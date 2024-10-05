@@ -1,0 +1,5 @@
+logs
+venv
+data/**/*raw*
+massif.out.*
+a.out
