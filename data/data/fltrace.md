@@ -79,7 +79,7 @@ Once `./fltrace` finishes to run, you will get 3 files as output in your working
 
 ## (Bonus) Tracing PARSEC
 
-PARSECis a benchmark suite widely used in memory/OS research, introduced by [Princeton researchers in 2008](https://doi.org/10.1145/1454115.1454128). As of November 2023, the official Princeton website was down. The last working archive was from [September 22, 2023](https://web.archive.org/web/20230922200507/https://parsec.cs.princeton.edu/), and was unable to be built on modern devices (had several build errors). PARSEC can therefore be installed using [this maintained mirror](https://github.com/cirosantilli/parsec-benchmark).
+PARSEC is a benchmark suite widely used in memory/OS research, introduced by [Princeton researchers in 2008](https://doi.org/10.1145/1454115.1454128). As of November 2023, the official Princeton website was down. The last working archive was from [September 22, 2023](https://web.archive.org/web/20230922200507/https://parsec.cs.princeton.edu/), and was unable to be built on modern devices (had several build errors). PARSEC can therefore be installed using [this maintained mirror](https://github.com/cirosantilli/parsec-benchmark).
 
 After building the tool and setting up your environment, to run one benchmark, you should be able to execute (from anywhere) 
 ```sh

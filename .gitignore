@@ -3,3 +3,7 @@ venv
 data/**/*raw*
 massif.out.*
 a.out
+testing
+__pycache__
+.ipynb_checkpoints
+.idea

@@ -1,0 +1,2 @@
+FLTRACE_OUTPUT_PREFIX = "fltrace-data-"
+FLTRACE_OUTPUT_SUFFIX = ".out"
