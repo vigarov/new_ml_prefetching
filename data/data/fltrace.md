@@ -23,12 +23,14 @@ sudo ./fltrace record -M <max_memory> -L <memory_limit> -- /path/to/prog
 The `max_memory` ($M$) and `memory_limit` ($L$), both in MB, are two variables you have control of. 
 
 * 
-    $M$ should act as an upper limit to the program's maximum memory usage. A great tool to get the memory usage of a program over time is `valgrind`'s [`massif`](https://valgrind.org/docs/manual/ms-manual.html). Before running `./fltrace`, you can therefore preliminarily trace your program using valgring:
+    $M$ should act as an upper limit to the program's maximum memory usage. Several great tools exist to get the memory usage of a program over time: two of note are `/usr/bin/time -v` (! different from the simpler `time` command) and `valgrind`'s [`massif`](https://valgrind.org/docs/manual/ms-manual.html) tool. In this project, we used valgrind as it provides slightly more consistent results (over 100 runs of the same application, it always computed the same value, whereas `/usr/bin/time` had the very small standard error of 0.00523). The difference betweend the tools was statistically insignificant however (p<0.0001), so feel free to use whichever you find easier!
+
+    Before running `./fltrace`, you can therefore preliminarily trace your program using valgrind:
 
     ```
     valgrind --tool=massif /path/to/prog
     ```
-    Note: take into account that running a program under valgring greatly reduces it's execution speed. 
+    Note: take into account that running a program under valgrind greatly reduces it's execution speed. 
 
     This will create a `massif.out.*` file which you can analyse using the `ms_print massif.out.filename` utility. It will print a bunch of data, the graph we're interested in will look like this:
 
@@ -101,11 +103,11 @@ strings=("canneal" "ferret" "facesim" "bodytrack" "dedup" "fluidanimate" "raytra
 
 # (Optional) Part III - extending the kernel to get more data
 
-(i386 and x86_32 only)
+(i386 and x86_64 only)
 
 By default, `userfaulfd` (which is the mechanism used by `fltrace` to capture page faults) does not include the instruction pointer of the program at fault time in its `uffd_msg` passed to the userfaultfd handler (see `struct uffd_msg`'s `arg.pagefault` in the kernel's /include/uapi/linux/userfaultfd.h definition). Executing the barebones `fltrace` version as above will therefore yield a value of `0` for the `ip` field (if you inspect the code, you will indeed notice that it isn't populated anywhere). 
 
-Although this hasn't been documented anywhere for `fltrace`, we suspect the authors of the tool have used their [eden uffd-include-ip kernel patch](https://github.com/eden-farmem/eden/tree/master/kernel) to alleviate this. Since we want a more complete dataset, we extend this idea by including the whole `struct pt_regs` page fault data structure inside the `uffd_msg`. A guide to getting our custom kernel to built can be found [here](TODO:not created yet).
+Although this hasn't been documented anywhere for `fltrace`, we suspect the authors of the tool have used their [eden uffd-include-ip kernel patch](https://github.com/eden-farmem/eden/tree/master/kernel) to alleviate this. Since we want a more complete dataset, we extend this idea by including the whole `struct pt_regs`  - the registers from the fault frame obtained at page fault time - inside the `uffd_msg`. A guide to getting our custom kernel to built can be found [here](kernel.md).
 
 Once the custom kernel has been installed, you can switch on the `reg_extending` branch of [our fltrace fork](https://github.com/vigarov/fltrace) :
 ```sh
@@ -117,4 +119,13 @@ make clean
 make
 ```
 
+You will notice a build error: 
+```
+src/rmem/handler.c:10:10: fatal error: /usr/src/CUSTOM_KERNEL_NAME/include/uapi/linux/userfaultfd.h: No such file or directory
+```
+
+Simply replace `CUSTOM_KERNEL_NAME` in that source file by your custom's kernel name as listed under `/usr/src/` (e.g.: mine, following the guide, was `linux-hwe-6.8-headers-6.8.0-45+vgiuffd`). This manual change is needed (and can probably be automated through the Makefile, feel free to PR!), as when installing a custom kernel, the default headers (under `/usr/include/`) don't get replaced by the headers of your custom kernel.  
+
 Now, tracing as before should yield a correctly populated value for the `ip` field under `fltrace-data-faults-<PID>.1.out` file, as well as the introduction of a new `regs` field, which contains the `struct pr_regs` register dump as it was populated by the fault handler. 
+
+(ps: you can activate/deactive this new functionality through the `CFLAGS += -DEXTRA_REGS_KERNEL` line in the Makefile)

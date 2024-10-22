@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import ConnectionPatch
+import matplotlib.ticker as ticker
 
 CB_PALETTE = ["#332288","#117733","#44AA99","#88CCEE","#DDCC77","#CC6677","#AA4499","#882255"][::-1]
 EXTRA_CB_PALLETTE = ["#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]
@@ -81,3 +82,20 @@ def get_pie_bar_zoom_in(data: np.array, labels: np.array, figsize=(12, 8), color
     plt.ion()  # re-enable interactive showing
     plt.close()
     return fig
+
+
+def get_time_graph(grouped_addresses_df):
+    fig,ax = plt.subplots(figsize=(15,10))
+    assert len(grouped_addresses_df) == len(grouped_addresses_df["stacktrace"].unique())
+    num_groups = len(grouped_addresses_df)
+    cmap = plt.cm.jet(np.linspace(0,1,num_groups))
+    
+    for i,row in grouped_addresses_df.iterrows():
+        ax.scatter(row["index_occurrences"],row["pages"],color=[cmap[i]]*len(row["pages"]),alpha=0.6, label=row["stacktrace"],marker='.')
+    #fig.legend(title="Groups")
+    ax.set_xlabel('Time')
+    current_xlims = ax.get_xlim()
+    ax.set_xlim([-10,current_xlims[-1]])
+    ax.set_ylabel('Page faulted (hex)')
+    ax.get_yaxis().set_major_formatter(ticker.FuncFormatter(lambda x,pos: hex(int(x))))
+    return fig,ax

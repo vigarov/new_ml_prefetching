@@ -1,2 +1,6 @@
 FLTRACE_OUTPUT_PREFIX = "fltrace-data-"
 FLTRACE_OUTPUT_SUFFIX = ".out"
+
+TEXT_SEPARATOR = '_'*30
+
+PAGE_SIZE = 4 * 1024

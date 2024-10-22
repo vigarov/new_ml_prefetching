@@ -4,6 +4,8 @@ from pathlib import Path
 from bisect import bisect_left
 
 
+MANDATORY_FLAG = 32
+
 # parse /proc/<pid>/maps
 MAPS_LINE_RE = re.compile(r"""
     (?P<addr_start>[0-9a-f]+)-(?P<addr_end>[0-9a-f]+)\s+  # Address
