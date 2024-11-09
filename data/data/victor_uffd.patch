@@ -1,0 +1,433 @@
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index e604d2d6c..052c17ad4 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -1270,7 +1270,7 @@ void do_user_addr_fault(struct pt_regs *regs,
+ 	 * potential system fault or CPU buglet:
+ 	 */
+ 	if (user_mode(regs)) {
+-		local_irq_enable();
++		//local_irq_enable();
+ 		flags |= FAULT_FLAG_USER;
+ 	} else {
+ 		if (regs->flags & X86_EFLAGS_IF)
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index 13ef4e1fc..769d20384 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -233,7 +233,16 @@ static void userfaultfd_ctx_put(struct userfaultfd_ctx *ctx)
+ 
+ static inline void msg_init(struct uffd_msg *msg)
+ {
+-	BUILD_BUG_ON(sizeof(struct uffd_msg) != 32);
++	BUILD_BUG_ON(sizeof(struct uffd_msg) != 
++		32+
++		#if defined(CONFIG_X86_64)
++		168 // see ptrace.h
++		#elif defined(__i386__)
++		68 - 4 //In 32bit systems, since registers are 4byte big, they fit well with the 32bit feat.ptid 32bit field --> no padding done by the compiler
++		#else
++		#error "Only supporting x86(_64) for now"
++		#endif
++		);
+ 	/*
+ 	 * Must use memset to zero out the paddings or kernel data is
+ 	 * leaked to userland.
+@@ -245,7 +254,8 @@ static inline struct uffd_msg userfault_msg(unsigned long address,
+ 					    unsigned long real_address,
+ 					    unsigned int flags,
+ 					    unsigned long reason,
+-					    unsigned int features)
++					    unsigned int features,
++						struct pt_regs* regs)
+ {
+ 	struct uffd_msg msg;
+ 
+@@ -254,7 +264,17 @@ static inline struct uffd_msg userfault_msg(unsigned long address,
+ 
+ 	msg.arg.pagefault.address = (features & UFFD_FEATURE_EXACT_ADDRESS) ?
+ 				    real_address : address;
+-
++	
++	if(regs == NULL){
++		printk("userfault_msg got null registers, leaving all registers to 0");
++	}
++	else{	
++		#if defined(CONFIG_X86_64) || defined(__i386__)
++		msg.arg.pagefault.registers_copy = *regs;
++		#else
++		#error "Only supporting x86 for now"
++		#endif
++	}
+ 	/*
+ 	 * These flags indicate why the userfault occurred:
+ 	 * - UFFD_PAGEFAULT_FLAG_WP indicates a write protect fault.
+@@ -413,7 +433,8 @@ static inline unsigned int userfaultfd_get_blocking_state(unsigned int flags)
+  * fatal_signal_pending()s, and the mmap_lock must be released before
+  * returning it.
+  */
+-vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
++vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason){return handle_userfault_regs(vmf,reason,0);}
++vm_fault_t handle_userfault_regs(struct vm_fault *vmf, unsigned long reason, struct pt_regs* regs)
+ {
+ 	struct vm_area_struct *vma = vmf->vma;
+ 	struct mm_struct *mm = vma->vm_mm;
+@@ -523,7 +544,7 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
+ 	init_waitqueue_func_entry(&uwq.wq, userfaultfd_wake_function);
+ 	uwq.wq.private = current;
+ 	uwq.msg = userfault_msg(vmf->address, vmf->real_address, vmf->flags,
+-				reason, ctx->features);
++				reason, ctx->features,regs);
+ 	uwq.ctx = ctx;
+ 	uwq.waken = false;
+ 
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index 1cfc69cb7..6c6e9c682 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -123,6 +123,17 @@ static inline u64 hv_do_rep_hypercall(u16 code, u16 rep_count, u16 varhead_size,
+ #define PKG_ABI 0
+ #endif
+ 
++
++#ifndef str 
++#define str(s) #s
++#define HV_UNDEF_STR_AFTER
++#endif
++
++#ifndef xstr
++#define xstr(s) str(s)
++#define HV_UNDEF_XSTR_AFTER
++#endif
++
+ /* Generate the guest OS identifier as described in the Hyper-V TLFS */
+ static inline u64 hv_generate_guest_id(u64 kernel_version)
+ {
+@@ -130,11 +141,41 @@ static inline u64 hv_generate_guest_id(u64 kernel_version)
+ 
+ 	guest_id = (((u64)HV_LINUX_VENDOR_ID) << 48);
+ 	guest_id |= (kernel_version << 16);
+-	guest_id |= PKG_ABI;
++	
++	/* 
++		When building custom kernels, Ubuntu recommends appending `+uniqueBuildId` to the ABI number
++		https://wiki.ubuntu.com/Kernel/BuildYourOwnKernel
++		Therefore, PKG_ABI might not be an int doing might therefore resolve in the addition `<ABI Number>+uniqueBuildId`,
++		which can't be built as uniqueBuildId isn't a variable in this context.
++		guest_id |= PKG_ABI;
++	*/
++	
++	const char* pkg_abi = xstr(PKG_ABI);
++	u64 true_abi = 0;
++	/*since abi numbers are always (for now) <1000, we can hard-code the string manipulations*/
++	if(pkg_abi[0] != 0 && (u8)pkg_abi[0] >= (u8)'0' && (u8)pkg_abi[0] <= (u8)'9'){
++		true_abi = ((u64)pkg_abi[0])-((u64)'0');
++		if(pkg_abi[1] != 0 && (u8)pkg_abi[1] >= (u8)'0' && (u8)pkg_abi[1] <= (u8)'9'){
++			true_abi = (true_abi*10) + ((u64)pkg_abi[1])-((u64)'0');
++			if(pkg_abi[2] != 0 && (u8)pkg_abi[2] >= (u8)'0' && (u8)pkg_abi[2] <= (u8)'9'){
++				true_abi = (true_abi*10) + ((u64)pkg_abi[2])-((u64)'0');
++			}
++		}
++	}
++
++	guest_id |= true_abi;
++
+ 
+ 	return guest_id;
+ }
+ 
++#ifdef HV_UNDEF_STR_AFTER
++#undef str
++#endif
++#ifdef HV_UNDEF_XSTR_AFTER
++#undef xstr
++#endif
++
+ /* Free the message slot and signal end-of-message if required */
+ static inline void vmbus_signal_eom(struct hv_message *msg, u32 old_msg_type)
+ {
+diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+index e4056547f..18dfdc8ab 100644
+--- a/include/linux/userfaultfd_k.h
++++ b/include/linux/userfaultfd_k.h
+@@ -37,6 +37,7 @@
+ #define UFFD_FLAGS_SET (EFD_SHARED_FCNTL_FLAGS)
+ 
+ extern vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason);
++extern vm_fault_t handle_userfault_regs(struct vm_fault *vmf, unsigned long reason, struct pt_regs* regs);
+ 
+ /* A combined operation mode + behavior flags. */
+ typedef unsigned int __bitwise uffd_flags_t;
+@@ -226,6 +227,12 @@ extern bool userfaultfd_wp_async(struct vm_area_struct *vma);
+ #else /* CONFIG_USERFAULTFD */
+ 
+ /* mm helpers */
++
++static inline vm_fault_t handle_userfault_regs(struct vm_fault *vmf,
++				unsigned long reason, struct pt_regs* regs)
++{
++	return VM_FAULT_SIGBUS;
++}
+ static inline vm_fault_t handle_userfault(struct vm_fault *vmf,
+ 				unsigned long reason)
+ {
+diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+index 2841e4ea8..5e1d43360 100644
+--- a/include/uapi/linux/userfaultfd.h
++++ b/include/uapi/linux/userfaultfd.h
+@@ -11,6 +11,7 @@
+ #define _LINUX_USERFAULTFD_H
+ 
+ #include <linux/types.h>
++#include <asm/ptrace.h>
+ 
+ /* ioctls for /dev/userfaultfd */
+ #define USERFAULTFD_IOC 0xAA
+@@ -119,6 +120,7 @@ struct uffd_msg {
+ 			union {
+ 				__u32 ptid;
+ 			} feat;
++			struct pt_regs registers_copy;
+ 		} pagefault;
+ 
+ 		struct {
+diff --git a/mm/internal.h b/mm/internal.h
+index c3f3e0f19..ec90f6422 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -103,7 +103,7 @@ static inline void wake_throttle_isolated(pg_data_t *pgdat)
+ 		wake_up(wqh);
+ }
+ 
+-vm_fault_t do_swap_page(struct vm_fault *vmf);
++vm_fault_t do_swap_page(struct vm_fault *vmf, struct pt_regs *regs);
+ void folio_rotate_reclaimable(struct folio *folio);
+ bool __folio_end_writeback(struct folio *folio);
+ void deactivate_file_folio(struct folio *folio);
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 2b219acb5..2609f54c3 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1019,7 +1019,7 @@ static int __collapse_huge_page_swapin(struct mm_struct *mm,
+ 
+ 		vmf.pte = pte;
+ 		vmf.ptl = ptl;
+-		ret = do_swap_page(&vmf);
++		ret = do_swap_page(&vmf,0);
+ 		/* Which unmaps pte (after perhaps re-checking the entry) */
+ 		pte = NULL;
+ 
+diff --git a/mm/memory.c b/mm/memory.c
+index d5753ed81..efcf1b4c0 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -105,7 +105,7 @@ EXPORT_SYMBOL(mem_map);
+ #endif
+ 
+ static vm_fault_t do_fault(struct vm_fault *vmf);
+-static vm_fault_t do_anonymous_page(struct vm_fault *vmf);
++static vm_fault_t do_anonymous_page(struct vm_fault *vmf, struct pt_regs *regs);
+ static bool vmf_pte_changed(struct vm_fault *vmf);
+ 
+ /*
+@@ -3433,7 +3433,7 @@ static bool wp_can_reuse_anon_folio(struct folio *folio,
+  * but allow concurrent faults), with pte both mapped and locked.
+  * We return with mmap_lock still held, but pte unmapped and unlocked.
+  */
+-static vm_fault_t do_wp_page(struct vm_fault *vmf)
++static vm_fault_t do_wp_page(struct vm_fault *vmf, struct pt_regs *regs)
+ 	__releases(vmf->ptl)
+ {
+ 	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
+@@ -3445,7 +3445,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 		if (userfaultfd_pte_wp(vma, ptep_get(vmf->pte))) {
+ 			if (!userfaultfd_wp_async(vma)) {
+ 				pte_unmap_unlock(vmf->pte, vmf->ptl);
+-				return handle_userfault(vmf, VM_UFFD_WP);
++				return handle_userfault_regs(vmf, VM_UFFD_WP, regs);
+ 			}
+ 
+ 			/*
+@@ -3738,10 +3738,10 @@ static vm_fault_t pte_marker_clear(struct vm_fault *vmf)
+ 	return 0;
+ }
+ 
+-static vm_fault_t do_pte_missing(struct vm_fault *vmf)
++static vm_fault_t do_pte_missing(struct vm_fault *vmf, struct pt_regs *regs)
+ {
+ 	if (vma_is_anonymous(vmf->vma))
+-		return do_anonymous_page(vmf);
++		return do_anonymous_page(vmf,regs);
+ 	else
+ 		return do_fault(vmf);
+ }
+@@ -3750,7 +3750,7 @@ static vm_fault_t do_pte_missing(struct vm_fault *vmf)
+  * This is actually a page-missing access, but with uffd-wp special pte
+  * installed.  It means this pte was wr-protected before being unmapped.
+  */
+-static vm_fault_t pte_marker_handle_uffd_wp(struct vm_fault *vmf)
++static vm_fault_t pte_marker_handle_uffd_wp(struct vm_fault *vmf, struct pt_regs *regs)
+ {
+ 	/*
+ 	 * Just in case there're leftover special ptes even after the region
+@@ -3759,10 +3759,10 @@ static vm_fault_t pte_marker_handle_uffd_wp(struct vm_fault *vmf)
+ 	if (unlikely(!userfaultfd_wp(vmf->vma)))
+ 		return pte_marker_clear(vmf);
+ 
+-	return do_pte_missing(vmf);
++	return do_pte_missing(vmf, regs);
+ }
+ 
+-static vm_fault_t handle_pte_marker(struct vm_fault *vmf)
++static vm_fault_t handle_pte_marker(struct vm_fault *vmf,struct pt_regs* regs)
+ {
+ 	swp_entry_t entry = pte_to_swp_entry(vmf->orig_pte);
+ 	unsigned long marker = pte_marker_get(entry);
+@@ -3779,7 +3779,7 @@ static vm_fault_t handle_pte_marker(struct vm_fault *vmf)
+ 		return VM_FAULT_HWPOISON;
+ 
+ 	if (pte_marker_entry_uffd_wp(entry))
+-		return pte_marker_handle_uffd_wp(vmf);
++		return pte_marker_handle_uffd_wp(vmf,regs);
+ 
+ 	/* This is an unknown pte marker */
+ 	return VM_FAULT_SIGBUS;
+@@ -3793,7 +3793,7 @@ static vm_fault_t handle_pte_marker(struct vm_fault *vmf)
+  * We return with the mmap_lock locked or unlocked in the same cases
+  * as does filemap_fault().
+  */
+-vm_fault_t do_swap_page(struct vm_fault *vmf)
++vm_fault_t do_swap_page(struct vm_fault *vmf, struct pt_regs *regs)
+ {
+ 	struct vm_area_struct *vma = vmf->vma;
+ 	struct folio *swapcache, *folio = NULL;
+@@ -3848,7 +3848,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 		} else if (is_hwpoison_entry(entry)) {
+ 			ret = VM_FAULT_HWPOISON;
+ 		} else if (is_pte_marker_entry(entry)) {
+-			ret = handle_pte_marker(vmf);
++			ret = handle_pte_marker(vmf,regs);
+ 		} else {
+ 			print_bad_pte(vma, vmf->address, vmf->orig_pte, NULL);
+ 			ret = VM_FAULT_SIGBUS;
+@@ -4121,7 +4121,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 	}
+ 
+ 	if (vmf->flags & FAULT_FLAG_WRITE) {
+-		ret |= do_wp_page(vmf);
++		ret |= do_wp_page(vmf, regs);
+ 		if (ret & VM_FAULT_ERROR)
+ 			ret &= VM_FAULT_ERROR;
+ 		goto out;
+@@ -4240,7 +4240,7 @@ static struct folio *alloc_anon_folio(struct vm_fault *vmf)
+  * but allow concurrent faults), and pte mapped but not yet locked.
+  * We return with mmap_lock still held, but pte unmapped and unlocked.
+  */
+-static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
++static vm_fault_t do_anonymous_page(struct vm_fault *vmf, struct pt_regs *regs)
+ {
+ 	bool uffd_wp = vmf_orig_pte_uffd_wp(vmf);
+ 	struct vm_area_struct *vma = vmf->vma;
+@@ -4281,7 +4281,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+ 		/* Deliver the page fault to userland, check inside PT lock */
+ 		if (userfaultfd_missing(vma)) {
+ 			pte_unmap_unlock(vmf->pte, vmf->ptl);
+-			return handle_userfault(vmf, VM_UFFD_MISSING);
++			return handle_userfault_regs(vmf, VM_UFFD_MISSING, regs);
+ 		}
+ 		goto setpte;
+ 	}
+@@ -4335,7 +4335,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+ 	if (userfaultfd_missing(vma)) {
+ 		pte_unmap_unlock(vmf->pte, vmf->ptl);
+ 		folio_put(folio);
+-		return handle_userfault(vmf, VM_UFFD_MISSING);
++		return handle_userfault_regs(vmf, VM_UFFD_MISSING, regs);
+ 	}
+ 
+ 	folio_ref_add(folio, nr_pages - 1);
+@@ -5044,7 +5044,7 @@ static inline vm_fault_t create_huge_pmd(struct vm_fault *vmf)
+ }
+ 
+ /* `inline' is required to avoid gcc 4.1.2 build error */
+-static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
++static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf, struct pt_regs *regs)
+ {
+ 	struct vm_area_struct *vma = vmf->vma;
+ 	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
+@@ -5055,7 +5055,7 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
+ 		    userfaultfd_huge_pmd_wp(vma, vmf->orig_pmd)) {
+ 			if (userfaultfd_wp_async(vmf->vma))
+ 				goto split;
+-			return handle_userfault(vmf, VM_UFFD_WP);
++			return handle_userfault_regs(vmf, VM_UFFD_WP, regs);
+ 		}
+ 		return do_huge_pmd_wp_page(vmf);
+ 	}
+@@ -5128,7 +5128,7 @@ static vm_fault_t wp_huge_pud(struct vm_fault *vmf, pud_t orig_pud)
+  * The mmap_lock may have been released depending on flags and our return value.
+  * See filemap_fault() and __folio_lock_or_retry().
+  */
+-static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
++static vm_fault_t handle_pte_fault(struct vm_fault *vmf,struct pt_regs *regs)
+ {
+ 	pte_t entry;
+ 
+@@ -5162,10 +5162,10 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+ 	}
+ 
+ 	if (!vmf->pte)
+-		return do_pte_missing(vmf);
++		return do_pte_missing(vmf,regs);
+ 
+ 	if (!pte_present(vmf->orig_pte))
+-		return do_swap_page(vmf);
++		return do_swap_page(vmf, regs);
+ 
+ 	if (pte_protnone(vmf->orig_pte) && vma_is_accessible(vmf->vma))
+ 		return do_numa_page(vmf);
+@@ -5178,7 +5178,7 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+ 	}
+ 	if (vmf->flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) {
+ 		if (!pte_write(entry))
+-			return do_wp_page(vmf);
++			return do_wp_page(vmf, regs);
+ 		else if (likely(vmf->flags & FAULT_FLAG_WRITE))
+ 			entry = pte_mkdirty(entry);
+ 	}
+@@ -5213,7 +5213,7 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+  * and __folio_lock_or_retry().
+  */
+ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+-		unsigned long address, unsigned int flags)
++		unsigned long address, unsigned int flags,struct pt_regs *regs)
+ {
+ 	struct vm_fault vmf = {
+ 		.vma = vma,
+@@ -5293,7 +5293,7 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+ 
+ 			if ((flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) &&
+ 			    !pmd_write(vmf.orig_pmd)) {
+-				ret = wp_huge_pmd(&vmf);
++				ret = wp_huge_pmd(&vmf ,regs);
+ 				if (!(ret & VM_FAULT_FALLBACK))
+ 					return ret;
+ 			} else {
+@@ -5303,7 +5303,7 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+ 		}
+ 	}
+ 
+-	return handle_pte_fault(&vmf);
++	return handle_pte_fault(&vmf,regs);
+ }
+ 
+ /**
+@@ -5468,7 +5468,7 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+ 	if (unlikely(is_vm_hugetlb_page(vma)))
+ 		ret = hugetlb_fault(vma->vm_mm, vma, address, flags);
+ 	else
+-		ret = __handle_mm_fault(vma, address, flags);
++		ret = __handle_mm_fault(vma, address, flags, regs);
+ 
+ 	lru_gen_exit_fault();
+ 

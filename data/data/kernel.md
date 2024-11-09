@@ -38,11 +38,19 @@ I therefore recommend following [this guide](https://wiki.ubuntu.com/Kernel/Buil
 
     If you decide to add more than simply numbers as your unique identifier (as I did in the example with "+mykernel"), then Microsoft's Hyper-V will not build (it is parsing the release number as an integer compiler defined macro). See the point below for the fix.
 
-6. "Edit" the configs `fakeroot debian/rules editconfigs`, make sure to say "y" to every edit proposition, and then simply exit the edit menuconfig (otherwise you might encounter some weird build issues afterwards). Note that it is normal if you get a bunch of "file not found" errors for configs of architecture your machines doesn't support -- you can safely ignore them.
+7. "Edit" the configs `fakeroot debian/rules editconfigs`, make sure to say "y" to every edit proposition, and then simply exit the edit menuconfig (otherwise you might encounter some weird build issues afterwards). Note that it is normal if you get a bunch of "file not found" errors for configs of architecture your machines doesn't support -- you can safely ignore them.
 
-7. Make your kernel changes ! For us, this means apply the [following patch](TODO), which does the following:
+8. Make your kernel changes ! For us, this means apply the [following patch](victor_uffd.patch), which does the following:
     1. Fixes the Hyper-V bug mentionned in 5 (by parsing the version numbers as a string, and extracting the first digits, assuming a "+" as a separator)
-    2. ...
+    2. Adds a `struct pt_regs` in the `uffd_msg`
+    3. Propagates the `regs` trapframe through the various fault handling functions and eventually copies it to the `uffd_msg`
+
+To apply a git patch, you can simply use (from the source directory):
+```bash
+git apply <patch_name>.patch
+```
+(in case of git errors, run `git init` first)
+
 
 9. Finally, build your kernel. Make a full build, as you will need linux tools : `fakeroot debian/rules binary`. This build will take at least ~1 hour, depending on your machine's performance. Go take a coffee break :)
 
