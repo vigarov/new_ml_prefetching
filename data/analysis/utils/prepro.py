@@ -40,12 +40,14 @@ It has the side effect of populating the `libs` dictionnary.
 """
 
 
-def preprocess_df(runid: RunIdentifier,df: pd.DataFrame, procmap_file: Path) -> tuple[pd.DataFrame,pd.DataFrame,ExtraProcessCodeInfo]:
+def preprocess_df(runid: RunIdentifier,df: pd.DataFrame, procmap_file: Path,get_stats: bool = True,add_missing_ips_to_st: bool = False) -> tuple[pd.DataFrame,pd.DataFrame,ExtraProcessCodeInfo]:
     """
     Preprocess the dataframe according to above description, and populate the `extrainfo` for the current run
     :param runid: the run
     :param df: the initial (raw) df
     :param procmap_file: the path to the relevant procmap file
+    :param add_missing_ips_to_st : if set to True, will ensure the `ip` is at the end of each stacktrace, adding it if necessary (this should already be the case for 99+% of the entries; and therefore only impacts the other 1%)
+    :param get_stats: if set to True, gets and returns stats about the number of removed ips from the stacktrace
     :return: (the updated dataframe, a dataframe with stats about how each entry was impacted by removing fltrace information,the epci)
     """
 
@@ -130,11 +132,12 @@ def preprocess_df(runid: RunIdentifier,df: pd.DataFrame, procmap_file: Path) -> 
         
         return initial_trace_length, number_impacted_ips, idx_first_ip, idx_last_ip, max_num_consecutive
         
-    # For the sake of correct stat taking, append the ip to the start of the stacktrace whenever the ip is *not* in the stacktrace
-    df["stats_stacktrace"] = df[["ip","old_stacktrace"]].swifter.apply(lambda row: ((row.ip if row.ip.startswith("0x") else "0x"+row.ip)+'|'+row.old_stacktrace) if row.ip not in row.old_stacktrace else row.old_stacktrace, axis=1)
+    if get_stats:
+        # For the sake of correct stat taking, append the ip to the start of the stacktrace whenever the ip is *not* in the stacktrace
+        df["stats_stacktrace"] = df[["ip","old_stacktrace"]].swifter.apply(lambda row: ((row.ip if row.ip.startswith("0x") else "0x"+row.ip)+'|'+row.old_stacktrace) if row.ip not in row.old_stacktrace else row.old_stacktrace, axis=1)
 
     # Transform the series to a df with relevant column names
-    removed_stats = pd.DataFrame(df["stats_stacktrace"].swifter.apply(get_fltrace_impact_stats).tolist(),columns=['initial_trace_length', 'number_impacted_ips', 'idx_first_ip', 'idx_last_ip', 'max_num_consecutive'])
+    removed_stats = None if not get_stats else pd.DataFrame(df["stats_stacktrace"].swifter.apply(get_fltrace_impact_stats).tolist(),columns=['initial_trace_length', 'number_impacted_ips', 'idx_first_ip', 'idx_last_ip', 'max_num_consecutive'])
     # Then, simply recreate the data by removing rows with `ip` from fltrace, and removing everything in the stacktrace which comes after (closer to execution point) the stacktrace `ip`
     df = df.drop(df[df["ip"].swifter.apply(lambda ip: ip if ip.startswith("0x") else "0x"+ip).isin(all_fltrace_ips)].index)
     def remove_ip_else_fltrace_stacktrace(row):
@@ -161,7 +164,7 @@ def preprocess_df(runid: RunIdentifier,df: pd.DataFrame, procmap_file: Path) -> 
             print(f"Warning: ip={row_ip} not in the stacktrace {row_ips_str}")
         return '|'.join(ret_st)
     df["stacktrace"] = df[["ip","old_stacktrace"]].swifter.apply(remove_ip_else_fltrace_stacktrace,axis=1)
-    df=df.drop(columns=["old_stacktrace","stats_stacktrace"])
+    df=df.drop(columns=["old_stacktrace"] + (["stats_stacktrace"] if get_stats else []))
         
     return df,removed_stats,epci
 
@@ -182,7 +185,7 @@ def get_ip_not_in_st_stats(runid,df):
         assert ip_pos_in_st[ip_pos_in_st != -1].mean() == 0
         print("For the rest, every ip is in the first position of the st.")
     
-    # For all `ip`s which aren't in the stacktrace, we heuristically simply add them at the end 
+    # For all `ip`s which aren't in the stacktrace, we "guess" and simply add them at the end 
     n_df = df.copy()
     n_df["stacktrace"] = n_df[["ip","stacktrace"]].swifter.apply(lambda row:(((row.ip if row.ip.startswith("0x") else "0x"+row.ip)+'|') if row.ip not in row.stacktrace else "")+row.stacktrace,axis=1)
     ip_pos_in_st_new = n_df[["ip","stacktrace"]].swifter.apply(lambda row: row.stacktrace.split('|').index(row.ip if row.ip.startswith("0x") else "0x"+row.ip) if row.ip in row.stacktrace else -1,axis=1)

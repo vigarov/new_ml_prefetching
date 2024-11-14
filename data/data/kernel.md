@@ -16,7 +16,7 @@ I therefore recommend following [this guide](https://wiki.ubuntu.com/Kernel/Buil
 
 2. Install the following additionnal packages if you don't have them :
     * rustc compiler, ideally through [this](https://www.rust-lang.org/tools/install) 
-    * `sudo apt install libbfd-dev libperl-dev libzstd-dev`
+    * `sudo apt install libbfd-dev libperl-dev libzstd-dev linux-cloud-tools-common`
 
 
 3. `sudo apt update`
@@ -40,7 +40,7 @@ I therefore recommend following [this guide](https://wiki.ubuntu.com/Kernel/Buil
 
 7. "Edit" the configs `fakeroot debian/rules editconfigs`, make sure to say "y" to every edit proposition, and then simply exit the edit menuconfig (otherwise you might encounter some weird build issues afterwards). Note that it is normal if you get a bunch of "file not found" errors for configs of architecture your machines doesn't support -- you can safely ignore them.
 
-8. Make your kernel changes ! For us, this means apply the [following patch](victor_uffd.patch), which does the following:
+8. Make your kernel changes ! For us, this means apply the [following patch](victor_uffd_irq_enabled.patch), which does the following:
     1. Fixes the Hyper-V bug mentionned in 5 (by parsing the version numbers as a string, and extracting the first digits, assuming a "+" as a separator)
     2. Adds a `struct pt_regs` in the `uffd_msg`
     3. Propagates the `regs` trapframe through the various fault handling functions and eventually copies it to the `uffd_msg`
@@ -56,11 +56,19 @@ git apply <patch_name>.patch
 
 ##  III. Installing and Booting off your kernel 
 
-10. If there are no errors, you should have received, as output in the parent directory of the source of the kernel (where you built from), you should have obtained a bunch of `.deb` files -- simply install them in your `/boot` directory by running `sudo dpkg -i linux*.deb`.
+10. If there are no errors, as output in the parent directory of the source of the kernel (where you built from), you should have obtained a bunch of `.deb` files -- simply install them in your `/boot` directory by running `sudo dpkg -i linux*.deb`. Important: this step will automatically add the newly installed kernel at the top of your kernel installs - unless you've manually configured `grub` to boot on a specific entry, this kernel will be booted on the next reboot : read ahead for a safe way to make sure everything worked correctly.
 
-10. If you're running this on a machine with physical access, simply restart it. In your grub menu should appear your new kernel (with your custom name prefix if you've set it in 5.). 
+11. If you're running this on a machine with physical access, simply restart it. In your grub menu should appear your new kernel (with your custom name prefix if you've set it in 5.). 
     
-    If you're doing this on a remote server though (throug SSH), you will probably not (ever) have physical access to the machine : make sure to verify that the current `grub` boot order of your kernels has an existing, working kernel (e.g.: the current one you're building from) set as first boot choice and then reboot using `grub-reboot [OPTION] MENU_ENTRY` (see [this](https://askubuntu.com/questions/574295/how-can-i-get-grub2-to-boot-a-different-option-only-on-the-next-boot)) which boots in a specific kernel for the next boot only! This way, if some of your changes in 7. broke the kernel (e.g.: can't even boot properly), a simple reboot (from an admin console for example) should put it back to the previous, working kernel, and you will hopefully be able to examine what went wrong in the system logs.
+    If you're doing this on a remote server though (throug SSH), you will probably not (ever) have physical access to the machine : make sure to verify that the current `grub` boot order of your kernels has an existing, working kernel (e.g.: the current one you're building from) set as first boot choice. Then, I recommend you set it as default boot entry by following [this procedure](https://unix.stackexchange.com/a/327686/672581). Reboot (`sudo reboot now`) and ensure that you're still on your old kernel by running `uname -r`. To then verify that the custom kernel works correclty, use `sudo grub-reboot <MENU_ENTRY>` (see [this](https://askubuntu.com/questions/574295/how-can-i-get-grub2-to-boot-a-different-option-only-on-the-next-boot); e.g. `sudo grub-reboot "Ubuntu, with Linux 6.8.0-45+vgiuffd-generic"`) which configures grub to boot in a specific kernel for the next boot only! This way, if some of your changes in 7. broke the kernel (e.g.: can't even boot properly), a simple reboot (from an admin console for example) should put it back to the previous, working kernel, and you will hopefully be able to examine what went wrong in the boot/init logs. Finally, simply reboot (`sudo reboot now`). 
+    
+    
+If everything went well, you should see that your custom kernel is running: 
+
+```bash
+$ uname -r
+6.8.0-45+vgiuffd-generic
+```
 
 # Encountered errors:
 
