@@ -1,0 +1,2154 @@
+
+libXdmcp.so.6.0.0:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+0000000000002000 <.init>:
+    2000:	f3 0f 1e fa          	endbr64 
+    2004:	48 83 ec 08          	sub    $0x8,%rsp
+    2008:	48 8b 05 d9 4f 00 00 	mov    0x4fd9(%rip),%rax        # 6fe8 <__gmon_start__@Base>
+    200f:	48 85 c0             	test   %rax,%rax
+    2012:	74 02                	je     2016 <__cxa_finalize@plt-0xca>
+    2014:	ff d0                	call   *%rax
+    2016:	48 83 c4 08          	add    $0x8,%rsp
+    201a:	c3                   	ret    
+
+Disassembly of section .plt:
+
+0000000000002020 <.plt>:
+    2020:	ff 35 e2 4f 00 00    	push   0x4fe2(%rip)        # 7008 <XdmcpWrap@@Base+0x37f8>
+    2026:	f2 ff 25 e3 4f 00 00 	bnd jmp *0x4fe3(%rip)        # 7010 <XdmcpWrap@@Base+0x3800>
+    202d:	0f 1f 00             	nopl   (%rax)
+    2030:	f3 0f 1e fa          	endbr64 
+    2034:	68 00 00 00 00       	push   $0x0
+    2039:	f2 e9 e1 ff ff ff    	bnd jmp 2020 <__cxa_finalize@plt-0xc0>
+    203f:	90                   	nop
+    2040:	f3 0f 1e fa          	endbr64 
+    2044:	68 01 00 00 00       	push   $0x1
+    2049:	f2 e9 d1 ff ff ff    	bnd jmp 2020 <__cxa_finalize@plt-0xc0>
+    204f:	90                   	nop
+    2050:	f3 0f 1e fa          	endbr64 
+    2054:	68 02 00 00 00       	push   $0x2
+    2059:	f2 e9 c1 ff ff ff    	bnd jmp 2020 <__cxa_finalize@plt-0xc0>
+    205f:	90                   	nop
+    2060:	f3 0f 1e fa          	endbr64 
+    2064:	68 03 00 00 00       	push   $0x3
+    2069:	f2 e9 b1 ff ff ff    	bnd jmp 2020 <__cxa_finalize@plt-0xc0>
+    206f:	90                   	nop
+    2070:	f3 0f 1e fa          	endbr64 
+    2074:	68 04 00 00 00       	push   $0x4
+    2079:	f2 e9 a1 ff ff ff    	bnd jmp 2020 <__cxa_finalize@plt-0xc0>
+    207f:	90                   	nop
+    2080:	f3 0f 1e fa          	endbr64 
+    2084:	68 05 00 00 00       	push   $0x5
+    2089:	f2 e9 91 ff ff ff    	bnd jmp 2020 <__cxa_finalize@plt-0xc0>
+    208f:	90                   	nop
+    2090:	f3 0f 1e fa          	endbr64 
+    2094:	68 06 00 00 00       	push   $0x6
+    2099:	f2 e9 81 ff ff ff    	bnd jmp 2020 <__cxa_finalize@plt-0xc0>
+    209f:	90                   	nop
+    20a0:	f3 0f 1e fa          	endbr64 
+    20a4:	68 07 00 00 00       	push   $0x7
+    20a9:	f2 e9 71 ff ff ff    	bnd jmp 2020 <__cxa_finalize@plt-0xc0>
+    20af:	90                   	nop
+    20b0:	f3 0f 1e fa          	endbr64 
+    20b4:	68 08 00 00 00       	push   $0x8
+    20b9:	f2 e9 61 ff ff ff    	bnd jmp 2020 <__cxa_finalize@plt-0xc0>
+    20bf:	90                   	nop
+    20c0:	f3 0f 1e fa          	endbr64 
+    20c4:	68 09 00 00 00       	push   $0x9
+    20c9:	f2 e9 51 ff ff ff    	bnd jmp 2020 <__cxa_finalize@plt-0xc0>
+    20cf:	90                   	nop
+    20d0:	f3 0f 1e fa          	endbr64 
+    20d4:	68 0a 00 00 00       	push   $0xa
+    20d9:	f2 e9 41 ff ff ff    	bnd jmp 2020 <__cxa_finalize@plt-0xc0>
+    20df:	90                   	nop
+
+Disassembly of section .plt.got:
+
+00000000000020e0 <__cxa_finalize@plt>:
+    20e0:	f3 0f 1e fa          	endbr64 
+    20e4:	f2 ff 25 0d 4f 00 00 	bnd jmp *0x4f0d(%rip)        # 6ff8 <__cxa_finalize@GLIBC_2.2.5>
+    20eb:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+Disassembly of section .plt.sec:
+
+00000000000020f0 <free@plt>:
+    20f0:	f3 0f 1e fa          	endbr64 
+    20f4:	f2 ff 25 1d 4f 00 00 	bnd jmp *0x4f1d(%rip)        # 7018 <free@GLIBC_2.2.5>
+    20fb:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002100 <__stack_chk_fail@plt>:
+    2100:	f3 0f 1e fa          	endbr64 
+    2104:	f2 ff 25 15 4f 00 00 	bnd jmp *0x4f15(%rip)        # 7020 <__stack_chk_fail@GLIBC_2.4>
+    210b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002110 <arc4random_buf@plt>:
+    2110:	f3 0f 1e fa          	endbr64 
+    2114:	f2 ff 25 0d 4f 00 00 	bnd jmp *0x4f0d(%rip)        # 7028 <arc4random_buf@LIBBSD_0.2>
+    211b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002120 <memset@plt>:
+    2120:	f3 0f 1e fa          	endbr64 
+    2124:	f2 ff 25 05 4f 00 00 	bnd jmp *0x4f05(%rip)        # 7030 <memset@GLIBC_2.2.5>
+    212b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002130 <sendto@plt>:
+    2130:	f3 0f 1e fa          	endbr64 
+    2134:	f2 ff 25 fd 4e 00 00 	bnd jmp *0x4efd(%rip)        # 7038 <sendto@GLIBC_2.2.5>
+    213b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002140 <memcmp@plt>:
+    2140:	f3 0f 1e fa          	endbr64 
+    2144:	f2 ff 25 f5 4e 00 00 	bnd jmp *0x4ef5(%rip)        # 7040 <memcmp@GLIBC_2.2.5>
+    214b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002150 <calloc@plt>:
+    2150:	f3 0f 1e fa          	endbr64 
+    2154:	f2 ff 25 ed 4e 00 00 	bnd jmp *0x4eed(%rip)        # 7048 <calloc@GLIBC_2.2.5>
+    215b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002160 <malloc@plt>:
+    2160:	f3 0f 1e fa          	endbr64 
+    2164:	f2 ff 25 e5 4e 00 00 	bnd jmp *0x4ee5(%rip)        # 7050 <malloc@GLIBC_2.2.5>
+    216b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002170 <recvfrom@plt>:
+    2170:	f3 0f 1e fa          	endbr64 
+    2174:	f2 ff 25 dd 4e 00 00 	bnd jmp *0x4edd(%rip)        # 7058 <recvfrom@GLIBC_2.2.5>
+    217b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002180 <realloc@plt>:
+    2180:	f3 0f 1e fa          	endbr64 
+    2184:	f2 ff 25 d5 4e 00 00 	bnd jmp *0x4ed5(%rip)        # 7060 <realloc@GLIBC_2.2.5>
+    218b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002190 <memmove@plt>:
+    2190:	f3 0f 1e fa          	endbr64 
+    2194:	f2 ff 25 cd 4e 00 00 	bnd jmp *0x4ecd(%rip)        # 7068 <memmove@GLIBC_2.2.5>
+    219b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+Disassembly of section .text:
+
+00000000000021a0 <XdmcpAllocARRAY8@@Base-0xc0>:
+    21a0:	48 8d 3d d1 4e 00 00 	lea    0x4ed1(%rip),%rdi        # 7078 <XdmcpWrap@@Base+0x3868>
+    21a7:	48 8d 05 ca 4e 00 00 	lea    0x4eca(%rip),%rax        # 7078 <XdmcpWrap@@Base+0x3868>
+    21ae:	48 39 f8             	cmp    %rdi,%rax
+    21b1:	74 15                	je     21c8 <memmove@plt+0x38>
+    21b3:	48 8b 05 26 4e 00 00 	mov    0x4e26(%rip),%rax        # 6fe0 <XdmcpWrap@@Base+0x37d0>
+    21ba:	48 85 c0             	test   %rax,%rax
+    21bd:	74 09                	je     21c8 <memmove@plt+0x38>
+    21bf:	ff e0                	jmp    *%rax
+    21c1:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    21c8:	c3                   	ret    
+    21c9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    21d0:	48 8d 3d a1 4e 00 00 	lea    0x4ea1(%rip),%rdi        # 7078 <XdmcpWrap@@Base+0x3868>
+    21d7:	48 8d 35 9a 4e 00 00 	lea    0x4e9a(%rip),%rsi        # 7078 <XdmcpWrap@@Base+0x3868>
+    21de:	48 29 fe             	sub    %rdi,%rsi
+    21e1:	48 89 f0             	mov    %rsi,%rax
+    21e4:	48 c1 ee 3f          	shr    $0x3f,%rsi
+    21e8:	48 c1 f8 03          	sar    $0x3,%rax
+    21ec:	48 01 c6             	add    %rax,%rsi
+    21ef:	48 d1 fe             	sar    %rsi
+    21f2:	74 14                	je     2208 <memmove@plt+0x78>
+    21f4:	48 8b 05 f5 4d 00 00 	mov    0x4df5(%rip),%rax        # 6ff0 <XdmcpWrap@@Base+0x37e0>
+    21fb:	48 85 c0             	test   %rax,%rax
+    21fe:	74 08                	je     2208 <memmove@plt+0x78>
+    2200:	ff e0                	jmp    *%rax
+    2202:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    2208:	c3                   	ret    
+    2209:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    2210:	f3 0f 1e fa          	endbr64 
+    2214:	80 3d 5d 4e 00 00 00 	cmpb   $0x0,0x4e5d(%rip)        # 7078 <XdmcpWrap@@Base+0x3868>
+    221b:	75 2b                	jne    2248 <memmove@plt+0xb8>
+    221d:	55                   	push   %rbp
+    221e:	48 83 3d d2 4d 00 00 	cmpq   $0x0,0x4dd2(%rip)        # 6ff8 <XdmcpWrap@@Base+0x37e8>
+    2225:	00 
+    2226:	48 89 e5             	mov    %rsp,%rbp
+    2229:	74 0c                	je     2237 <memmove@plt+0xa7>
+    222b:	48 8b 3d 3e 4e 00 00 	mov    0x4e3e(%rip),%rdi        # 7070 <XdmcpWrap@@Base+0x3860>
+    2232:	e8 a9 fe ff ff       	call   20e0 <__cxa_finalize@plt>
+    2237:	e8 64 ff ff ff       	call   21a0 <memmove@plt+0x10>
+    223c:	c6 05 35 4e 00 00 01 	movb   $0x1,0x4e35(%rip)        # 7078 <XdmcpWrap@@Base+0x3868>
+    2243:	5d                   	pop    %rbp
+    2244:	c3                   	ret    
+    2245:	0f 1f 00             	nopl   (%rax)
+    2248:	c3                   	ret    
+    2249:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    2250:	f3 0f 1e fa          	endbr64 
+    2254:	e9 77 ff ff ff       	jmp    21d0 <memmove@plt+0x40>
+    2259:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+
+0000000000002260 <XdmcpAllocARRAY8@@Base>:
+    2260:	f3 0f 1e fa          	endbr64 
+    2264:	55                   	push   %rbp
+    2265:	48 89 fd             	mov    %rdi,%rbp
+    2268:	53                   	push   %rbx
+    2269:	48 83 ec 08          	sub    $0x8,%rsp
+    226d:	81 fe ff ff 00 00    	cmp    $0xffff,%esi
+    2273:	76 1b                	jbe    2290 <XdmcpAllocARRAY8@@Base+0x30>
+    2275:	31 c0                	xor    %eax,%eax
+    2277:	31 db                	xor    %ebx,%ebx
+    2279:	45 31 c0             	xor    %r8d,%r8d
+    227c:	48 89 45 08          	mov    %rax,0x8(%rbp)
+    2280:	44 89 c0             	mov    %r8d,%eax
+    2283:	66 89 5d 00          	mov    %bx,0x0(%rbp)
+    2287:	48 83 c4 08          	add    $0x8,%rsp
+    228b:	5b                   	pop    %rbx
+    228c:	5d                   	pop    %rbp
+    228d:	c3                   	ret    
+    228e:	66 90                	xchg   %ax,%ax
+    2290:	48 63 fe             	movslq %esi,%rdi
+    2293:	b8 01 00 00 00       	mov    $0x1,%eax
+    2298:	89 f3                	mov    %esi,%ebx
+    229a:	48 85 ff             	test   %rdi,%rdi
+    229d:	48 0f 44 f8          	cmove  %rax,%rdi
+    22a1:	e8 ba fe ff ff       	call   2160 <malloc@plt>
+    22a6:	31 d2                	xor    %edx,%edx
+    22a8:	48 85 c0             	test   %rax,%rax
+    22ab:	0f 44 da             	cmove  %edx,%ebx
+    22ae:	48 83 f8 01          	cmp    $0x1,%rax
+    22b2:	45 19 c0             	sbb    %r8d,%r8d
+    22b5:	41 83 c0 01          	add    $0x1,%r8d
+    22b9:	eb c1                	jmp    227c <XdmcpAllocARRAY8@@Base+0x1c>
+    22bb:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+00000000000022c0 <XdmcpAllocARRAY16@@Base>:
+    22c0:	f3 0f 1e fa          	endbr64 
+    22c4:	55                   	push   %rbp
+    22c5:	48 89 fd             	mov    %rdi,%rbp
+    22c8:	53                   	push   %rbx
+    22c9:	48 83 ec 08          	sub    $0x8,%rsp
+    22cd:	81 fe ff 00 00 00    	cmp    $0xff,%esi
+    22d3:	76 1b                	jbe    22f0 <XdmcpAllocARRAY16@@Base+0x30>
+    22d5:	31 c0                	xor    %eax,%eax
+    22d7:	31 db                	xor    %ebx,%ebx
+    22d9:	45 31 c0             	xor    %r8d,%r8d
+    22dc:	48 89 45 08          	mov    %rax,0x8(%rbp)
+    22e0:	44 89 c0             	mov    %r8d,%eax
+    22e3:	88 5d 00             	mov    %bl,0x0(%rbp)
+    22e6:	48 83 c4 08          	add    $0x8,%rsp
+    22ea:	5b                   	pop    %rbx
+    22eb:	5d                   	pop    %rbp
+    22ec:	c3                   	ret    
+    22ed:	0f 1f 00             	nopl   (%rax)
+    22f0:	48 63 fe             	movslq %esi,%rdi
+    22f3:	b8 01 00 00 00       	mov    $0x1,%eax
+    22f8:	89 f3                	mov    %esi,%ebx
+    22fa:	48 01 ff             	add    %rdi,%rdi
+    22fd:	48 0f 44 f8          	cmove  %rax,%rdi
+    2301:	e8 5a fe ff ff       	call   2160 <malloc@plt>
+    2306:	31 d2                	xor    %edx,%edx
+    2308:	48 85 c0             	test   %rax,%rax
+    230b:	0f 44 da             	cmove  %edx,%ebx
+    230e:	48 83 f8 01          	cmp    $0x1,%rax
+    2312:	45 19 c0             	sbb    %r8d,%r8d
+    2315:	41 83 c0 01          	add    $0x1,%r8d
+    2319:	eb c1                	jmp    22dc <XdmcpAllocARRAY16@@Base+0x1c>
+    231b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002320 <XdmcpAllocARRAY32@@Base>:
+    2320:	f3 0f 1e fa          	endbr64 
+    2324:	55                   	push   %rbp
+    2325:	48 89 fd             	mov    %rdi,%rbp
+    2328:	53                   	push   %rbx
+    2329:	48 83 ec 08          	sub    $0x8,%rsp
+    232d:	81 fe ff 00 00 00    	cmp    $0xff,%esi
+    2333:	76 1b                	jbe    2350 <XdmcpAllocARRAY32@@Base+0x30>
+    2335:	31 c0                	xor    %eax,%eax
+    2337:	31 db                	xor    %ebx,%ebx
+    2339:	45 31 c0             	xor    %r8d,%r8d
+    233c:	48 89 45 08          	mov    %rax,0x8(%rbp)
+    2340:	44 89 c0             	mov    %r8d,%eax
+    2343:	88 5d 00             	mov    %bl,0x0(%rbp)
+    2346:	48 83 c4 08          	add    $0x8,%rsp
+    234a:	5b                   	pop    %rbx
+    234b:	5d                   	pop    %rbp
+    234c:	c3                   	ret    
+    234d:	0f 1f 00             	nopl   (%rax)
+    2350:	48 63 fe             	movslq %esi,%rdi
+    2353:	b8 01 00 00 00       	mov    $0x1,%eax
+    2358:	89 f3                	mov    %esi,%ebx
+    235a:	48 c1 e7 02          	shl    $0x2,%rdi
+    235e:	48 0f 44 f8          	cmove  %rax,%rdi
+    2362:	e8 f9 fd ff ff       	call   2160 <malloc@plt>
+    2367:	31 d2                	xor    %edx,%edx
+    2369:	48 85 c0             	test   %rax,%rax
+    236c:	0f 44 da             	cmove  %edx,%ebx
+    236f:	48 83 f8 01          	cmp    $0x1,%rax
+    2373:	45 19 c0             	sbb    %r8d,%r8d
+    2376:	41 83 c0 01          	add    $0x1,%r8d
+    237a:	eb c0                	jmp    233c <XdmcpAllocARRAY32@@Base+0x1c>
+    237c:	0f 1f 40 00          	nopl   0x0(%rax)
+
+0000000000002380 <XdmcpAllocARRAYofARRAY8@@Base>:
+    2380:	f3 0f 1e fa          	endbr64 
+    2384:	55                   	push   %rbp
+    2385:	48 89 fd             	mov    %rdi,%rbp
+    2388:	53                   	push   %rbx
+    2389:	48 83 ec 08          	sub    $0x8,%rsp
+    238d:	81 fe ff 00 00 00    	cmp    $0xff,%esi
+    2393:	76 1b                	jbe    23b0 <XdmcpAllocARRAYofARRAY8@@Base+0x30>
+    2395:	31 c0                	xor    %eax,%eax
+    2397:	31 db                	xor    %ebx,%ebx
+    2399:	45 31 c0             	xor    %r8d,%r8d
+    239c:	48 89 45 08          	mov    %rax,0x8(%rbp)
+    23a0:	44 89 c0             	mov    %r8d,%eax
+    23a3:	88 5d 00             	mov    %bl,0x0(%rbp)
+    23a6:	48 83 c4 08          	add    $0x8,%rsp
+    23aa:	5b                   	pop    %rbx
+    23ab:	5d                   	pop    %rbp
+    23ac:	c3                   	ret    
+    23ad:	0f 1f 00             	nopl   (%rax)
+    23b0:	48 63 fe             	movslq %esi,%rdi
+    23b3:	b8 01 00 00 00       	mov    $0x1,%eax
+    23b8:	89 f3                	mov    %esi,%ebx
+    23ba:	be 10 00 00 00       	mov    $0x10,%esi
+    23bf:	48 85 ff             	test   %rdi,%rdi
+    23c2:	48 0f 44 f8          	cmove  %rax,%rdi
+    23c6:	e8 85 fd ff ff       	call   2150 <calloc@plt>
+    23cb:	31 d2                	xor    %edx,%edx
+    23cd:	48 85 c0             	test   %rax,%rax
+    23d0:	0f 44 da             	cmove  %edx,%ebx
+    23d3:	48 83 f8 01          	cmp    $0x1,%rax
+    23d7:	45 19 c0             	sbb    %r8d,%r8d
+    23da:	41 83 c0 01          	add    $0x1,%r8d
+    23de:	eb bc                	jmp    239c <XdmcpAllocARRAYofARRAY8@@Base+0x1c>
+
+00000000000023e0 <XdmcpARRAY8Equal@@Base>:
+    23e0:	f3 0f 1e fa          	endbr64 
+    23e4:	0f b7 17             	movzwl (%rdi),%edx
+    23e7:	66 3b 16             	cmp    (%rsi),%dx
+    23ea:	75 24                	jne    2410 <XdmcpARRAY8Equal@@Base+0x30>
+    23ec:	48 83 ec 08          	sub    $0x8,%rsp
+    23f0:	48 8b 76 08          	mov    0x8(%rsi),%rsi
+    23f4:	48 8b 7f 08          	mov    0x8(%rdi),%rdi
+    23f8:	e8 43 fd ff ff       	call   2140 <memcmp@plt>
+    23fd:	85 c0                	test   %eax,%eax
+    23ff:	0f 94 c0             	sete   %al
+    2402:	48 83 c4 08          	add    $0x8,%rsp
+    2406:	0f b6 c0             	movzbl %al,%eax
+    2409:	c3                   	ret    
+    240a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    2410:	31 c0                	xor    %eax,%eax
+    2412:	c3                   	ret    
+    2413:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    241a:	00 00 00 00 
+    241e:	66 90                	xchg   %ax,%ax
+
+0000000000002420 <XdmcpCopyARRAY8@@Base>:
+    2420:	f3 0f 1e fa          	endbr64 
+    2424:	55                   	push   %rbp
+    2425:	48 89 f5             	mov    %rsi,%rbp
+    2428:	53                   	push   %rbx
+    2429:	48 89 fb             	mov    %rdi,%rbx
+    242c:	48 83 ec 08          	sub    $0x8,%rsp
+    2430:	0f b7 37             	movzwl (%rdi),%esi
+    2433:	48 89 ef             	mov    %rbp,%rdi
+    2436:	e8 25 fe ff ff       	call   2260 <XdmcpAllocARRAY8@@Base>
+    243b:	85 c0                	test   %eax,%eax
+    243d:	74 15                	je     2454 <XdmcpCopyARRAY8@@Base+0x34>
+    243f:	0f b7 13             	movzwl (%rbx),%edx
+    2442:	48 8b 73 08          	mov    0x8(%rbx),%rsi
+    2446:	48 8b 7d 08          	mov    0x8(%rbp),%rdi
+    244a:	e8 41 fd ff ff       	call   2190 <memmove@plt>
+    244f:	b8 01 00 00 00       	mov    $0x1,%eax
+    2454:	48 83 c4 08          	add    $0x8,%rsp
+    2458:	5b                   	pop    %rbx
+    2459:	5d                   	pop    %rbp
+    245a:	c3                   	ret    
+    245b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002460 <XdmcpReallocARRAY8@@Base>:
+    2460:	f3 0f 1e fa          	endbr64 
+    2464:	81 fe ff ff 00 00    	cmp    $0xffff,%esi
+    246a:	76 04                	jbe    2470 <XdmcpReallocARRAY8@@Base+0x10>
+    246c:	31 c0                	xor    %eax,%eax
+    246e:	c3                   	ret    
+    246f:	90                   	nop
+    2470:	55                   	push   %rbp
+    2471:	b8 01 00 00 00       	mov    $0x1,%eax
+    2476:	48 89 fd             	mov    %rdi,%rbp
+    2479:	53                   	push   %rbx
+    247a:	89 f3                	mov    %esi,%ebx
+    247c:	48 63 f6             	movslq %esi,%rsi
+    247f:	48 83 ec 08          	sub    $0x8,%rsp
+    2483:	48 85 f6             	test   %rsi,%rsi
+    2486:	48 8b 7f 08          	mov    0x8(%rdi),%rdi
+    248a:	48 0f 44 f0          	cmove  %rax,%rsi
+    248e:	e8 ed fc ff ff       	call   2180 <realloc@plt>
+    2493:	48 85 c0             	test   %rax,%rax
+    2496:	74 14                	je     24ac <XdmcpReallocARRAY8@@Base+0x4c>
+    2498:	48 89 45 08          	mov    %rax,0x8(%rbp)
+    249c:	b8 01 00 00 00       	mov    $0x1,%eax
+    24a1:	66 89 5d 00          	mov    %bx,0x0(%rbp)
+    24a5:	48 83 c4 08          	add    $0x8,%rsp
+    24a9:	5b                   	pop    %rbx
+    24aa:	5d                   	pop    %rbp
+    24ab:	c3                   	ret    
+    24ac:	48 83 c4 08          	add    $0x8,%rsp
+    24b0:	31 c0                	xor    %eax,%eax
+    24b2:	5b                   	pop    %rbx
+    24b3:	5d                   	pop    %rbp
+    24b4:	c3                   	ret    
+    24b5:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    24bc:	00 00 00 00 
+
+00000000000024c0 <XdmcpReallocARRAYofARRAY8@@Base>:
+    24c0:	f3 0f 1e fa          	endbr64 
+    24c4:	81 fe ff 00 00 00    	cmp    $0xff,%esi
+    24ca:	76 04                	jbe    24d0 <XdmcpReallocARRAYofARRAY8@@Base+0x10>
+    24cc:	31 c0                	xor    %eax,%eax
+    24ce:	c3                   	ret    
+    24cf:	90                   	nop
+    24d0:	41 54                	push   %r12
+    24d2:	b8 01 00 00 00       	mov    $0x1,%eax
+    24d7:	49 89 fc             	mov    %rdi,%r12
+    24da:	55                   	push   %rbp
+    24db:	53                   	push   %rbx
+    24dc:	89 f3                	mov    %esi,%ebx
+    24de:	48 63 f6             	movslq %esi,%rsi
+    24e1:	48 8b 7f 08          	mov    0x8(%rdi),%rdi
+    24e5:	48 c1 e6 04          	shl    $0x4,%rsi
+    24e9:	48 0f 44 f0          	cmove  %rax,%rsi
+    24ed:	e8 8e fc ff ff       	call   2180 <realloc@plt>
+    24f2:	48 89 c5             	mov    %rax,%rbp
+    24f5:	48 85 c0             	test   %rax,%rax
+    24f8:	74 1c                	je     2516 <XdmcpReallocARRAYofARRAY8@@Base+0x56>
+    24fa:	41 0f b6 0c 24       	movzbl (%r12),%ecx
+    24ff:	39 cb                	cmp    %ecx,%ebx
+    2501:	7f 1d                	jg     2520 <XdmcpReallocARRAYofARRAY8@@Base+0x60>
+    2503:	41 88 1c 24          	mov    %bl,(%r12)
+    2507:	b8 01 00 00 00       	mov    $0x1,%eax
+    250c:	49 89 6c 24 08       	mov    %rbp,0x8(%r12)
+    2511:	5b                   	pop    %rbx
+    2512:	5d                   	pop    %rbp
+    2513:	41 5c                	pop    %r12
+    2515:	c3                   	ret    
+    2516:	5b                   	pop    %rbx
+    2517:	31 c0                	xor    %eax,%eax
+    2519:	5d                   	pop    %rbp
+    251a:	41 5c                	pop    %r12
+    251c:	c3                   	ret    
+    251d:	0f 1f 00             	nopl   (%rax)
+    2520:	0f b6 f9             	movzbl %cl,%edi
+    2523:	89 da                	mov    %ebx,%edx
+    2525:	31 f6                	xor    %esi,%esi
+    2527:	29 ca                	sub    %ecx,%edx
+    2529:	48 89 f8             	mov    %rdi,%rax
+    252c:	48 c1 e0 04          	shl    $0x4,%rax
+    2530:	48 63 d2             	movslq %edx,%rdx
+    2533:	48 c1 e2 04          	shl    $0x4,%rdx
+    2537:	48 8d 7c 05 00       	lea    0x0(%rbp,%rax,1),%rdi
+    253c:	e8 df fb ff ff       	call   2120 <memset@plt>
+    2541:	eb c0                	jmp    2503 <XdmcpReallocARRAYofARRAY8@@Base+0x43>
+    2543:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    254a:	00 00 00 00 
+    254e:	66 90                	xchg   %ax,%ax
+
+0000000000002550 <XdmcpReallocARRAY16@@Base>:
+    2550:	f3 0f 1e fa          	endbr64 
+    2554:	81 fe ff 00 00 00    	cmp    $0xff,%esi
+    255a:	76 04                	jbe    2560 <XdmcpReallocARRAY16@@Base+0x10>
+    255c:	31 c0                	xor    %eax,%eax
+    255e:	c3                   	ret    
+    255f:	90                   	nop
+    2560:	55                   	push   %rbp
+    2561:	b8 01 00 00 00       	mov    $0x1,%eax
+    2566:	48 89 fd             	mov    %rdi,%rbp
+    2569:	53                   	push   %rbx
+    256a:	89 f3                	mov    %esi,%ebx
+    256c:	48 63 f6             	movslq %esi,%rsi
+    256f:	48 83 ec 08          	sub    $0x8,%rsp
+    2573:	48 01 f6             	add    %rsi,%rsi
+    2576:	48 8b 7f 08          	mov    0x8(%rdi),%rdi
+    257a:	48 0f 44 f0          	cmove  %rax,%rsi
+    257e:	e8 fd fb ff ff       	call   2180 <realloc@plt>
+    2583:	48 85 c0             	test   %rax,%rax
+    2586:	74 13                	je     259b <XdmcpReallocARRAY16@@Base+0x4b>
+    2588:	48 89 45 08          	mov    %rax,0x8(%rbp)
+    258c:	b8 01 00 00 00       	mov    $0x1,%eax
+    2591:	88 5d 00             	mov    %bl,0x0(%rbp)
+    2594:	48 83 c4 08          	add    $0x8,%rsp
+    2598:	5b                   	pop    %rbx
+    2599:	5d                   	pop    %rbp
+    259a:	c3                   	ret    
+    259b:	48 83 c4 08          	add    $0x8,%rsp
+    259f:	31 c0                	xor    %eax,%eax
+    25a1:	5b                   	pop    %rbx
+    25a2:	5d                   	pop    %rbp
+    25a3:	c3                   	ret    
+    25a4:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    25ab:	00 00 00 00 
+    25af:	90                   	nop
+
+00000000000025b0 <XdmcpReallocARRAY32@@Base>:
+    25b0:	f3 0f 1e fa          	endbr64 
+    25b4:	81 fe ff 00 00 00    	cmp    $0xff,%esi
+    25ba:	76 04                	jbe    25c0 <XdmcpReallocARRAY32@@Base+0x10>
+    25bc:	31 c0                	xor    %eax,%eax
+    25be:	c3                   	ret    
+    25bf:	90                   	nop
+    25c0:	55                   	push   %rbp
+    25c1:	b8 01 00 00 00       	mov    $0x1,%eax
+    25c6:	48 89 fd             	mov    %rdi,%rbp
+    25c9:	53                   	push   %rbx
+    25ca:	89 f3                	mov    %esi,%ebx
+    25cc:	48 63 f6             	movslq %esi,%rsi
+    25cf:	48 83 ec 08          	sub    $0x8,%rsp
+    25d3:	48 c1 e6 02          	shl    $0x2,%rsi
+    25d7:	48 8b 7f 08          	mov    0x8(%rdi),%rdi
+    25db:	48 0f 44 f0          	cmove  %rax,%rsi
+    25df:	e8 9c fb ff ff       	call   2180 <realloc@plt>
+    25e4:	48 85 c0             	test   %rax,%rax
+    25e7:	74 13                	je     25fc <XdmcpReallocARRAY32@@Base+0x4c>
+    25e9:	48 89 45 08          	mov    %rax,0x8(%rbp)
+    25ed:	b8 01 00 00 00       	mov    $0x1,%eax
+    25f2:	88 5d 00             	mov    %bl,0x0(%rbp)
+    25f5:	48 83 c4 08          	add    $0x8,%rsp
+    25f9:	5b                   	pop    %rbx
+    25fa:	5d                   	pop    %rbp
+    25fb:	c3                   	ret    
+    25fc:	48 83 c4 08          	add    $0x8,%rsp
+    2600:	31 c0                	xor    %eax,%eax
+    2602:	5b                   	pop    %rbx
+    2603:	5d                   	pop    %rbp
+    2604:	c3                   	ret    
+    2605:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    260c:	00 00 00 00 
+
+0000000000002610 <XdmcpDisposeARRAY8@@Base>:
+    2610:	f3 0f 1e fa          	endbr64 
+    2614:	53                   	push   %rbx
+    2615:	48 89 fb             	mov    %rdi,%rbx
+    2618:	48 8b 7f 08          	mov    0x8(%rdi),%rdi
+    261c:	e8 cf fa ff ff       	call   20f0 <free@plt>
+    2621:	31 c0                	xor    %eax,%eax
+    2623:	48 c7 43 08 00 00 00 	movq   $0x0,0x8(%rbx)
+    262a:	00 
+    262b:	66 89 03             	mov    %ax,(%rbx)
+    262e:	5b                   	pop    %rbx
+    262f:	c3                   	ret    
+
+0000000000002630 <XdmcpDisposeARRAY16@@Base>:
+    2630:	f3 0f 1e fa          	endbr64 
+    2634:	53                   	push   %rbx
+    2635:	48 89 fb             	mov    %rdi,%rbx
+    2638:	48 8b 7f 08          	mov    0x8(%rdi),%rdi
+    263c:	e8 af fa ff ff       	call   20f0 <free@plt>
+    2641:	c6 03 00             	movb   $0x0,(%rbx)
+    2644:	48 c7 43 08 00 00 00 	movq   $0x0,0x8(%rbx)
+    264b:	00 
+    264c:	5b                   	pop    %rbx
+    264d:	c3                   	ret    
+    264e:	66 90                	xchg   %ax,%ax
+
+0000000000002650 <XdmcpDisposeARRAY32@@Base>:
+    2650:	f3 0f 1e fa          	endbr64 
+    2654:	53                   	push   %rbx
+    2655:	48 89 fb             	mov    %rdi,%rbx
+    2658:	48 8b 7f 08          	mov    0x8(%rdi),%rdi
+    265c:	e8 8f fa ff ff       	call   20f0 <free@plt>
+    2661:	c6 03 00             	movb   $0x0,(%rbx)
+    2664:	48 c7 43 08 00 00 00 	movq   $0x0,0x8(%rbx)
+    266b:	00 
+    266c:	5b                   	pop    %rbx
+    266d:	c3                   	ret    
+    266e:	66 90                	xchg   %ax,%ax
+
+0000000000002670 <XdmcpDisposeARRAYofARRAY8@@Base>:
+    2670:	f3 0f 1e fa          	endbr64 
+    2674:	55                   	push   %rbp
+    2675:	48 89 fd             	mov    %rdi,%rbp
+    2678:	53                   	push   %rbx
+    2679:	48 83 ec 08          	sub    $0x8,%rsp
+    267d:	48 8b 7f 08          	mov    0x8(%rdi),%rdi
+    2681:	48 85 ff             	test   %rdi,%rdi
+    2684:	74 2e                	je     26b4 <XdmcpDisposeARRAYofARRAY8@@Base+0x44>
+    2686:	80 7d 00 00          	cmpb   $0x0,0x0(%rbp)
+    268a:	74 23                	je     26af <XdmcpDisposeARRAYofARRAY8@@Base+0x3f>
+    268c:	31 db                	xor    %ebx,%ebx
+    268e:	66 90                	xchg   %ax,%ax
+    2690:	48 89 d8             	mov    %rbx,%rax
+    2693:	48 83 c3 01          	add    $0x1,%rbx
+    2697:	48 c1 e0 04          	shl    $0x4,%rax
+    269b:	48 01 c7             	add    %rax,%rdi
+    269e:	e8 6d ff ff ff       	call   2610 <XdmcpDisposeARRAY8@@Base>
+    26a3:	0f b6 45 00          	movzbl 0x0(%rbp),%eax
+    26a7:	48 8b 7d 08          	mov    0x8(%rbp),%rdi
+    26ab:	39 d8                	cmp    %ebx,%eax
+    26ad:	7f e1                	jg     2690 <XdmcpDisposeARRAYofARRAY8@@Base+0x20>
+    26af:	e8 3c fa ff ff       	call   20f0 <free@plt>
+    26b4:	c6 45 00 00          	movb   $0x0,0x0(%rbp)
+    26b8:	48 c7 45 08 00 00 00 	movq   $0x0,0x8(%rbp)
+    26bf:	00 
+    26c0:	48 83 c4 08          	add    $0x8,%rsp
+    26c4:	5b                   	pop    %rbx
+    26c5:	5d                   	pop    %rbp
+    26c6:	c3                   	ret    
+    26c7:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+    26ce:	00 00 
+
+00000000000026d0 <XdmcpFill@@Base>:
+    26d0:	f3 0f 1e fa          	endbr64 
+    26d4:	41 57                	push   %r15
+    26d6:	41 56                	push   %r14
+    26d8:	49 89 ce             	mov    %rcx,%r14
+    26db:	41 55                	push   %r13
+    26dd:	49 89 d5             	mov    %rdx,%r13
+    26e0:	41 54                	push   %r12
+    26e2:	41 89 fc             	mov    %edi,%r12d
+    26e5:	55                   	push   %rbp
+    26e6:	53                   	push   %rbx
+    26e7:	48 89 f3             	mov    %rsi,%rbx
+    26ea:	48 83 ec 08          	sub    $0x8,%rsp
+    26ee:	8b 6e 08             	mov    0x8(%rsi),%ebp
+    26f1:	81 fd ff 1f 00 00    	cmp    $0x1fff,%ebp
+    26f7:	7e 47                	jle    2740 <XdmcpFill@@Base+0x70>
+    26f9:	4c 8b 3b             	mov    (%rbx),%r15
+    26fc:	48 63 d5             	movslq %ebp,%rdx
+    26ff:	c7 43 0c 00 00 00 00 	movl   $0x0,0xc(%rbx)
+    2706:	4d 89 f1             	mov    %r14,%r9
+    2709:	4d 89 e8             	mov    %r13,%r8
+    270c:	31 c9                	xor    %ecx,%ecx
+    270e:	4c 89 fe             	mov    %r15,%rsi
+    2711:	44 89 e7             	mov    %r12d,%edi
+    2714:	e8 57 fa ff ff       	call   2170 <recvfrom@plt>
+    2719:	83 f8 05             	cmp    $0x5,%eax
+    271c:	89 c2                	mov    %eax,%edx
+    271e:	b8 00 00 00 00       	mov    $0x0,%eax
+    2723:	0f 4e d0             	cmovle %eax,%edx
+    2726:	0f 9f c0             	setg   %al
+    2729:	0f b6 c0             	movzbl %al,%eax
+    272c:	89 53 10             	mov    %edx,0x10(%rbx)
+    272f:	48 83 c4 08          	add    $0x8,%rsp
+    2733:	5b                   	pop    %rbx
+    2734:	5d                   	pop    %rbp
+    2735:	41 5c                	pop    %r12
+    2737:	41 5d                	pop    %r13
+    2739:	41 5e                	pop    %r14
+    273b:	41 5f                	pop    %r15
+    273d:	c3                   	ret    
+    273e:	66 90                	xchg   %ax,%ax
+    2740:	bf 00 20 00 00       	mov    $0x2000,%edi
+    2745:	e8 16 fa ff ff       	call   2160 <malloc@plt>
+    274a:	49 89 c7             	mov    %rax,%r15
+    274d:	48 85 c0             	test   %rax,%rax
+    2750:	74 a7                	je     26f9 <XdmcpFill@@Base+0x29>
+    2752:	48 8b 3b             	mov    (%rbx),%rdi
+    2755:	e8 96 f9 ff ff       	call   20f0 <free@plt>
+    275a:	4c 89 3b             	mov    %r15,(%rbx)
+    275d:	ba 00 20 00 00       	mov    $0x2000,%edx
+    2762:	c7 43 08 00 20 00 00 	movl   $0x2000,0x8(%rbx)
+    2769:	eb 94                	jmp    26ff <XdmcpFill@@Base+0x2f>
+    276b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002770 <XdmcpFlush@@Base>:
+    2770:	f3 0f 1e fa          	endbr64 
+    2774:	53                   	push   %rbx
+    2775:	49 89 d0             	mov    %rdx,%r8
+    2778:	48 89 f3             	mov    %rsi,%rbx
+    277b:	48 63 56 0c          	movslq 0xc(%rsi),%rdx
+    277f:	48 8b 36             	mov    (%rsi),%rsi
+    2782:	41 89 c9             	mov    %ecx,%r9d
+    2785:	31 c9                	xor    %ecx,%ecx
+    2787:	e8 a4 f9 ff ff       	call   2130 <sendto@plt>
+    278c:	39 43 0c             	cmp    %eax,0xc(%rbx)
+    278f:	5b                   	pop    %rbx
+    2790:	0f 94 c0             	sete   %al
+    2793:	0f b6 c0             	movzbl %al,%eax
+    2796:	c3                   	ret    
+    2797:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+    279e:	00 00 
+
+00000000000027a0 <XdmcpGenerateKey@@Base>:
+    27a0:	f3 0f 1e fa          	endbr64 
+    27a4:	be 08 00 00 00       	mov    $0x8,%esi
+    27a9:	e9 62 f9 ff ff       	jmp    2110 <arc4random_buf@plt>
+    27ae:	66 90                	xchg   %ax,%ax
+
+00000000000027b0 <XdmcpCompareKeys@@Base>:
+    27b0:	f3 0f 1e fa          	endbr64 
+    27b4:	31 c0                	xor    %eax,%eax
+    27b6:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+    27bd:	00 00 00 
+    27c0:	0f b6 14 06          	movzbl (%rsi,%rax,1),%edx
+    27c4:	38 14 07             	cmp    %dl,(%rdi,%rax,1)
+    27c7:	75 17                	jne    27e0 <XdmcpCompareKeys@@Base+0x30>
+    27c9:	48 83 c0 01          	add    $0x1,%rax
+    27cd:	48 83 f8 08          	cmp    $0x8,%rax
+    27d1:	75 ed                	jne    27c0 <XdmcpCompareKeys@@Base+0x10>
+    27d3:	b8 01 00 00 00       	mov    $0x1,%eax
+    27d8:	c3                   	ret    
+    27d9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    27e0:	31 c0                	xor    %eax,%eax
+    27e2:	c3                   	ret    
+    27e3:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    27ea:	00 00 00 00 
+    27ee:	66 90                	xchg   %ax,%ax
+
+00000000000027f0 <XdmcpIncrementKey@@Base>:
+    27f0:	f3 0f 1e fa          	endbr64 
+    27f4:	48 8d 57 07          	lea    0x7(%rdi),%rdx
+    27f8:	eb 09                	jmp    2803 <XdmcpIncrementKey@@Base+0x13>
+    27fa:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    2800:	48 89 c2             	mov    %rax,%rdx
+    2803:	80 02 01             	addb   $0x1,(%rdx)
+    2806:	75 09                	jne    2811 <XdmcpIncrementKey@@Base+0x21>
+    2808:	48 8d 42 ff          	lea    -0x1(%rdx),%rax
+    280c:	48 39 fa             	cmp    %rdi,%rdx
+    280f:	75 ef                	jne    2800 <XdmcpIncrementKey@@Base+0x10>
+    2811:	c3                   	ret    
+    2812:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    2819:	00 00 00 00 
+    281d:	0f 1f 00             	nopl   (%rax)
+
+0000000000002820 <XdmcpDecrementKey@@Base>:
+    2820:	f3 0f 1e fa          	endbr64 
+    2824:	48 8d 47 07          	lea    0x7(%rdi),%rax
+    2828:	eb 09                	jmp    2833 <XdmcpDecrementKey@@Base+0x13>
+    282a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    2830:	48 89 d0             	mov    %rdx,%rax
+    2833:	0f b6 10             	movzbl (%rax),%edx
+    2836:	8d 4a ff             	lea    -0x1(%rdx),%ecx
+    2839:	88 08                	mov    %cl,(%rax)
+    283b:	84 d2                	test   %dl,%dl
+    283d:	75 09                	jne    2848 <XdmcpDecrementKey@@Base+0x28>
+    283f:	48 8d 50 ff          	lea    -0x1(%rax),%rdx
+    2843:	48 39 f8             	cmp    %rdi,%rax
+    2846:	75 e8                	jne    2830 <XdmcpDecrementKey@@Base+0x10>
+    2848:	c3                   	ret    
+    2849:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+
+0000000000002850 <XdmcpReadRemaining@@Base>:
+    2850:	f3 0f 1e fa          	endbr64 
+    2854:	8b 47 10             	mov    0x10(%rdi),%eax
+    2857:	2b 47 0c             	sub    0xc(%rdi),%eax
+    285a:	c3                   	ret    
+    285b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000002860 <XdmcpReadCARD8@@Base>:
+    2860:	f3 0f 1e fa          	endbr64 
+    2864:	48 63 47 0c          	movslq 0xc(%rdi),%rax
+    2868:	45 31 c0             	xor    %r8d,%r8d
+    286b:	3b 47 10             	cmp    0x10(%rdi),%eax
+    286e:	7d 15                	jge    2885 <XdmcpReadCARD8@@Base+0x25>
+    2870:	48 8b 17             	mov    (%rdi),%rdx
+    2873:	8d 48 01             	lea    0x1(%rax),%ecx
+    2876:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+    287c:	89 4f 0c             	mov    %ecx,0xc(%rdi)
+    287f:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax
+    2883:	88 06                	mov    %al,(%rsi)
+    2885:	44 89 c0             	mov    %r8d,%eax
+    2888:	c3                   	ret    
+    2889:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+
+0000000000002890 <XdmcpReadCARD16@@Base>:
+    2890:	f3 0f 1e fa          	endbr64 
+    2894:	55                   	push   %rbp
+    2895:	48 89 fd             	mov    %rdi,%rbp
+    2898:	53                   	push   %rbx
+    2899:	48 89 f3             	mov    %rsi,%rbx
+    289c:	48 83 ec 18          	sub    $0x18,%rsp
+    28a0:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+    28a7:	00 00 
+    28a9:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+    28ae:	31 c0                	xor    %eax,%eax
+    28b0:	48 8d 74 24 07       	lea    0x7(%rsp),%rsi
+    28b5:	e8 a6 ff ff ff       	call   2860 <XdmcpReadCARD8@@Base>
+    28ba:	85 c0                	test   %eax,%eax
+    28bc:	75 22                	jne    28e0 <XdmcpReadCARD16@@Base+0x50>
+    28be:	31 c0                	xor    %eax,%eax
+    28c0:	48 8b 54 24 08       	mov    0x8(%rsp),%rdx
+    28c5:	64 48 2b 14 25 28 00 	sub    %fs:0x28,%rdx
+    28cc:	00 00 
+    28ce:	75 3a                	jne    290a <XdmcpReadCARD16@@Base+0x7a>
+    28d0:	48 83 c4 18          	add    $0x18,%rsp
+    28d4:	5b                   	pop    %rbx
+    28d5:	5d                   	pop    %rbp
+    28d6:	c3                   	ret    
+    28d7:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+    28de:	00 00 
+    28e0:	48 8d 74 24 06       	lea    0x6(%rsp),%rsi
+    28e5:	48 89 ef             	mov    %rbp,%rdi
+    28e8:	e8 73 ff ff ff       	call   2860 <XdmcpReadCARD8@@Base>
+    28ed:	85 c0                	test   %eax,%eax
+    28ef:	74 cd                	je     28be <XdmcpReadCARD16@@Base+0x2e>
+    28f1:	0f b6 54 24 07       	movzbl 0x7(%rsp),%edx
+    28f6:	0f b6 44 24 06       	movzbl 0x6(%rsp),%eax
+    28fb:	c1 e2 08             	shl    $0x8,%edx
+    28fe:	09 d0                	or     %edx,%eax
+    2900:	66 89 03             	mov    %ax,(%rbx)
+    2903:	b8 01 00 00 00       	mov    $0x1,%eax
+    2908:	eb b6                	jmp    28c0 <XdmcpReadCARD16@@Base+0x30>
+    290a:	e8 f1 f7 ff ff       	call   2100 <__stack_chk_fail@plt>
+    290f:	90                   	nop
+
+0000000000002910 <XdmcpReadHeader@@Base>:
+    2910:	f3 0f 1e fa          	endbr64 
+    2914:	55                   	push   %rbp
+    2915:	48 89 fd             	mov    %rdi,%rbp
+    2918:	53                   	push   %rbx
+    2919:	48 89 f3             	mov    %rsi,%rbx
+    291c:	48 83 ec 08          	sub    $0x8,%rsp
+    2920:	e8 6b ff ff ff       	call   2890 <XdmcpReadCARD16@@Base>
+    2925:	85 c0                	test   %eax,%eax
+    2927:	75 0f                	jne    2938 <XdmcpReadHeader@@Base+0x28>
+    2929:	48 83 c4 08          	add    $0x8,%rsp
+    292d:	31 c0                	xor    %eax,%eax
+    292f:	5b                   	pop    %rbx
+    2930:	5d                   	pop    %rbp
+    2931:	c3                   	ret    
+    2932:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    2938:	48 8d 73 02          	lea    0x2(%rbx),%rsi
+    293c:	48 89 ef             	mov    %rbp,%rdi
+    293f:	e8 4c ff ff ff       	call   2890 <XdmcpReadCARD16@@Base>
+    2944:	85 c0                	test   %eax,%eax
+    2946:	74 e1                	je     2929 <XdmcpReadHeader@@Base+0x19>
+    2948:	48 8d 73 04          	lea    0x4(%rbx),%rsi
+    294c:	48 89 ef             	mov    %rbp,%rdi
+    294f:	e8 3c ff ff ff       	call   2890 <XdmcpReadCARD16@@Base>
+    2954:	85 c0                	test   %eax,%eax
+    2956:	0f 95 c0             	setne  %al
+    2959:	48 83 c4 08          	add    $0x8,%rsp
+    295d:	0f b6 c0             	movzbl %al,%eax
+    2960:	5b                   	pop    %rbx
+    2961:	5d                   	pop    %rbp
+    2962:	c3                   	ret    
+    2963:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    296a:	00 00 00 00 
+    296e:	66 90                	xchg   %ax,%ax
+
+0000000000002970 <XdmcpReadARRAY8@@Base>:
+    2970:	f3 0f 1e fa          	endbr64 
+    2974:	41 54                	push   %r12
+    2976:	55                   	push   %rbp
+    2977:	48 89 f5             	mov    %rsi,%rbp
+    297a:	53                   	push   %rbx
+    297b:	48 89 fb             	mov    %rdi,%rbx
+    297e:	48 83 ec 10          	sub    $0x10,%rsp
+    2982:	e8 09 ff ff ff       	call   2890 <XdmcpReadCARD16@@Base>
+    2987:	85 c0                	test   %eax,%eax
+    2989:	0f 84 91 00 00 00    	je     2a20 <XdmcpReadARRAY8@@Base+0xb0>
+    298f:	0f b7 7d 00          	movzwl 0x0(%rbp),%edi
+    2993:	66 85 ff             	test   %di,%di
+    2996:	75 18                	jne    29b0 <XdmcpReadARRAY8@@Base+0x40>
+    2998:	48 c7 45 08 00 00 00 	movq   $0x0,0x8(%rbp)
+    299f:	00 
+    29a0:	b8 01 00 00 00       	mov    $0x1,%eax
+    29a5:	48 83 c4 10          	add    $0x10,%rsp
+    29a9:	5b                   	pop    %rbx
+    29aa:	5d                   	pop    %rbp
+    29ab:	41 5c                	pop    %r12
+    29ad:	c3                   	ret    
+    29ae:	66 90                	xchg   %ax,%ax
+    29b0:	e8 ab f7 ff ff       	call   2160 <malloc@plt>
+    29b5:	48 89 45 08          	mov    %rax,0x8(%rbp)
+    29b9:	48 89 c6             	mov    %rax,%rsi
+    29bc:	48 85 c0             	test   %rax,%rax
+    29bf:	0f 84 81 00 00 00    	je     2a46 <XdmcpReadARRAY8@@Base+0xd6>
+    29c5:	45 31 e4             	xor    %r12d,%r12d
+    29c8:	eb 17                	jmp    29e1 <XdmcpReadARRAY8@@Base+0x71>
+    29ca:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    29d0:	0f b7 45 00          	movzwl 0x0(%rbp),%eax
+    29d4:	49 83 c4 01          	add    $0x1,%r12
+    29d8:	44 39 e0             	cmp    %r12d,%eax
+    29db:	7e 5b                	jle    2a38 <XdmcpReadARRAY8@@Base+0xc8>
+    29dd:	48 8b 75 08          	mov    0x8(%rbp),%rsi
+    29e1:	4c 01 e6             	add    %r12,%rsi
+    29e4:	48 89 df             	mov    %rbx,%rdi
+    29e7:	e8 74 fe ff ff       	call   2860 <XdmcpReadCARD8@@Base>
+    29ec:	85 c0                	test   %eax,%eax
+    29ee:	75 e0                	jne    29d0 <XdmcpReadARRAY8@@Base+0x60>
+    29f0:	48 8b 7d 08          	mov    0x8(%rbp),%rdi
+    29f4:	89 44 24 0c          	mov    %eax,0xc(%rsp)
+    29f8:	e8 f3 f6 ff ff       	call   20f0 <free@plt>
+    29fd:	31 c0                	xor    %eax,%eax
+    29ff:	48 c7 45 08 00 00 00 	movq   $0x0,0x8(%rbp)
+    2a06:	00 
+    2a07:	66 89 45 00          	mov    %ax,0x0(%rbp)
+    2a0b:	8b 44 24 0c          	mov    0xc(%rsp),%eax
+    2a0f:	48 83 c4 10          	add    $0x10,%rsp
+    2a13:	5b                   	pop    %rbx
+    2a14:	5d                   	pop    %rbp
+    2a15:	41 5c                	pop    %r12
+    2a17:	c3                   	ret    
+    2a18:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+    2a1f:	00 
+    2a20:	48 c7 45 08 00 00 00 	movq   $0x0,0x8(%rbp)
+    2a27:	00 
+    2a28:	48 83 c4 10          	add    $0x10,%rsp
+    2a2c:	5b                   	pop    %rbx
+    2a2d:	5d                   	pop    %rbp
+    2a2e:	41 5c                	pop    %r12
+    2a30:	c3                   	ret    
+    2a31:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    2a38:	48 83 c4 10          	add    $0x10,%rsp
+    2a3c:	b8 01 00 00 00       	mov    $0x1,%eax
+    2a41:	5b                   	pop    %rbx
+    2a42:	5d                   	pop    %rbp
+    2a43:	41 5c                	pop    %r12
+    2a45:	c3                   	ret    
+    2a46:	31 c0                	xor    %eax,%eax
+    2a48:	e9 58 ff ff ff       	jmp    29a5 <XdmcpReadARRAY8@@Base+0x35>
+    2a4d:	0f 1f 00             	nopl   (%rax)
+
+0000000000002a50 <XdmcpReadARRAYofARRAY8@@Base>:
+    2a50:	f3 0f 1e fa          	endbr64 
+    2a54:	41 54                	push   %r12
+    2a56:	49 89 f4             	mov    %rsi,%r12
+    2a59:	55                   	push   %rbp
+    2a5a:	53                   	push   %rbx
+    2a5b:	48 89 fb             	mov    %rdi,%rbx
+    2a5e:	48 83 ec 10          	sub    $0x10,%rsp
+    2a62:	e8 f9 fd ff ff       	call   2860 <XdmcpReadCARD8@@Base>
+    2a67:	85 c0                	test   %eax,%eax
+    2a69:	0f 84 89 00 00 00    	je     2af8 <XdmcpReadARRAYofARRAY8@@Base+0xa8>
+    2a6f:	41 0f b6 3c 24       	movzbl (%r12),%edi
+    2a74:	40 84 ff             	test   %dil,%dil
+    2a77:	75 17                	jne    2a90 <XdmcpReadARRAYofARRAY8@@Base+0x40>
+    2a79:	49 c7 44 24 08 00 00 	movq   $0x0,0x8(%r12)
+    2a80:	00 00 
+    2a82:	b8 01 00 00 00       	mov    $0x1,%eax
+    2a87:	48 83 c4 10          	add    $0x10,%rsp
+    2a8b:	5b                   	pop    %rbx
+    2a8c:	5d                   	pop    %rbp
+    2a8d:	41 5c                	pop    %r12
+    2a8f:	c3                   	ret    
+    2a90:	48 c1 e7 04          	shl    $0x4,%rdi
+    2a94:	e8 c7 f6 ff ff       	call   2160 <malloc@plt>
+    2a99:	49 89 44 24 08       	mov    %rax,0x8(%r12)
+    2a9e:	48 89 c6             	mov    %rax,%rsi
+    2aa1:	48 85 c0             	test   %rax,%rax
+    2aa4:	74 78                	je     2b1e <XdmcpReadARRAYofARRAY8@@Base+0xce>
+    2aa6:	31 ed                	xor    %ebp,%ebp
+    2aa8:	eb 14                	jmp    2abe <XdmcpReadARRAYofARRAY8@@Base+0x6e>
+    2aaa:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    2ab0:	83 c5 01             	add    $0x1,%ebp
+    2ab3:	41 3a 2c 24          	cmp    (%r12),%bpl
+    2ab7:	73 57                	jae    2b10 <XdmcpReadARRAYofARRAY8@@Base+0xc0>
+    2ab9:	49 8b 74 24 08       	mov    0x8(%r12),%rsi
+    2abe:	40 0f b6 c5          	movzbl %bpl,%eax
+    2ac2:	48 89 df             	mov    %rbx,%rdi
+    2ac5:	48 c1 e0 04          	shl    $0x4,%rax
+    2ac9:	48 01 c6             	add    %rax,%rsi
+    2acc:	e8 9f fe ff ff       	call   2970 <XdmcpReadARRAY8@@Base>
+    2ad1:	85 c0                	test   %eax,%eax
+    2ad3:	75 db                	jne    2ab0 <XdmcpReadARRAYofARRAY8@@Base+0x60>
+    2ad5:	41 88 2c 24          	mov    %bpl,(%r12)
+    2ad9:	4c 89 e7             	mov    %r12,%rdi
+    2adc:	89 44 24 0c          	mov    %eax,0xc(%rsp)
+    2ae0:	e8 8b fb ff ff       	call   2670 <XdmcpDisposeARRAYofARRAY8@@Base>
+    2ae5:	8b 44 24 0c          	mov    0xc(%rsp),%eax
+    2ae9:	48 83 c4 10          	add    $0x10,%rsp
+    2aed:	5b                   	pop    %rbx
+    2aee:	5d                   	pop    %rbp
+    2aef:	41 5c                	pop    %r12
+    2af1:	c3                   	ret    
+    2af2:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    2af8:	49 c7 44 24 08 00 00 	movq   $0x0,0x8(%r12)
+    2aff:	00 00 
+    2b01:	48 83 c4 10          	add    $0x10,%rsp
+    2b05:	5b                   	pop    %rbx
+    2b06:	5d                   	pop    %rbp
+    2b07:	41 5c                	pop    %r12
+    2b09:	c3                   	ret    
+    2b0a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    2b10:	48 83 c4 10          	add    $0x10,%rsp
+    2b14:	b8 01 00 00 00       	mov    $0x1,%eax
+    2b19:	5b                   	pop    %rbx
+    2b1a:	5d                   	pop    %rbp
+    2b1b:	41 5c                	pop    %r12
+    2b1d:	c3                   	ret    
+    2b1e:	31 c0                	xor    %eax,%eax
+    2b20:	e9 62 ff ff ff       	jmp    2a87 <XdmcpReadARRAYofARRAY8@@Base+0x37>
+    2b25:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    2b2c:	00 00 00 00 
+
+0000000000002b30 <XdmcpReadARRAY16@@Base>:
+    2b30:	f3 0f 1e fa          	endbr64 
+    2b34:	41 54                	push   %r12
+    2b36:	49 89 fc             	mov    %rdi,%r12
+    2b39:	55                   	push   %rbp
+    2b3a:	53                   	push   %rbx
+    2b3b:	48 89 f3             	mov    %rsi,%rbx
+    2b3e:	48 83 ec 10          	sub    $0x10,%rsp
+    2b42:	e8 19 fd ff ff       	call   2860 <XdmcpReadCARD8@@Base>
+    2b47:	85 c0                	test   %eax,%eax
+    2b49:	0f 84 81 00 00 00    	je     2bd0 <XdmcpReadARRAY16@@Base+0xa0>
+    2b4f:	0f b6 3b             	movzbl (%rbx),%edi
+    2b52:	40 84 ff             	test   %dil,%dil
+    2b55:	75 19                	jne    2b70 <XdmcpReadARRAY16@@Base+0x40>
+    2b57:	48 c7 43 08 00 00 00 	movq   $0x0,0x8(%rbx)
+    2b5e:	00 
+    2b5f:	b8 01 00 00 00       	mov    $0x1,%eax
+    2b64:	48 83 c4 10          	add    $0x10,%rsp
+    2b68:	5b                   	pop    %rbx
+    2b69:	5d                   	pop    %rbp
+    2b6a:	41 5c                	pop    %r12
+    2b6c:	c3                   	ret    
+    2b6d:	0f 1f 00             	nopl   (%rax)
+    2b70:	48 01 ff             	add    %rdi,%rdi
+    2b73:	e8 e8 f5 ff ff       	call   2160 <malloc@plt>
+    2b78:	48 89 43 08          	mov    %rax,0x8(%rbx)
+    2b7c:	48 85 c0             	test   %rax,%rax
+    2b7f:	74 75                	je     2bf6 <XdmcpReadARRAY16@@Base+0xc6>
+    2b81:	31 ed                	xor    %ebp,%ebp
+    2b83:	eb 12                	jmp    2b97 <XdmcpReadARRAY16@@Base+0x67>
+    2b85:	0f 1f 00             	nopl   (%rax)
+    2b88:	0f b6 03             	movzbl (%rbx),%eax
+    2b8b:	48 83 c5 01          	add    $0x1,%rbp
+    2b8f:	39 e8                	cmp    %ebp,%eax
+    2b91:	7e 55                	jle    2be8 <XdmcpReadARRAY16@@Base+0xb8>
+    2b93:	48 8b 43 08          	mov    0x8(%rbx),%rax
+    2b97:	48 8d 34 68          	lea    (%rax,%rbp,2),%rsi
+    2b9b:	4c 89 e7             	mov    %r12,%rdi
+    2b9e:	e8 ed fc ff ff       	call   2890 <XdmcpReadCARD16@@Base>
+    2ba3:	85 c0                	test   %eax,%eax
+    2ba5:	75 e1                	jne    2b88 <XdmcpReadARRAY16@@Base+0x58>
+    2ba7:	48 8b 7b 08          	mov    0x8(%rbx),%rdi
+    2bab:	89 44 24 0c          	mov    %eax,0xc(%rsp)
+    2baf:	e8 3c f5 ff ff       	call   20f0 <free@plt>
+    2bb4:	c6 03 00             	movb   $0x0,(%rbx)
+    2bb7:	8b 44 24 0c          	mov    0xc(%rsp),%eax
+    2bbb:	48 c7 43 08 00 00 00 	movq   $0x0,0x8(%rbx)
+    2bc2:	00 
+    2bc3:	48 83 c4 10          	add    $0x10,%rsp
+    2bc7:	5b                   	pop    %rbx
+    2bc8:	5d                   	pop    %rbp
+    2bc9:	41 5c                	pop    %r12
+    2bcb:	c3                   	ret    
+    2bcc:	0f 1f 40 00          	nopl   0x0(%rax)
+    2bd0:	48 c7 43 08 00 00 00 	movq   $0x0,0x8(%rbx)
+    2bd7:	00 
+    2bd8:	48 83 c4 10          	add    $0x10,%rsp
+    2bdc:	5b                   	pop    %rbx
+    2bdd:	5d                   	pop    %rbp
+    2bde:	41 5c                	pop    %r12
+    2be0:	c3                   	ret    
+    2be1:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    2be8:	48 83 c4 10          	add    $0x10,%rsp
+    2bec:	b8 01 00 00 00       	mov    $0x1,%eax
+    2bf1:	5b                   	pop    %rbx
+    2bf2:	5d                   	pop    %rbp
+    2bf3:	41 5c                	pop    %r12
+    2bf5:	c3                   	ret    
+    2bf6:	31 c0                	xor    %eax,%eax
+    2bf8:	e9 67 ff ff ff       	jmp    2b64 <XdmcpReadARRAY16@@Base+0x34>
+    2bfd:	0f 1f 00             	nopl   (%rax)
+
+0000000000002c00 <XdmcpReadCARD32@@Base>:
+    2c00:	f3 0f 1e fa          	endbr64 
+    2c04:	55                   	push   %rbp
+    2c05:	48 89 fd             	mov    %rdi,%rbp
+    2c08:	53                   	push   %rbx
+    2c09:	48 89 f3             	mov    %rsi,%rbx
+    2c0c:	48 83 ec 18          	sub    $0x18,%rsp
+    2c10:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+    2c17:	00 00 
+    2c19:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+    2c1e:	31 c0                	xor    %eax,%eax
+    2c20:	48 8d 74 24 07       	lea    0x7(%rsp),%rsi
+    2c25:	e8 36 fc ff ff       	call   2860 <XdmcpReadCARD8@@Base>
+    2c2a:	85 c0                	test   %eax,%eax
+    2c2c:	75 22                	jne    2c50 <XdmcpReadCARD32@@Base+0x50>
+    2c2e:	31 c0                	xor    %eax,%eax
+    2c30:	48 8b 54 24 08       	mov    0x8(%rsp),%rdx
+    2c35:	64 48 2b 14 25 28 00 	sub    %fs:0x28,%rdx
+    2c3c:	00 00 
+    2c3e:	75 6f                	jne    2caf <XdmcpReadCARD32@@Base+0xaf>
+    2c40:	48 83 c4 18          	add    $0x18,%rsp
+    2c44:	5b                   	pop    %rbx
+    2c45:	5d                   	pop    %rbp
+    2c46:	c3                   	ret    
+    2c47:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+    2c4e:	00 00 
+    2c50:	48 8d 74 24 06       	lea    0x6(%rsp),%rsi
+    2c55:	48 89 ef             	mov    %rbp,%rdi
+    2c58:	e8 03 fc ff ff       	call   2860 <XdmcpReadCARD8@@Base>
+    2c5d:	85 c0                	test   %eax,%eax
+    2c5f:	74 cd                	je     2c2e <XdmcpReadCARD32@@Base+0x2e>
+    2c61:	48 8d 74 24 05       	lea    0x5(%rsp),%rsi
+    2c66:	48 89 ef             	mov    %rbp,%rdi
+    2c69:	e8 f2 fb ff ff       	call   2860 <XdmcpReadCARD8@@Base>
+    2c6e:	85 c0                	test   %eax,%eax
+    2c70:	74 bc                	je     2c2e <XdmcpReadCARD32@@Base+0x2e>
+    2c72:	48 8d 74 24 04       	lea    0x4(%rsp),%rsi
+    2c77:	48 89 ef             	mov    %rbp,%rdi
+    2c7a:	e8 e1 fb ff ff       	call   2860 <XdmcpReadCARD8@@Base>
+    2c7f:	85 c0                	test   %eax,%eax
+    2c81:	74 ab                	je     2c2e <XdmcpReadCARD32@@Base+0x2e>
+    2c83:	0f b6 44 24 07       	movzbl 0x7(%rsp),%eax
+    2c88:	0f b6 54 24 06       	movzbl 0x6(%rsp),%edx
+    2c8d:	c1 e0 18             	shl    $0x18,%eax
+    2c90:	c1 e2 10             	shl    $0x10,%edx
+    2c93:	09 d0                	or     %edx,%eax
+    2c95:	0f b6 54 24 04       	movzbl 0x4(%rsp),%edx
+    2c9a:	09 d0                	or     %edx,%eax
+    2c9c:	0f b6 54 24 05       	movzbl 0x5(%rsp),%edx
+    2ca1:	c1 e2 08             	shl    $0x8,%edx
+    2ca4:	09 d0                	or     %edx,%eax
+    2ca6:	89 03                	mov    %eax,(%rbx)
+    2ca8:	b8 01 00 00 00       	mov    $0x1,%eax
+    2cad:	eb 81                	jmp    2c30 <XdmcpReadCARD32@@Base+0x30>
+    2caf:	e8 4c f4 ff ff       	call   2100 <__stack_chk_fail@plt>
+    2cb4:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    2cbb:	00 00 00 00 
+    2cbf:	90                   	nop
+
+0000000000002cc0 <XdmcpReadARRAY32@@Base>:
+    2cc0:	f3 0f 1e fa          	endbr64 
+    2cc4:	41 54                	push   %r12
+    2cc6:	49 89 fc             	mov    %rdi,%r12
+    2cc9:	55                   	push   %rbp
+    2cca:	53                   	push   %rbx
+    2ccb:	48 89 f3             	mov    %rsi,%rbx
+    2cce:	48 83 ec 10          	sub    $0x10,%rsp
+    2cd2:	e8 89 fb ff ff       	call   2860 <XdmcpReadCARD8@@Base>
+    2cd7:	85 c0                	test   %eax,%eax
+    2cd9:	0f 84 89 00 00 00    	je     2d68 <XdmcpReadARRAY32@@Base+0xa8>
+    2cdf:	0f b6 3b             	movzbl (%rbx),%edi
+    2ce2:	40 84 ff             	test   %dil,%dil
+    2ce5:	75 19                	jne    2d00 <XdmcpReadARRAY32@@Base+0x40>
+    2ce7:	48 c7 43 08 00 00 00 	movq   $0x0,0x8(%rbx)
+    2cee:	00 
+    2cef:	b8 01 00 00 00       	mov    $0x1,%eax
+    2cf4:	48 83 c4 10          	add    $0x10,%rsp
+    2cf8:	5b                   	pop    %rbx
+    2cf9:	5d                   	pop    %rbp
+    2cfa:	41 5c                	pop    %r12
+    2cfc:	c3                   	ret    
+    2cfd:	0f 1f 00             	nopl   (%rax)
+    2d00:	48 c1 e7 02          	shl    $0x2,%rdi
+    2d04:	e8 57 f4 ff ff       	call   2160 <malloc@plt>
+    2d09:	48 89 43 08          	mov    %rax,0x8(%rbx)
+    2d0d:	48 85 c0             	test   %rax,%rax
+    2d10:	74 7c                	je     2d8e <XdmcpReadARRAY32@@Base+0xce>
+    2d12:	31 ed                	xor    %ebp,%ebp
+    2d14:	eb 19                	jmp    2d2f <XdmcpReadARRAY32@@Base+0x6f>
+    2d16:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+    2d1d:	00 00 00 
+    2d20:	0f b6 03             	movzbl (%rbx),%eax
+    2d23:	48 83 c5 01          	add    $0x1,%rbp
+    2d27:	39 e8                	cmp    %ebp,%eax
+    2d29:	7e 55                	jle    2d80 <XdmcpReadARRAY32@@Base+0xc0>
+    2d2b:	48 8b 43 08          	mov    0x8(%rbx),%rax
+    2d2f:	48 8d 34 a8          	lea    (%rax,%rbp,4),%rsi
+    2d33:	4c 89 e7             	mov    %r12,%rdi
+    2d36:	e8 c5 fe ff ff       	call   2c00 <XdmcpReadCARD32@@Base>
+    2d3b:	85 c0                	test   %eax,%eax
+    2d3d:	75 e1                	jne    2d20 <XdmcpReadARRAY32@@Base+0x60>
+    2d3f:	48 8b 7b 08          	mov    0x8(%rbx),%rdi
+    2d43:	89 44 24 0c          	mov    %eax,0xc(%rsp)
+    2d47:	e8 a4 f3 ff ff       	call   20f0 <free@plt>
+    2d4c:	c6 03 00             	movb   $0x0,(%rbx)
+    2d4f:	8b 44 24 0c          	mov    0xc(%rsp),%eax
+    2d53:	48 c7 43 08 00 00 00 	movq   $0x0,0x8(%rbx)
+    2d5a:	00 
+    2d5b:	48 83 c4 10          	add    $0x10,%rsp
+    2d5f:	5b                   	pop    %rbx
+    2d60:	5d                   	pop    %rbp
+    2d61:	41 5c                	pop    %r12
+    2d63:	c3                   	ret    
+    2d64:	0f 1f 40 00          	nopl   0x0(%rax)
+    2d68:	48 c7 43 08 00 00 00 	movq   $0x0,0x8(%rbx)
+    2d6f:	00 
+    2d70:	48 83 c4 10          	add    $0x10,%rsp
+    2d74:	5b                   	pop    %rbx
+    2d75:	5d                   	pop    %rbp
+    2d76:	41 5c                	pop    %r12
+    2d78:	c3                   	ret    
+    2d79:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    2d80:	48 83 c4 10          	add    $0x10,%rsp
+    2d84:	b8 01 00 00 00       	mov    $0x1,%eax
+    2d89:	5b                   	pop    %rbx
+    2d8a:	5d                   	pop    %rbp
+    2d8b:	41 5c                	pop    %r12
+    2d8d:	c3                   	ret    
+    2d8e:	31 c0                	xor    %eax,%eax
+    2d90:	e9 5f ff ff ff       	jmp    2cf4 <XdmcpReadARRAY32@@Base+0x34>
+    2d95:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    2d9c:	00 00 00 00 
+
+0000000000002da0 <_XdmcpWrapperToOddParity@@Base>:
+    2da0:	f3 0f 1e fa          	endbr64 
+    2da4:	49 89 f0             	mov    %rsi,%r8
+    2da7:	41 b9 08 00 00 00    	mov    $0x8,%r9d
+    2dad:	be 01 00 00 00       	mov    $0x1,%esi
+    2db2:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    2db8:	0f b6 44 37 ff       	movzbl -0x1(%rdi,%rsi,1),%eax
+    2dbd:	44 89 c9             	mov    %r9d,%ecx
+    2dc0:	0f b6 14 37          	movzbl (%rdi,%rsi,1),%edx
+    2dc4:	29 f1                	sub    %esi,%ecx
+    2dc6:	d3 e0                	shl    %cl,%eax
+    2dc8:	89 f1                	mov    %esi,%ecx
+    2dca:	d3 fa                	sar    %cl,%edx
+    2dcc:	09 d0                	or     %edx,%eax
+    2dce:	83 e0 7f             	and    $0x7f,%eax
+    2dd1:	89 c2                	mov    %eax,%edx
+    2dd3:	c0 ea 04             	shr    $0x4,%dl
+    2dd6:	31 c2                	xor    %eax,%edx
+    2dd8:	01 c0                	add    %eax,%eax
+    2dda:	89 d1                	mov    %edx,%ecx
+    2ddc:	c0 e9 02             	shr    $0x2,%cl
+    2ddf:	31 ca                	xor    %ecx,%edx
+    2de1:	89 d1                	mov    %edx,%ecx
+    2de3:	d0 e9                	shr    %cl
+    2de5:	31 ca                	xor    %ecx,%edx
+    2de7:	f7 d2                	not    %edx
+    2de9:	83 e2 01             	and    $0x1,%edx
+    2dec:	09 d0                	or     %edx,%eax
+    2dee:	41 88 44 30 ff       	mov    %al,-0x1(%r8,%rsi,1)
+    2df3:	48 83 c6 01          	add    $0x1,%rsi
+    2df7:	48 83 fe 08          	cmp    $0x8,%rsi
+    2dfb:	75 bb                	jne    2db8 <_XdmcpWrapperToOddParity@@Base+0x18>
+    2dfd:	0f b6 57 07          	movzbl 0x7(%rdi),%edx
+    2e01:	89 d0                	mov    %edx,%eax
+    2e03:	c0 e8 04             	shr    $0x4,%al
+    2e06:	31 d0                	xor    %edx,%eax
+    2e08:	01 d2                	add    %edx,%edx
+    2e0a:	89 c1                	mov    %eax,%ecx
+    2e0c:	c0 e9 02             	shr    $0x2,%cl
+    2e0f:	31 c8                	xor    %ecx,%eax
+    2e11:	89 c1                	mov    %eax,%ecx
+    2e13:	d0 e9                	shr    %cl
+    2e15:	31 c8                	xor    %ecx,%eax
+    2e17:	f7 d0                	not    %eax
+    2e19:	83 e0 01             	and    $0x1,%eax
+    2e1c:	09 c2                	or     %eax,%edx
+    2e1e:	41 88 50 07          	mov    %dl,0x7(%r8)
+    2e22:	c3                   	ret    
+    2e23:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    2e2a:	00 00 00 00 
+    2e2e:	66 90                	xchg   %ax,%ax
+
+0000000000002e30 <XdmcpWriteCARD8@@Base>:
+    2e30:	f3 0f 1e fa          	endbr64 
+    2e34:	48 63 47 0c          	movslq 0xc(%rdi),%rax
+    2e38:	45 31 c0             	xor    %r8d,%r8d
+    2e3b:	3b 47 08             	cmp    0x8(%rdi),%eax
+    2e3e:	7d 13                	jge    2e53 <XdmcpWriteCARD8@@Base+0x23>
+    2e40:	48 8b 17             	mov    (%rdi),%rdx
+    2e43:	8d 48 01             	lea    0x1(%rax),%ecx
+    2e46:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+    2e4c:	89 4f 0c             	mov    %ecx,0xc(%rdi)
+    2e4f:	40 88 34 02          	mov    %sil,(%rdx,%rax,1)
+    2e53:	44 89 c0             	mov    %r8d,%eax
+    2e56:	c3                   	ret    
+    2e57:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+    2e5e:	00 00 
+
+0000000000002e60 <XdmcpWriteCARD16@@Base>:
+    2e60:	f3 0f 1e fa          	endbr64 
+    2e64:	55                   	push   %rbp
+    2e65:	48 89 fd             	mov    %rdi,%rbp
+    2e68:	53                   	push   %rbx
+    2e69:	89 f3                	mov    %esi,%ebx
+    2e6b:	c1 ee 08             	shr    $0x8,%esi
+    2e6e:	48 83 ec 08          	sub    $0x8,%rsp
+    2e72:	e8 b9 ff ff ff       	call   2e30 <XdmcpWriteCARD8@@Base>
+    2e77:	85 c0                	test   %eax,%eax
+    2e79:	74 13                	je     2e8e <XdmcpWriteCARD16@@Base+0x2e>
+    2e7b:	0f b6 f3             	movzbl %bl,%esi
+    2e7e:	48 89 ef             	mov    %rbp,%rdi
+    2e81:	e8 aa ff ff ff       	call   2e30 <XdmcpWriteCARD8@@Base>
+    2e86:	85 c0                	test   %eax,%eax
+    2e88:	0f 95 c0             	setne  %al
+    2e8b:	0f b6 c0             	movzbl %al,%eax
+    2e8e:	48 83 c4 08          	add    $0x8,%rsp
+    2e92:	5b                   	pop    %rbx
+    2e93:	5d                   	pop    %rbp
+    2e94:	c3                   	ret    
+    2e95:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    2e9c:	00 00 00 00 
+
+0000000000002ea0 <XdmcpWriteHeader@@Base>:
+    2ea0:	f3 0f 1e fa          	endbr64 
+    2ea4:	41 54                	push   %r12
+    2ea6:	55                   	push   %rbp
+    2ea7:	48 89 fd             	mov    %rdi,%rbp
+    2eaa:	53                   	push   %rbx
+    2eab:	0f b7 46 04          	movzwl 0x4(%rsi),%eax
+    2eaf:	48 89 f3             	mov    %rsi,%rbx
+    2eb2:	83 c0 05             	add    $0x5,%eax
+    2eb5:	3b 47 08             	cmp    0x8(%rdi),%eax
+    2eb8:	7c 26                	jl     2ee0 <XdmcpWriteHeader@@Base+0x40>
+    2eba:	bf 00 20 00 00       	mov    $0x2000,%edi
+    2ebf:	e8 9c f2 ff ff       	call   2160 <malloc@plt>
+    2ec4:	49 89 c4             	mov    %rax,%r12
+    2ec7:	48 85 c0             	test   %rax,%rax
+    2eca:	74 2a                	je     2ef6 <XdmcpWriteHeader@@Base+0x56>
+    2ecc:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
+    2ed0:	e8 1b f2 ff ff       	call   20f0 <free@plt>
+    2ed5:	4c 89 65 00          	mov    %r12,0x0(%rbp)
+    2ed9:	c7 45 08 00 20 00 00 	movl   $0x2000,0x8(%rbp)
+    2ee0:	c7 45 0c 00 00 00 00 	movl   $0x0,0xc(%rbp)
+    2ee7:	0f b7 33             	movzwl (%rbx),%esi
+    2eea:	48 89 ef             	mov    %rbp,%rdi
+    2eed:	e8 6e ff ff ff       	call   2e60 <XdmcpWriteCARD16@@Base>
+    2ef2:	85 c0                	test   %eax,%eax
+    2ef4:	75 0a                	jne    2f00 <XdmcpWriteHeader@@Base+0x60>
+    2ef6:	5b                   	pop    %rbx
+    2ef7:	31 c0                	xor    %eax,%eax
+    2ef9:	5d                   	pop    %rbp
+    2efa:	41 5c                	pop    %r12
+    2efc:	c3                   	ret    
+    2efd:	0f 1f 00             	nopl   (%rax)
+    2f00:	0f b7 73 02          	movzwl 0x2(%rbx),%esi
+    2f04:	48 89 ef             	mov    %rbp,%rdi
+    2f07:	e8 54 ff ff ff       	call   2e60 <XdmcpWriteCARD16@@Base>
+    2f0c:	85 c0                	test   %eax,%eax
+    2f0e:	74 e6                	je     2ef6 <XdmcpWriteHeader@@Base+0x56>
+    2f10:	0f b7 73 04          	movzwl 0x4(%rbx),%esi
+    2f14:	48 89 ef             	mov    %rbp,%rdi
+    2f17:	e8 44 ff ff ff       	call   2e60 <XdmcpWriteCARD16@@Base>
+    2f1c:	5b                   	pop    %rbx
+    2f1d:	5d                   	pop    %rbp
+    2f1e:	85 c0                	test   %eax,%eax
+    2f20:	41 5c                	pop    %r12
+    2f22:	0f 95 c0             	setne  %al
+    2f25:	0f b6 c0             	movzbl %al,%eax
+    2f28:	c3                   	ret    
+    2f29:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+
+0000000000002f30 <XdmcpWriteARRAY8@@Base>:
+    2f30:	f3 0f 1e fa          	endbr64 
+    2f34:	41 54                	push   %r12
+    2f36:	49 89 fc             	mov    %rdi,%r12
+    2f39:	55                   	push   %rbp
+    2f3a:	48 89 f5             	mov    %rsi,%rbp
+    2f3d:	53                   	push   %rbx
+    2f3e:	0f b7 36             	movzwl (%rsi),%esi
+    2f41:	e8 1a ff ff ff       	call   2e60 <XdmcpWriteCARD16@@Base>
+    2f46:	85 c0                	test   %eax,%eax
+    2f48:	74 2e                	je     2f78 <XdmcpWriteARRAY8@@Base+0x48>
+    2f4a:	31 db                	xor    %ebx,%ebx
+    2f4c:	66 83 7d 00 00       	cmpw   $0x0,0x0(%rbp)
+    2f51:	75 11                	jne    2f64 <XdmcpWriteARRAY8@@Base+0x34>
+    2f53:	eb 2b                	jmp    2f80 <XdmcpWriteARRAY8@@Base+0x50>
+    2f55:	0f 1f 00             	nopl   (%rax)
+    2f58:	0f b7 45 00          	movzwl 0x0(%rbp),%eax
+    2f5c:	48 83 c3 01          	add    $0x1,%rbx
+    2f60:	39 d8                	cmp    %ebx,%eax
+    2f62:	7e 1c                	jle    2f80 <XdmcpWriteARRAY8@@Base+0x50>
+    2f64:	48 8b 45 08          	mov    0x8(%rbp),%rax
+    2f68:	4c 89 e7             	mov    %r12,%rdi
+    2f6b:	0f b6 34 18          	movzbl (%rax,%rbx,1),%esi
+    2f6f:	e8 bc fe ff ff       	call   2e30 <XdmcpWriteCARD8@@Base>
+    2f74:	85 c0                	test   %eax,%eax
+    2f76:	75 e0                	jne    2f58 <XdmcpWriteARRAY8@@Base+0x28>
+    2f78:	5b                   	pop    %rbx
+    2f79:	31 c0                	xor    %eax,%eax
+    2f7b:	5d                   	pop    %rbp
+    2f7c:	41 5c                	pop    %r12
+    2f7e:	c3                   	ret    
+    2f7f:	90                   	nop
+    2f80:	5b                   	pop    %rbx
+    2f81:	b8 01 00 00 00       	mov    $0x1,%eax
+    2f86:	5d                   	pop    %rbp
+    2f87:	41 5c                	pop    %r12
+    2f89:	c3                   	ret    
+    2f8a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+0000000000002f90 <XdmcpWriteARRAYofARRAY8@@Base>:
+    2f90:	f3 0f 1e fa          	endbr64 
+    2f94:	41 54                	push   %r12
+    2f96:	49 89 fc             	mov    %rdi,%r12
+    2f99:	55                   	push   %rbp
+    2f9a:	48 89 f5             	mov    %rsi,%rbp
+    2f9d:	53                   	push   %rbx
+    2f9e:	0f b6 36             	movzbl (%rsi),%esi
+    2fa1:	e8 8a fe ff ff       	call   2e30 <XdmcpWriteCARD8@@Base>
+    2fa6:	85 c0                	test   %eax,%eax
+    2fa8:	74 31                	je     2fdb <XdmcpWriteARRAYofARRAY8@@Base+0x4b>
+    2faa:	31 db                	xor    %ebx,%ebx
+    2fac:	80 7d 00 00          	cmpb   $0x0,0x0(%rbp)
+    2fb0:	75 12                	jne    2fc4 <XdmcpWriteARRAYofARRAY8@@Base+0x34>
+    2fb2:	eb 34                	jmp    2fe8 <XdmcpWriteARRAYofARRAY8@@Base+0x58>
+    2fb4:	0f 1f 40 00          	nopl   0x0(%rax)
+    2fb8:	0f b6 45 00          	movzbl 0x0(%rbp),%eax
+    2fbc:	48 83 c3 01          	add    $0x1,%rbx
+    2fc0:	39 d8                	cmp    %ebx,%eax
+    2fc2:	7e 24                	jle    2fe8 <XdmcpWriteARRAYofARRAY8@@Base+0x58>
+    2fc4:	48 89 de             	mov    %rbx,%rsi
+    2fc7:	4c 89 e7             	mov    %r12,%rdi
+    2fca:	48 c1 e6 04          	shl    $0x4,%rsi
+    2fce:	48 03 75 08          	add    0x8(%rbp),%rsi
+    2fd2:	e8 59 ff ff ff       	call   2f30 <XdmcpWriteARRAY8@@Base>
+    2fd7:	85 c0                	test   %eax,%eax
+    2fd9:	75 dd                	jne    2fb8 <XdmcpWriteARRAYofARRAY8@@Base+0x28>
+    2fdb:	5b                   	pop    %rbx
+    2fdc:	31 c0                	xor    %eax,%eax
+    2fde:	5d                   	pop    %rbp
+    2fdf:	41 5c                	pop    %r12
+    2fe1:	c3                   	ret    
+    2fe2:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    2fe8:	5b                   	pop    %rbx
+    2fe9:	b8 01 00 00 00       	mov    $0x1,%eax
+    2fee:	5d                   	pop    %rbp
+    2fef:	41 5c                	pop    %r12
+    2ff1:	c3                   	ret    
+    2ff2:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    2ff9:	00 00 00 00 
+    2ffd:	0f 1f 00             	nopl   (%rax)
+
+0000000000003000 <XdmcpWriteARRAY16@@Base>:
+    3000:	f3 0f 1e fa          	endbr64 
+    3004:	41 54                	push   %r12
+    3006:	49 89 fc             	mov    %rdi,%r12
+    3009:	55                   	push   %rbp
+    300a:	48 89 f5             	mov    %rsi,%rbp
+    300d:	53                   	push   %rbx
+    300e:	0f b6 36             	movzbl (%rsi),%esi
+    3011:	e8 1a fe ff ff       	call   2e30 <XdmcpWriteCARD8@@Base>
+    3016:	85 c0                	test   %eax,%eax
+    3018:	74 2e                	je     3048 <XdmcpWriteARRAY16@@Base+0x48>
+    301a:	31 db                	xor    %ebx,%ebx
+    301c:	80 7d 00 00          	cmpb   $0x0,0x0(%rbp)
+    3020:	75 12                	jne    3034 <XdmcpWriteARRAY16@@Base+0x34>
+    3022:	eb 2c                	jmp    3050 <XdmcpWriteARRAY16@@Base+0x50>
+    3024:	0f 1f 40 00          	nopl   0x0(%rax)
+    3028:	0f b6 45 00          	movzbl 0x0(%rbp),%eax
+    302c:	48 83 c3 01          	add    $0x1,%rbx
+    3030:	39 d8                	cmp    %ebx,%eax
+    3032:	7e 1c                	jle    3050 <XdmcpWriteARRAY16@@Base+0x50>
+    3034:	48 8b 45 08          	mov    0x8(%rbp),%rax
+    3038:	4c 89 e7             	mov    %r12,%rdi
+    303b:	0f b7 34 58          	movzwl (%rax,%rbx,2),%esi
+    303f:	e8 1c fe ff ff       	call   2e60 <XdmcpWriteCARD16@@Base>
+    3044:	85 c0                	test   %eax,%eax
+    3046:	75 e0                	jne    3028 <XdmcpWriteARRAY16@@Base+0x28>
+    3048:	5b                   	pop    %rbx
+    3049:	31 c0                	xor    %eax,%eax
+    304b:	5d                   	pop    %rbp
+    304c:	41 5c                	pop    %r12
+    304e:	c3                   	ret    
+    304f:	90                   	nop
+    3050:	5b                   	pop    %rbx
+    3051:	b8 01 00 00 00       	mov    $0x1,%eax
+    3056:	5d                   	pop    %rbp
+    3057:	41 5c                	pop    %r12
+    3059:	c3                   	ret    
+    305a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+0000000000003060 <XdmcpWriteCARD32@@Base>:
+    3060:	f3 0f 1e fa          	endbr64 
+    3064:	55                   	push   %rbp
+    3065:	48 89 fd             	mov    %rdi,%rbp
+    3068:	53                   	push   %rbx
+    3069:	89 f3                	mov    %esi,%ebx
+    306b:	c1 ee 18             	shr    $0x18,%esi
+    306e:	48 83 ec 08          	sub    $0x8,%rsp
+    3072:	e8 b9 fd ff ff       	call   2e30 <XdmcpWriteCARD8@@Base>
+    3077:	85 c0                	test   %eax,%eax
+    3079:	75 0d                	jne    3088 <XdmcpWriteCARD32@@Base+0x28>
+    307b:	48 83 c4 08          	add    $0x8,%rsp
+    307f:	31 c0                	xor    %eax,%eax
+    3081:	5b                   	pop    %rbx
+    3082:	5d                   	pop    %rbp
+    3083:	c3                   	ret    
+    3084:	0f 1f 40 00          	nopl   0x0(%rax)
+    3088:	89 de                	mov    %ebx,%esi
+    308a:	48 89 ef             	mov    %rbp,%rdi
+    308d:	c1 ee 10             	shr    $0x10,%esi
+    3090:	40 0f b6 f6          	movzbl %sil,%esi
+    3094:	e8 97 fd ff ff       	call   2e30 <XdmcpWriteCARD8@@Base>
+    3099:	85 c0                	test   %eax,%eax
+    309b:	74 de                	je     307b <XdmcpWriteCARD32@@Base+0x1b>
+    309d:	0f b6 f7             	movzbl %bh,%esi
+    30a0:	48 89 ef             	mov    %rbp,%rdi
+    30a3:	e8 88 fd ff ff       	call   2e30 <XdmcpWriteCARD8@@Base>
+    30a8:	85 c0                	test   %eax,%eax
+    30aa:	74 cf                	je     307b <XdmcpWriteCARD32@@Base+0x1b>
+    30ac:	0f b6 f3             	movzbl %bl,%esi
+    30af:	48 89 ef             	mov    %rbp,%rdi
+    30b2:	e8 79 fd ff ff       	call   2e30 <XdmcpWriteCARD8@@Base>
+    30b7:	85 c0                	test   %eax,%eax
+    30b9:	0f 95 c0             	setne  %al
+    30bc:	48 83 c4 08          	add    $0x8,%rsp
+    30c0:	0f b6 c0             	movzbl %al,%eax
+    30c3:	5b                   	pop    %rbx
+    30c4:	5d                   	pop    %rbp
+    30c5:	c3                   	ret    
+    30c6:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+    30cd:	00 00 00 
+
+00000000000030d0 <XdmcpWriteARRAY32@@Base>:
+    30d0:	f3 0f 1e fa          	endbr64 
+    30d4:	41 54                	push   %r12
+    30d6:	49 89 fc             	mov    %rdi,%r12
+    30d9:	55                   	push   %rbp
+    30da:	48 89 f5             	mov    %rsi,%rbp
+    30dd:	53                   	push   %rbx
+    30de:	0f b6 36             	movzbl (%rsi),%esi
+    30e1:	e8 4a fd ff ff       	call   2e30 <XdmcpWriteCARD8@@Base>
+    30e6:	85 c0                	test   %eax,%eax
+    30e8:	74 2d                	je     3117 <XdmcpWriteARRAY32@@Base+0x47>
+    30ea:	31 db                	xor    %ebx,%ebx
+    30ec:	80 7d 00 00          	cmpb   $0x0,0x0(%rbp)
+    30f0:	75 12                	jne    3104 <XdmcpWriteARRAY32@@Base+0x34>
+    30f2:	eb 2c                	jmp    3120 <XdmcpWriteARRAY32@@Base+0x50>
+    30f4:	0f 1f 40 00          	nopl   0x0(%rax)
+    30f8:	0f b6 45 00          	movzbl 0x0(%rbp),%eax
+    30fc:	48 83 c3 01          	add    $0x1,%rbx
+    3100:	39 d8                	cmp    %ebx,%eax
+    3102:	7e 1c                	jle    3120 <XdmcpWriteARRAY32@@Base+0x50>
+    3104:	48 8b 45 08          	mov    0x8(%rbp),%rax
+    3108:	4c 89 e7             	mov    %r12,%rdi
+    310b:	8b 34 98             	mov    (%rax,%rbx,4),%esi
+    310e:	e8 4d ff ff ff       	call   3060 <XdmcpWriteCARD32@@Base>
+    3113:	85 c0                	test   %eax,%eax
+    3115:	75 e1                	jne    30f8 <XdmcpWriteARRAY32@@Base+0x28>
+    3117:	5b                   	pop    %rbx
+    3118:	31 c0                	xor    %eax,%eax
+    311a:	5d                   	pop    %rbp
+    311b:	41 5c                	pop    %r12
+    311d:	c3                   	ret    
+    311e:	66 90                	xchg   %ax,%ax
+    3120:	5b                   	pop    %rbx
+    3121:	b8 01 00 00 00       	mov    $0x1,%eax
+    3126:	5d                   	pop    %rbp
+    3127:	41 5c                	pop    %r12
+    3129:	c3                   	ret    
+    312a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+0000000000003130 <_XdmcpAuthSetup@@Base>:
+    3130:	f3 0f 1e fa          	endbr64 
+    3134:	55                   	push   %rbp
+    3135:	49 89 f0             	mov    %rsi,%r8
+    3138:	4c 8d 0d c2 1e 00 00 	lea    0x1ec2(%rip),%r9        # 5001 <XdmcpWrap@@Base+0x17f1>
+    313f:	53                   	push   %rbx
+    3140:	8b 47 04             	mov    0x4(%rdi),%eax
+    3143:	4d 8d 51 0f          	lea    0xf(%r9),%r10
+    3147:	8b 17                	mov    (%rdi),%edx
+    3149:	48 8d 3d b0 16 00 00 	lea    0x16b0(%rip),%rdi        # 4800 <XdmcpWrap@@Base+0xff0>
+    3150:	89 c1                	mov    %eax,%ecx
+    3152:	c1 e9 04             	shr    $0x4,%ecx
+    3155:	31 d1                	xor    %edx,%ecx
+    3157:	81 e1 0f 0f 0f 0f    	and    $0xf0f0f0f,%ecx
+    315d:	31 ca                	xor    %ecx,%edx
+    315f:	c1 e1 04             	shl    $0x4,%ecx
+    3162:	31 c1                	xor    %eax,%ecx
+    3164:	89 d0                	mov    %edx,%eax
+    3166:	c1 e0 12             	shl    $0x12,%eax
+    3169:	31 d0                	xor    %edx,%eax
+    316b:	25 00 00 cc cc       	and    $0xcccc0000,%eax
+    3170:	31 c2                	xor    %eax,%edx
+    3172:	c1 e8 12             	shr    $0x12,%eax
+    3175:	31 d0                	xor    %edx,%eax
+    3177:	89 c2                	mov    %eax,%edx
+    3179:	c1 e2 11             	shl    $0x11,%edx
+    317c:	31 c2                	xor    %eax,%edx
+    317e:	81 e2 00 00 aa aa    	and    $0xaaaa0000,%edx
+    3184:	31 d0                	xor    %edx,%eax
+    3186:	c1 ea 11             	shr    $0x11,%edx
+    3189:	31 c2                	xor    %eax,%edx
+    318b:	89 d0                	mov    %edx,%eax
+    318d:	c1 e0 08             	shl    $0x8,%eax
+    3190:	31 d0                	xor    %edx,%eax
+    3192:	25 00 00 ff 00       	and    $0xff0000,%eax
+    3197:	31 c2                	xor    %eax,%edx
+    3199:	c1 e8 08             	shr    $0x8,%eax
+    319c:	31 d0                	xor    %edx,%eax
+    319e:	89 c2                	mov    %eax,%edx
+    31a0:	c1 e2 11             	shl    $0x11,%edx
+    31a3:	31 c2                	xor    %eax,%edx
+    31a5:	81 e2 00 00 aa aa    	and    $0xaaaa0000,%edx
+    31ab:	31 d0                	xor    %edx,%eax
+    31ad:	c1 ea 11             	shr    $0x11,%edx
+    31b0:	31 c2                	xor    %eax,%edx
+    31b2:	89 c8                	mov    %ecx,%eax
+    31b4:	c1 e0 18             	shl    $0x18,%eax
+    31b7:	31 c8                	xor    %ecx,%eax
+    31b9:	25 00 00 00 ff       	and    $0xff000000,%eax
+    31be:	31 c1                	xor    %eax,%ecx
+    31c0:	c1 e8 18             	shr    $0x18,%eax
+    31c3:	31 c8                	xor    %ecx,%eax
+    31c5:	89 c1                	mov    %eax,%ecx
+    31c7:	c1 e1 08             	shl    $0x8,%ecx
+    31ca:	31 c1                	xor    %eax,%ecx
+    31cc:	81 e1 00 00 ff 00    	and    $0xff0000,%ecx
+    31d2:	31 c8                	xor    %ecx,%eax
+    31d4:	c1 e9 08             	shr    $0x8,%ecx
+    31d7:	31 c1                	xor    %eax,%ecx
+    31d9:	89 c8                	mov    %ecx,%eax
+    31db:	c1 e0 0e             	shl    $0xe,%eax
+    31de:	31 c8                	xor    %ecx,%eax
+    31e0:	25 00 00 33 33       	and    $0x33330000,%eax
+    31e5:	31 c1                	xor    %eax,%ecx
+    31e7:	c1 e8 0e             	shr    $0xe,%eax
+    31ea:	31 c8                	xor    %ecx,%eax
+    31ec:	89 c1                	mov    %eax,%ecx
+    31ee:	89 c6                	mov    %eax,%esi
+    31f0:	25 55 aa 55 aa       	and    $0xaa55aa55,%eax
+    31f5:	c1 e1 07             	shl    $0x7,%ecx
+    31f8:	c1 ee 07             	shr    $0x7,%esi
+    31fb:	81 e6 aa 00 aa 00    	and    $0xaa00aa,%esi
+    3201:	81 e1 00 55 00 55    	and    $0x55005500,%ecx
+    3207:	09 f1                	or     %esi,%ecx
+    3209:	89 d6                	mov    %edx,%esi
+    320b:	81 e2 ff ff ff 0f    	and    $0xfffffff,%edx
+    3211:	09 c8                	or     %ecx,%eax
+    3213:	c1 ee 04             	shr    $0x4,%esi
+    3216:	c1 e8 08             	shr    $0x8,%eax
+    3219:	81 e6 00 00 00 0f    	and    $0xf000000,%esi
+    321f:	09 c6                	or     %eax,%esi
+    3221:	31 c0                	xor    %eax,%eax
+    3223:	e9 18 01 00 00       	jmp    3340 <_XdmcpAuthSetup@@Base+0x210>
+    3228:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+    322f:	00 
+    3230:	41 c1 eb 02          	shr    $0x2,%r11d
+    3234:	89 f3                	mov    %esi,%ebx
+    3236:	c1 e2 1a             	shl    $0x1a,%edx
+    3239:	c1 eb 02             	shr    $0x2,%ebx
+    323c:	c1 e6 1a             	shl    $0x1a,%esi
+    323f:	41 09 d3             	or     %edx,%r11d
+    3242:	09 f3                	or     %esi,%ebx
+    3244:	44 89 da             	mov    %r11d,%edx
+    3247:	41 83 e3 3f          	and    $0x3f,%r11d
+    324b:	89 de                	mov    %ebx,%esi
+    324d:	83 e3 3f             	and    $0x3f,%ebx
+    3250:	81 e2 ff ff ff 0f    	and    $0xfffffff,%edx
+    3256:	81 e6 ff ff ff 0f    	and    $0xfffffff,%esi
+    325c:	89 d1                	mov    %edx,%ecx
+    325e:	89 d0                	mov    %edx,%eax
+    3260:	89 d5                	mov    %edx,%ebp
+    3262:	c1 e9 06             	shr    $0x6,%ecx
+    3265:	c1 e8 07             	shr    $0x7,%eax
+    3268:	83 e0 3c             	and    $0x3c,%eax
+    326b:	83 e1 03             	and    $0x3,%ecx
+    326e:	c1 ed 0e             	shr    $0xe,%ebp
+    3271:	09 c1                	or     %eax,%ecx
+    3273:	89 d0                	mov    %edx,%eax
+    3275:	83 e5 30             	and    $0x30,%ebp
+    3278:	c1 e8 0d             	shr    $0xd,%eax
+    327b:	8b 8c 8f 00 01 00 00 	mov    0x100(%rdi,%rcx,4),%ecx
+    3282:	83 e0 0f             	and    $0xf,%eax
+    3285:	09 e8                	or     %ebp,%eax
+    3287:	0b 8c 87 00 02 00 00 	or     0x200(%rdi,%rax,4),%ecx
+    328e:	89 d0                	mov    %edx,%eax
+    3290:	42 0b 0c 9f          	or     (%rdi,%r11,4),%ecx
+    3294:	41 89 d3             	mov    %edx,%r11d
+    3297:	c1 e8 14             	shr    $0x14,%eax
+    329a:	41 c1 eb 15          	shr    $0x15,%r11d
+    329e:	41 83 e3 06          	and    $0x6,%r11d
+    32a2:	83 e0 01             	and    $0x1,%eax
+    32a5:	44 09 d8             	or     %r11d,%eax
+    32a8:	41 89 d3             	mov    %edx,%r11d
+    32ab:	41 c1 eb 16          	shr    $0x16,%r11d
+    32af:	41 83 e3 38          	and    $0x38,%r11d
+    32b3:	44 09 d8             	or     %r11d,%eax
+    32b6:	41 89 f3             	mov    %esi,%r11d
+    32b9:	0b 8c 87 00 03 00 00 	or     0x300(%rdi,%rax,4),%ecx
+    32c0:	89 f0                	mov    %esi,%eax
+    32c2:	41 c1 eb 07          	shr    $0x7,%r11d
+    32c6:	c1 e8 08             	shr    $0x8,%eax
+    32c9:	41 83 e3 03          	and    $0x3,%r11d
+    32cd:	83 e0 3c             	and    $0x3c,%eax
+    32d0:	41 09 c3             	or     %eax,%r11d
+    32d3:	89 f0                	mov    %esi,%eax
+    32d5:	c1 e8 0f             	shr    $0xf,%eax
+    32d8:	83 e0 3f             	and    $0x3f,%eax
+    32db:	8b 84 87 00 06 00 00 	mov    0x600(%rdi,%rax,4),%eax
+    32e2:	0b 84 9f 00 04 00 00 	or     0x400(%rdi,%rbx,4),%eax
+    32e9:	89 f3                	mov    %esi,%ebx
+    32eb:	49 83 c0 08          	add    $0x8,%r8
+    32ef:	42 0b 84 9f 00 05 00 	or     0x500(%rdi,%r11,4),%eax
+    32f6:	00 
+    32f7:	41 89 f3             	mov    %esi,%r11d
+    32fa:	c1 eb 16             	shr    $0x16,%ebx
+    32fd:	41 c1 eb 15          	shr    $0x15,%r11d
+    3301:	83 e3 30             	and    $0x30,%ebx
+    3304:	41 83 e3 0f          	and    $0xf,%r11d
+    3308:	41 09 db             	or     %ebx,%r11d
+    330b:	0f b7 d9             	movzwl %cx,%ebx
+    330e:	c1 e9 10             	shr    $0x10,%ecx
+    3311:	42 0b 84 9f 00 07 00 	or     0x700(%rdi,%r11,4),%eax
+    3318:	00 
+    3319:	41 89 c3             	mov    %eax,%r11d
+    331c:	66 31 c0             	xor    %ax,%ax
+    331f:	41 c1 e3 10          	shl    $0x10,%r11d
+    3323:	09 c8                	or     %ecx,%eax
+    3325:	41 09 db             	or     %ebx,%r11d
+    3328:	c1 c0 04             	rol    $0x4,%eax
+    332b:	45 89 58 f8          	mov    %r11d,-0x8(%r8)
+    332f:	41 89 40 fc          	mov    %eax,-0x4(%r8)
+    3333:	4d 39 d1             	cmp    %r10,%r9
+    3336:	74 30                	je     3368 <_XdmcpAuthSetup@@Base+0x238>
+    3338:	41 0f b6 01          	movzbl (%r9),%eax
+    333c:	49 83 c1 01          	add    $0x1,%r9
+    3340:	41 89 d3             	mov    %edx,%r11d
+    3343:	84 c0                	test   %al,%al
+    3345:	0f 85 e5 fe ff ff    	jne    3230 <_XdmcpAuthSetup@@Base+0x100>
+    334b:	41 d1 eb             	shr    %r11d
+    334e:	89 f3                	mov    %esi,%ebx
+    3350:	c1 e2 1b             	shl    $0x1b,%edx
+    3353:	d1 eb                	shr    %ebx
+    3355:	c1 e6 1b             	shl    $0x1b,%esi
+    3358:	41 09 d3             	or     %edx,%r11d
+    335b:	09 f3                	or     %esi,%ebx
+    335d:	e9 e2 fe ff ff       	jmp    3244 <_XdmcpAuthSetup@@Base+0x114>
+    3362:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    3368:	5b                   	pop    %rbx
+    3369:	5d                   	pop    %rbp
+    336a:	c3                   	ret    
+    336b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000003370 <_XdmcpAuthDoIt@@Base>:
+    3370:	f3 0f 1e fa          	endbr64 
+    3374:	55                   	push   %rbp
+    3375:	49 89 d0             	mov    %rdx,%r8
+    3378:	41 89 ca             	mov    %ecx,%r10d
+    337b:	49 89 f1             	mov    %rsi,%r9
+    337e:	53                   	push   %rbx
+    337f:	8b 57 04             	mov    0x4(%rdi),%edx
+    3382:	8b 07                	mov    (%rdi),%eax
+    3384:	89 d1                	mov    %edx,%ecx
+    3386:	c1 e9 04             	shr    $0x4,%ecx
+    3389:	31 c1                	xor    %eax,%ecx
+    338b:	81 e1 0f 0f 0f 0f    	and    $0xf0f0f0f,%ecx
+    3391:	31 c8                	xor    %ecx,%eax
+    3393:	c1 e1 04             	shl    $0x4,%ecx
+    3396:	31 d1                	xor    %edx,%ecx
+    3398:	89 c2                	mov    %eax,%edx
+    339a:	c1 ea 10             	shr    $0x10,%edx
+    339d:	31 ca                	xor    %ecx,%edx
+    339f:	0f b7 d2             	movzwl %dx,%edx
+    33a2:	31 d1                	xor    %edx,%ecx
+    33a4:	c1 e2 10             	shl    $0x10,%edx
+    33a7:	31 c2                	xor    %eax,%edx
+    33a9:	89 c8                	mov    %ecx,%eax
+    33ab:	c1 e8 02             	shr    $0x2,%eax
+    33ae:	31 d0                	xor    %edx,%eax
+    33b0:	25 33 33 33 33       	and    $0x33333333,%eax
+    33b5:	31 c2                	xor    %eax,%edx
+    33b7:	c1 e0 02             	shl    $0x2,%eax
+    33ba:	89 d6                	mov    %edx,%esi
+    33bc:	31 c8                	xor    %ecx,%eax
+    33be:	c1 ee 08             	shr    $0x8,%esi
+    33c1:	31 c6                	xor    %eax,%esi
+    33c3:	81 e6 ff 00 ff 00    	and    $0xff00ff,%esi
+    33c9:	31 f0                	xor    %esi,%eax
+    33cb:	c1 e6 08             	shl    $0x8,%esi
+    33ce:	89 c1                	mov    %eax,%ecx
+    33d0:	31 d6                	xor    %edx,%esi
+    33d2:	d1 e9                	shr    %ecx
+    33d4:	31 f1                	xor    %esi,%ecx
+    33d6:	81 e1 55 55 55 55    	and    $0x55555555,%ecx
+    33dc:	31 ce                	xor    %ecx,%esi
+    33de:	01 c9                	add    %ecx,%ecx
+    33e0:	31 c1                	xor    %eax,%ecx
+    33e2:	45 85 d2             	test   %r10d,%r10d
+    33e5:	0f 84 b5 01 00 00    	je     35a0 <_XdmcpAuthDoIt@@Base+0x230>
+    33eb:	49 8d b8 80 00 00 00 	lea    0x80(%r8),%rdi
+    33f2:	48 8d 05 07 0c 00 00 	lea    0xc07(%rip),%rax        # 4000 <XdmcpWrap@@Base+0x7f0>
+    33f9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    3400:	45 8b 18             	mov    (%r8),%r11d
+    3403:	41 89 f2             	mov    %esi,%r10d
+    3406:	41 d1 c2             	rol    %r10d
+    3409:	45 31 d3             	xor    %r10d,%r11d
+    340c:	45 33 50 04          	xor    0x4(%r8),%r10d
+    3410:	41 c1 ca 04          	ror    $0x4,%r10d
+    3414:	44 89 da             	mov    %r11d,%edx
+    3417:	c1 ea 08             	shr    $0x8,%edx
+    341a:	44 89 d3             	mov    %r10d,%ebx
+    341d:	83 e3 3f             	and    $0x3f,%ebx
+    3420:	83 e2 3f             	and    $0x3f,%edx
+    3423:	8b 94 90 00 02 00 00 	mov    0x200(%rax,%rdx,4),%edx
+    342a:	0b 94 98 00 01 00 00 	or     0x100(%rax,%rbx,4),%edx
+    3431:	44 89 db             	mov    %r11d,%ebx
+    3434:	83 e3 3f             	and    $0x3f,%ebx
+    3437:	0b 14 98             	or     (%rax,%rbx,4),%edx
+    343a:	44 89 db             	mov    %r11d,%ebx
+    343d:	41 c1 eb 18          	shr    $0x18,%r11d
+    3441:	c1 eb 10             	shr    $0x10,%ebx
+    3444:	41 83 e3 3f          	and    $0x3f,%r11d
+    3448:	83 e3 3f             	and    $0x3f,%ebx
+    344b:	0b 94 98 00 04 00 00 	or     0x400(%rax,%rbx,4),%edx
+    3452:	42 0b 94 98 00 06 00 	or     0x600(%rax,%r11,4),%edx
+    3459:	00 
+    345a:	45 89 d3             	mov    %r10d,%r11d
+    345d:	41 c1 eb 08          	shr    $0x8,%r11d
+    3461:	41 83 e3 3f          	and    $0x3f,%r11d
+    3465:	42 0b 94 98 00 03 00 	or     0x300(%rax,%r11,4),%edx
+    346c:	00 
+    346d:	45 89 d3             	mov    %r10d,%r11d
+    3470:	41 c1 ea 18          	shr    $0x18,%r10d
+    3474:	41 c1 eb 10          	shr    $0x10,%r11d
+    3478:	41 83 e2 3f          	and    $0x3f,%r10d
+    347c:	41 83 e3 3f          	and    $0x3f,%r11d
+    3480:	42 0b 94 98 00 05 00 	or     0x500(%rax,%r11,4),%edx
+    3487:	00 
+    3488:	42 0b 94 90 00 07 00 	or     0x700(%rax,%r10,4),%edx
+    348f:	00 
+    3490:	31 d1                	xor    %edx,%ecx
+    3492:	45 8b 58 08          	mov    0x8(%r8),%r11d
+    3496:	41 89 ca             	mov    %ecx,%r10d
+    3499:	41 d1 c2             	rol    %r10d
+    349c:	45 31 d3             	xor    %r10d,%r11d
+    349f:	45 33 50 0c          	xor    0xc(%r8),%r10d
+    34a3:	41 c1 ca 04          	ror    $0x4,%r10d
+    34a7:	44 89 da             	mov    %r11d,%edx
+    34aa:	c1 ea 08             	shr    $0x8,%edx
+    34ad:	44 89 d3             	mov    %r10d,%ebx
+    34b0:	83 e2 3f             	and    $0x3f,%edx
+    34b3:	83 e3 3f             	and    $0x3f,%ebx
+    34b6:	49 83 c0 10          	add    $0x10,%r8
+    34ba:	8b 94 90 00 02 00 00 	mov    0x200(%rax,%rdx,4),%edx
+    34c1:	0b 94 98 00 01 00 00 	or     0x100(%rax,%rbx,4),%edx
+    34c8:	44 89 db             	mov    %r11d,%ebx
+    34cb:	83 e3 3f             	and    $0x3f,%ebx
+    34ce:	0b 14 98             	or     (%rax,%rbx,4),%edx
+    34d1:	44 89 db             	mov    %r11d,%ebx
+    34d4:	41 c1 eb 18          	shr    $0x18,%r11d
+    34d8:	c1 eb 10             	shr    $0x10,%ebx
+    34db:	41 83 e3 3f          	and    $0x3f,%r11d
+    34df:	83 e3 3f             	and    $0x3f,%ebx
+    34e2:	0b 94 98 00 04 00 00 	or     0x400(%rax,%rbx,4),%edx
+    34e9:	42 0b 94 98 00 06 00 	or     0x600(%rax,%r11,4),%edx
+    34f0:	00 
+    34f1:	45 89 d3             	mov    %r10d,%r11d
+    34f4:	41 c1 eb 08          	shr    $0x8,%r11d
+    34f8:	41 83 e3 3f          	and    $0x3f,%r11d
+    34fc:	42 0b 94 98 00 03 00 	or     0x300(%rax,%r11,4),%edx
+    3503:	00 
+    3504:	45 89 d3             	mov    %r10d,%r11d
+    3507:	41 c1 ea 18          	shr    $0x18,%r10d
+    350b:	41 c1 eb 10          	shr    $0x10,%r11d
+    350f:	41 83 e2 3f          	and    $0x3f,%r10d
+    3513:	41 83 e3 3f          	and    $0x3f,%r11d
+    3517:	42 0b 94 98 00 05 00 	or     0x500(%rax,%r11,4),%edx
+    351e:	00 
+    351f:	42 0b 94 90 00 07 00 	or     0x700(%rax,%r10,4),%edx
+    3526:	00 
+    3527:	31 d6                	xor    %edx,%esi
+    3529:	4c 39 c7             	cmp    %r8,%rdi
+    352c:	0f 85 ce fe ff ff    	jne    3400 <_XdmcpAuthDoIt@@Base+0x90>
+    3532:	89 f0                	mov    %esi,%eax
+    3534:	5b                   	pop    %rbx
+    3535:	5d                   	pop    %rbp
+    3536:	d1 e8                	shr    %eax
+    3538:	31 c8                	xor    %ecx,%eax
+    353a:	25 55 55 55 55       	and    $0x55555555,%eax
+    353f:	31 c1                	xor    %eax,%ecx
+    3541:	01 c0                	add    %eax,%eax
+    3543:	89 ca                	mov    %ecx,%edx
+    3545:	31 c6                	xor    %eax,%esi
+    3547:	c1 ea 08             	shr    $0x8,%edx
+    354a:	31 f2                	xor    %esi,%edx
+    354c:	81 e2 ff 00 ff 00    	and    $0xff00ff,%edx
+    3552:	31 d6                	xor    %edx,%esi
+    3554:	c1 e2 08             	shl    $0x8,%edx
+    3557:	89 f0                	mov    %esi,%eax
+    3559:	31 ca                	xor    %ecx,%edx
+    355b:	c1 e8 02             	shr    $0x2,%eax
+    355e:	31 d0                	xor    %edx,%eax
+    3560:	25 33 33 33 33       	and    $0x33333333,%eax
+    3565:	31 c2                	xor    %eax,%edx
+    3567:	c1 e0 02             	shl    $0x2,%eax
+    356a:	89 d1                	mov    %edx,%ecx
+    356c:	31 f0                	xor    %esi,%eax
+    356e:	c1 e9 10             	shr    $0x10,%ecx
+    3571:	31 c1                	xor    %eax,%ecx
+    3573:	0f b7 c9             	movzwl %cx,%ecx
+    3576:	31 c8                	xor    %ecx,%eax
+    3578:	c1 e1 10             	shl    $0x10,%ecx
+    357b:	31 ca                	xor    %ecx,%edx
+    357d:	89 c1                	mov    %eax,%ecx
+    357f:	c1 e9 04             	shr    $0x4,%ecx
+    3582:	31 d1                	xor    %edx,%ecx
+    3584:	81 e1 0f 0f 0f 0f    	and    $0xf0f0f0f,%ecx
+    358a:	31 ca                	xor    %ecx,%edx
+    358c:	c1 e1 04             	shl    $0x4,%ecx
+    358f:	31 c1                	xor    %eax,%ecx
+    3591:	41 89 11             	mov    %edx,(%r9)
+    3594:	41 89 49 04          	mov    %ecx,0x4(%r9)
+    3598:	c3                   	ret    
+    3599:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    35a0:	49 8d 78 70          	lea    0x70(%r8),%rdi
+    35a4:	48 8d 05 55 0a 00 00 	lea    0xa55(%rip),%rax        # 4000 <XdmcpWrap@@Base+0x7f0>
+    35ab:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+    35b0:	8b 5f 08             	mov    0x8(%rdi),%ebx
+    35b3:	41 89 f3             	mov    %esi,%r11d
+    35b6:	49 89 fa             	mov    %rdi,%r10
+    35b9:	41 d1 c3             	rol    %r11d
+    35bc:	44 31 db             	xor    %r11d,%ebx
+    35bf:	44 33 5f 0c          	xor    0xc(%rdi),%r11d
+    35c3:	41 c1 cb 04          	ror    $0x4,%r11d
+    35c7:	89 da                	mov    %ebx,%edx
+    35c9:	c1 ea 08             	shr    $0x8,%edx
+    35cc:	44 89 dd             	mov    %r11d,%ebp
+    35cf:	83 e5 3f             	and    $0x3f,%ebp
+    35d2:	83 e2 3f             	and    $0x3f,%edx
+    35d5:	8b 94 90 00 02 00 00 	mov    0x200(%rax,%rdx,4),%edx
+    35dc:	0b 94 a8 00 01 00 00 	or     0x100(%rax,%rbp,4),%edx
+    35e3:	89 dd                	mov    %ebx,%ebp
+    35e5:	83 e5 3f             	and    $0x3f,%ebp
+    35e8:	0b 14 a8             	or     (%rax,%rbp,4),%edx
+    35eb:	89 dd                	mov    %ebx,%ebp
+    35ed:	c1 eb 18             	shr    $0x18,%ebx
+    35f0:	c1 ed 10             	shr    $0x10,%ebp
+    35f3:	83 e3 3f             	and    $0x3f,%ebx
+    35f6:	83 e5 3f             	and    $0x3f,%ebp
+    35f9:	0b 94 a8 00 04 00 00 	or     0x400(%rax,%rbp,4),%edx
+    3600:	0b 94 98 00 06 00 00 	or     0x600(%rax,%rbx,4),%edx
+    3607:	44 89 db             	mov    %r11d,%ebx
+    360a:	c1 eb 08             	shr    $0x8,%ebx
+    360d:	83 e3 3f             	and    $0x3f,%ebx
+    3610:	0b 94 98 00 03 00 00 	or     0x300(%rax,%rbx,4),%edx
+    3617:	44 89 db             	mov    %r11d,%ebx
+    361a:	41 c1 eb 18          	shr    $0x18,%r11d
+    361e:	c1 eb 10             	shr    $0x10,%ebx
+    3621:	41 83 e3 3f          	and    $0x3f,%r11d
+    3625:	83 e3 3f             	and    $0x3f,%ebx
+    3628:	0b 94 98 00 05 00 00 	or     0x500(%rax,%rbx,4),%edx
+    362f:	42 0b 94 98 00 07 00 	or     0x700(%rax,%r11,4),%edx
+    3636:	00 
+    3637:	31 d1                	xor    %edx,%ecx
+    3639:	8b 1f                	mov    (%rdi),%ebx
+    363b:	41 89 cb             	mov    %ecx,%r11d
+    363e:	41 d1 c3             	rol    %r11d
+    3641:	44 31 db             	xor    %r11d,%ebx
+    3644:	44 33 5f 04          	xor    0x4(%rdi),%r11d
+    3648:	41 c1 cb 04          	ror    $0x4,%r11d
+    364c:	89 da                	mov    %ebx,%edx
+    364e:	c1 ea 08             	shr    $0x8,%edx
+    3651:	44 89 dd             	mov    %r11d,%ebp
+    3654:	83 e2 3f             	and    $0x3f,%edx
+    3657:	83 e5 3f             	and    $0x3f,%ebp
+    365a:	48 83 ef 10          	sub    $0x10,%rdi
+    365e:	8b 94 90 00 02 00 00 	mov    0x200(%rax,%rdx,4),%edx
+    3665:	0b 94 a8 00 01 00 00 	or     0x100(%rax,%rbp,4),%edx
+    366c:	89 dd                	mov    %ebx,%ebp
+    366e:	83 e5 3f             	and    $0x3f,%ebp
+    3671:	0b 14 a8             	or     (%rax,%rbp,4),%edx
+    3674:	89 dd                	mov    %ebx,%ebp
+    3676:	c1 eb 18             	shr    $0x18,%ebx
+    3679:	c1 ed 10             	shr    $0x10,%ebp
+    367c:	83 e3 3f             	and    $0x3f,%ebx
+    367f:	83 e5 3f             	and    $0x3f,%ebp
+    3682:	0b 94 a8 00 04 00 00 	or     0x400(%rax,%rbp,4),%edx
+    3689:	0b 94 98 00 06 00 00 	or     0x600(%rax,%rbx,4),%edx
+    3690:	44 89 db             	mov    %r11d,%ebx
+    3693:	c1 eb 08             	shr    $0x8,%ebx
+    3696:	83 e3 3f             	and    $0x3f,%ebx
+    3699:	0b 94 98 00 03 00 00 	or     0x300(%rax,%rbx,4),%edx
+    36a0:	44 89 db             	mov    %r11d,%ebx
+    36a3:	41 c1 eb 18          	shr    $0x18,%r11d
+    36a7:	c1 eb 10             	shr    $0x10,%ebx
+    36aa:	41 83 e3 3f          	and    $0x3f,%r11d
+    36ae:	83 e3 3f             	and    $0x3f,%ebx
+    36b1:	0b 94 98 00 05 00 00 	or     0x500(%rax,%rbx,4),%edx
+    36b8:	42 0b 94 98 00 07 00 	or     0x700(%rax,%r11,4),%edx
+    36bf:	00 
+    36c0:	31 d6                	xor    %edx,%esi
+    36c2:	4d 39 c2             	cmp    %r8,%r10
+    36c5:	0f 85 e5 fe ff ff    	jne    35b0 <_XdmcpAuthDoIt@@Base+0x240>
+    36cb:	e9 62 fe ff ff       	jmp    3532 <_XdmcpAuthDoIt@@Base+0x1c2>
+
+00000000000036d0 <XdmcpUnwrap@@Base>:
+    36d0:	f3 0f 1e fa          	endbr64 
+    36d4:	41 57                	push   %r15
+    36d6:	41 56                	push   %r14
+    36d8:	41 89 ce             	mov    %ecx,%r14d
+    36db:	41 55                	push   %r13
+    36dd:	41 54                	push   %r12
+    36df:	55                   	push   %rbp
+    36e0:	48 89 fd             	mov    %rdi,%rbp
+    36e3:	48 89 f7             	mov    %rsi,%rdi
+    36e6:	53                   	push   %rbx
+    36e7:	48 89 d3             	mov    %rdx,%rbx
+    36ea:	48 81 ec c8 00 00 00 	sub    $0xc8,%rsp
+    36f1:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+    36f8:	00 00 
+    36fa:	48 89 84 24 b8 00 00 	mov    %rax,0xb8(%rsp)
+    3701:	00 
+    3702:	31 c0                	xor    %eax,%eax
+    3704:	4c 8d ac 24 a8 00 00 	lea    0xa8(%rsp),%r13
+    370b:	00 
+    370c:	4c 8d 64 24 20       	lea    0x20(%rsp),%r12
+    3711:	4c 89 ee             	mov    %r13,%rsi
+    3714:	e8 87 f6 ff ff       	call   2da0 <_XdmcpWrapperToOddParity@@Base>
+    3719:	4c 89 e6             	mov    %r12,%rsi
+    371c:	4c 89 ef             	mov    %r13,%rdi
+    371f:	e8 0c fa ff ff       	call   3130 <_XdmcpAuthSetup@@Base>
+    3724:	41 83 fe 07          	cmp    $0x7,%r14d
+    3728:	0f 8e b3 00 00 00    	jle    37e1 <XdmcpUnwrap@@Base+0x111>
+    372e:	49 89 ed             	mov    %rbp,%r13
+    3731:	41 8d 6e f8          	lea    -0x8(%r14),%ebp
+    3735:	45 31 d2             	xor    %r10d,%r10d
+    3738:	83 e5 f8             	and    $0xfffffff8,%ebp
+    373b:	4c 8d bc 24 b0 00 00 	lea    0xb0(%rsp),%r15
+    3742:	00 
+    3743:	8d 45 08             	lea    0x8(%rbp),%eax
+    3746:	31 ed                	xor    %ebp,%ebp
+    3748:	89 44 24 0c          	mov    %eax,0xc(%rsp)
+    374c:	41 8d 46 ff          	lea    -0x1(%r14),%eax
+    3750:	45 31 f6             	xor    %r14d,%r14d
+    3753:	83 e0 f8             	and    $0xfffffff8,%eax
+    3756:	83 c0 08             	add    $0x8,%eax
+    3759:	89 44 24 08          	mov    %eax,0x8(%rsp)
+    375d:	48 8d 44 24 10       	lea    0x10(%rsp),%rax
+    3762:	48 89 04 24          	mov    %rax,(%rsp)
+    3766:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+    376d:	00 00 00 
+    3770:	49 8b 45 00          	mov    0x0(%r13),%rax
+    3774:	4c 89 fe             	mov    %r15,%rsi
+    3777:	31 c9                	xor    %ecx,%ecx
+    3779:	4c 89 e2             	mov    %r12,%rdx
+    377c:	4c 89 ef             	mov    %r13,%rdi
+    377f:	83 f5 01             	xor    $0x1,%ebp
+    3782:	4a 89 44 d4 10       	mov    %rax,0x10(%rsp,%r10,8)
+    3787:	e8 e4 fb ff ff       	call   3370 <_XdmcpAuthDoIt@@Base>
+    378c:	48 8b 04 24          	mov    (%rsp),%rax
+    3790:	4c 63 d5             	movslq %ebp,%r10
+    3793:	4a 8d 34 d0          	lea    (%rax,%r10,8),%rsi
+    3797:	31 c0                	xor    %eax,%eax
+    3799:	eb 19                	jmp    37b4 <XdmcpUnwrap@@Base+0xe4>
+    379b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+    37a0:	41 8d 0c 06          	lea    (%r14,%rax,1),%ecx
+    37a4:	32 14 06             	xor    (%rsi,%rax,1),%dl
+    37a7:	48 83 c0 01          	add    $0x1,%rax
+    37ab:	88 14 0b             	mov    %dl,(%rbx,%rcx,1)
+    37ae:	48 83 f8 08          	cmp    $0x8,%rax
+    37b2:	74 17                	je     37cb <XdmcpUnwrap@@Base+0xfb>
+    37b4:	41 0f b6 14 07       	movzbl (%r15,%rax,1),%edx
+    37b9:	45 85 f6             	test   %r14d,%r14d
+    37bc:	75 e2                	jne    37a0 <XdmcpUnwrap@@Base+0xd0>
+    37be:	88 14 03             	mov    %dl,(%rbx,%rax,1)
+    37c1:	48 83 c0 01          	add    $0x1,%rax
+    37c5:	48 83 f8 08          	cmp    $0x8,%rax
+    37c9:	75 e9                	jne    37b4 <XdmcpUnwrap@@Base+0xe4>
+    37cb:	41 83 c6 08          	add    $0x8,%r14d
+    37cf:	44 3b 74 24 08       	cmp    0x8(%rsp),%r14d
+    37d4:	74 0b                	je     37e1 <XdmcpUnwrap@@Base+0x111>
+    37d6:	49 83 c5 08          	add    $0x8,%r13
+    37da:	44 3b 74 24 0c       	cmp    0xc(%rsp),%r14d
+    37df:	75 8f                	jne    3770 <XdmcpUnwrap@@Base+0xa0>
+    37e1:	48 8b 84 24 b8 00 00 	mov    0xb8(%rsp),%rax
+    37e8:	00 
+    37e9:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax
+    37f0:	00 00 
+    37f2:	75 12                	jne    3806 <XdmcpUnwrap@@Base+0x136>
+    37f4:	48 81 c4 c8 00 00 00 	add    $0xc8,%rsp
+    37fb:	5b                   	pop    %rbx
+    37fc:	5d                   	pop    %rbp
+    37fd:	41 5c                	pop    %r12
+    37ff:	41 5d                	pop    %r13
+    3801:	41 5e                	pop    %r14
+    3803:	41 5f                	pop    %r15
+    3805:	c3                   	ret    
+    3806:	e8 f5 e8 ff ff       	call   2100 <__stack_chk_fail@plt>
+    380b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000003810 <XdmcpWrap@@Base>:
+    3810:	f3 0f 1e fa          	endbr64 
+    3814:	41 57                	push   %r15
+    3816:	49 89 d7             	mov    %rdx,%r15
+    3819:	41 56                	push   %r14
+    381b:	41 55                	push   %r13
+    381d:	41 54                	push   %r12
+    381f:	55                   	push   %rbp
+    3820:	48 89 fd             	mov    %rdi,%rbp
+    3823:	48 89 f7             	mov    %rsi,%rdi
+    3826:	53                   	push   %rbx
+    3827:	89 cb                	mov    %ecx,%ebx
+    3829:	48 81 ec b8 00 00 00 	sub    $0xb8,%rsp
+    3830:	89 4c 24 08          	mov    %ecx,0x8(%rsp)
+    3834:	4c 8d ac 24 98 00 00 	lea    0x98(%rsp),%r13
+    383b:	00 
+    383c:	4c 8d 64 24 10       	lea    0x10(%rsp),%r12
+    3841:	4c 89 ee             	mov    %r13,%rsi
+    3844:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+    384b:	00 00 
+    384d:	48 89 84 24 a8 00 00 	mov    %rax,0xa8(%rsp)
+    3854:	00 
+    3855:	31 c0                	xor    %eax,%eax
+    3857:	e8 44 f5 ff ff       	call   2da0 <_XdmcpWrapperToOddParity@@Base>
+    385c:	4c 89 e6             	mov    %r12,%rsi
+    385f:	4c 89 ef             	mov    %r13,%rdi
+    3862:	e8 c9 f8 ff ff       	call   3130 <_XdmcpAuthSetup@@Base>
+    3867:	85 db                	test   %ebx,%ebx
+    3869:	0f 8e ce 00 00 00    	jle    393d <XdmcpWrap@@Base+0x12d>
+    386f:	89 d8                	mov    %ebx,%eax
+    3871:	45 31 ed             	xor    %r13d,%r13d
+    3874:	4c 8d b4 24 a0 00 00 	lea    0xa0(%rsp),%r14
+    387b:	00 
+    387c:	4c 89 fb             	mov    %r15,%rbx
+    387f:	83 e8 01             	sub    $0x1,%eax
+    3882:	83 e0 f8             	and    $0xfffffff8,%eax
+    3885:	83 c0 08             	add    $0x8,%eax
+    3888:	89 44 24 0c          	mov    %eax,0xc(%rsp)
+    388c:	0f 1f 40 00          	nopl   0x0(%rax)
+    3890:	8b 44 24 08          	mov    0x8(%rsp),%eax
+    3894:	ba 08 00 00 00       	mov    $0x8,%edx
+    3899:	45 8d 4d f8          	lea    -0x8(%r13),%r9d
+    389d:	44 29 e8             	sub    %r13d,%eax
+    38a0:	39 d0                	cmp    %edx,%eax
+    38a2:	0f 4f c2             	cmovg  %edx,%eax
+    38a5:	31 d2                	xor    %edx,%edx
+    38a7:	eb 28                	jmp    38d1 <XdmcpWrap@@Base+0xc1>
+    38a9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    38b0:	41 8d 0c 11          	lea    (%r9,%rdx,1),%ecx
+    38b4:	41 8d 7c 15 00       	lea    0x0(%r13,%rdx,1),%edi
+    38b9:	48 63 c9             	movslq %ecx,%rcx
+    38bc:	41 0f b6 0c 0f       	movzbl (%r15,%rcx,1),%ecx
+    38c1:	32 4c 3d 00          	xor    0x0(%rbp,%rdi,1),%cl
+    38c5:	41 88 0c 16          	mov    %cl,(%r14,%rdx,1)
+    38c9:	48 83 c2 01          	add    $0x1,%rdx
+    38cd:	39 d0                	cmp    %edx,%eax
+    38cf:	7e 16                	jle    38e7 <XdmcpWrap@@Base+0xd7>
+    38d1:	45 85 ed             	test   %r13d,%r13d
+    38d4:	75 da                	jne    38b0 <XdmcpWrap@@Base+0xa0>
+    38d6:	0f b6 4c 15 00       	movzbl 0x0(%rbp,%rdx,1),%ecx
+    38db:	41 88 0c 16          	mov    %cl,(%r14,%rdx,1)
+    38df:	48 83 c2 01          	add    $0x1,%rdx
+    38e3:	39 d0                	cmp    %edx,%eax
+    38e5:	7f ea                	jg     38d1 <XdmcpWrap@@Base+0xc1>
+    38e7:	83 f8 08             	cmp    $0x8,%eax
+    38ea:	74 2b                	je     3917 <XdmcpWrap@@Base+0x107>
+    38ec:	48 98                	cltq   
+    38ee:	41 8d 4d f8          	lea    -0x8(%r13),%ecx
+    38f2:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    38f8:	31 d2                	xor    %edx,%edx
+    38fa:	45 85 ed             	test   %r13d,%r13d
+    38fd:	74 0b                	je     390a <XdmcpWrap@@Base+0xfa>
+    38ff:	8d 14 01             	lea    (%rcx,%rax,1),%edx
+    3902:	48 63 d2             	movslq %edx,%rdx
+    3905:	41 0f b6 14 17       	movzbl (%r15,%rdx,1),%edx
+    390a:	41 88 14 06          	mov    %dl,(%r14,%rax,1)
+    390e:	48 83 c0 01          	add    $0x1,%rax
+    3912:	83 f8 08             	cmp    $0x8,%eax
+    3915:	75 e1                	jne    38f8 <XdmcpWrap@@Base+0xe8>
+    3917:	48 89 de             	mov    %rbx,%rsi
+    391a:	b9 01 00 00 00       	mov    $0x1,%ecx
+    391f:	4c 89 e2             	mov    %r12,%rdx
+    3922:	4c 89 f7             	mov    %r14,%rdi
+    3925:	e8 46 fa ff ff       	call   3370 <_XdmcpAuthDoIt@@Base>
+    392a:	41 83 c5 08          	add    $0x8,%r13d
+    392e:	48 83 c3 08          	add    $0x8,%rbx
+    3932:	44 3b 6c 24 0c       	cmp    0xc(%rsp),%r13d
+    3937:	0f 85 53 ff ff ff    	jne    3890 <XdmcpWrap@@Base+0x80>
+    393d:	48 8b 84 24 a8 00 00 	mov    0xa8(%rsp),%rax
+    3944:	00 
+    3945:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax
+    394c:	00 00 
+    394e:	75 12                	jne    3962 <XdmcpWrap@@Base+0x152>
+    3950:	48 81 c4 b8 00 00 00 	add    $0xb8,%rsp
+    3957:	5b                   	pop    %rbx
+    3958:	5d                   	pop    %rbp
+    3959:	41 5c                	pop    %r12
+    395b:	41 5d                	pop    %r13
+    395d:	41 5e                	pop    %r14
+    395f:	41 5f                	pop    %r15
+    3961:	c3                   	ret    
+    3962:	e8 99 e7 ff ff       	call   2100 <__stack_chk_fail@plt>
+
+Disassembly of section .fini:
+
+0000000000003968 <.fini>:
+    3968:	f3 0f 1e fa          	endbr64 
+    396c:	48 83 ec 08          	sub    $0x8,%rsp
+    3970:	48 83 c4 08          	add    $0x8,%rsp
+    3974:	c3                   	ret    
