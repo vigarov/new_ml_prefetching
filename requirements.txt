@@ -1,0 +1,5 @@
+pandas
+swifter
+tqdm
+mapply
+pytest
