@@ -1,14 +1,11 @@
 from pathlib import Path
-from collections import defaultdict
 from .fltrace_classes import *
-from .constants import TEXT_SEPARATOR, get_page_address,get_page_num
+from .constants import TEXT_SEPARATOR, get_page_address, PAGE_SIZE
 import pandas as pd
-# import swifter
+import swifter
 # import mapply
 from tqdm import tqdm
 from functools import partial
-import multiprocessing as mp
-import numpy as np
 
 def check_correct_dir_str(path: Path, str_path: str = ""):
     assert path.exists() and path.is_dir(),("The directory "+ (f"{str_path}, a.k.a. " if str_path != "" else "") +f"{path.absolute().as_posix()} either does not exist, or isn't a directory")
@@ -271,12 +268,19 @@ def get_df_no_cold_miss(df: pd.DataFrame):
     return analysis_without_mandatory, num_cold_misses
 
 
-def single_preprocess(runid:RunIdentifier,df:pd.DataFrame, procmap_file: Path,keep_exec_only=False,use_ints = True):
-    
+def single_preprocess(runid:RunIdentifier,df:pd.DataFrame, procmap_file: Path | str,keep_exec_only=False,use_ints = True):
+    # Returns tuple[pd.DataFrame, ExtraProcessCodeInfo], the pre-processed dataframe, and the extra process code-info 
+
+  
+    if isinstance(procmap_file,str):
+        procmap_file = Path(procmap_file)
+        assert procmap_file.exists() and procmap_file.is_file()
+
     # Do some basic pre-processing
+    df["flags"] = df.flags.astype(int)
     if use_ints:
         hex_to_int = partial(int,base=16)
-        df["ip"] = df.ip.swifter.progress_bar(desc="Translating hex to int").apply(hex_to_int)
+        df["ip"] = df.ip.swifter.progress_bar(desc="Translating iphex to int").apply(hex_to_int)
         df["trace"] = df["trace"].swifter.progress_bar(desc="Splitting and translating st").apply(lambda  trace_str: tuple(hex_to_int(ip) for ip in trace_str.split('|') if ip != ""))
     df = remove_weird_ips(runid,df,use_ints=use_ints)
     df = remove_unused_and_rename(runid, df)
@@ -295,4 +299,17 @@ def single_preprocess(runid:RunIdentifier,df:pd.DataFrame, procmap_file: Path,ke
         # This can be bad if we have inlined functions !
         exec_lib_ips = epci.libs[[k for k in epci.libs.keys() if runid.program_name in k][0]].ips
         df = df.drop(df[df.ip.swifter.force_parallel(enable=use_ints).progress_bar(desc="Aggressive removal of rows").apply(lambda ip: ip not in exec_lib_ips)].index) 
+    
+    # Finally, translate all the addresses to pages
+    # Fltrace typically does that for you already, so let's not do useless work
+    has_offsets = len(df[~df.addr.str.endswith("000")]) > 0
+    assert PAGE_SIZE == 4*1024, f"For huge pages, use get_page_address functions (didn't want to implement the slow 'always going to int' operation)"
+    if has_offsets:
+        df["page_offsets"] = df.addr.str.slice(start=-3)
+    if use_ints:
+        if has_offsets:
+            df["page_offsets"] = df.page_offsets.swifter.progress_bar(desc="Translating pohex to int").apply(hex_to_int)
+        df["addr"] = df.addr.swifter.progress_bar(desc="Translating addrhex to int").apply(get_page_address)
+    else:
+        df["addr"] = df.addr.str.slice(end=-3) + '000'
     return df,epci

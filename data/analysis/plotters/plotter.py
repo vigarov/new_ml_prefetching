@@ -7,13 +7,18 @@ CB_PALETTE = ["#332288","#117733","#44AA99","#88CCEE","#DDCC77","#CC6677","#AA44
 EXTRA_CB_PALLETTE = ["#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]
 
 def get_pie_bar_zoom_in(data: np.array, labels: np.array, figsize=(12, 8), colors=None,
-                        zoomed_in_y_axis_label="Percentage", fig_title = ""):
+                        zoomed_in_y_axis_label="Percentage",
+                        zoomed_in_x_axis_label="Values",
+                        zoomed_in_pct_to_num = -1,
+                        zoomed_in_fontsize = 8,
+                        fig_title = "",
+                        already_existing_figure=None):
     plt.ioff()  # disable interactive showing so that figures don't get shown upon creation
 
     if colors is None:
         colors = CB_PALETTE+EXTRA_CB_PALLETTE
     assert np.all(np.isclose(data.sum(), [100])), f"Sum of data is not 100 (%), but rather {data.sum()}"
-    assert np.any(np.greater_equal(data, 90)), f"None of the elements are significant (>90%)"
+    assert np.any(np.greater_equal(data, 80)), f"None of the elements are significant (>80%), {data}"
     assert len(colors) >= len(data)
     assert len(data) == len(labels)
     assert len(data) >= 3, "This kind of plot doesn't make sense for only two classes"
@@ -23,7 +28,7 @@ def get_pie_bar_zoom_in(data: np.array, labels: np.array, figsize=(12, 8), color
         labels = np.array(labels)
     labels = labels[sorted_idcs]
 
-    fig = plt.figure(figsize=figsize)
+    fig = plt.figure(figsize=figsize) if already_existing_figure is None else already_existing_figure
 
     # Create axes for pie chart (bottom left) and bar chart (top right)
     ax1 = fig.add_axes([0.1, 0.1, 0.4, 0.4])  # [left, bottom, width, height]
@@ -40,7 +45,7 @@ def get_pie_bar_zoom_in(data: np.array, labels: np.array, figsize=(12, 8), color
         if pct < 0.5:
             return ""
         else:
-            return ("   " if idx % 2 == 0 else ("\n" if idx > 2 else "")) + label + (string_formatted_pct if idx == 0 else "")
+            return ("   " if idx % 2 == 0 else ("\n" if idx > 2 else "")) + str(label) + (string_formatted_pct if idx == 0 else "")
 
     wedges, texts, autotexts = ax1.pie(data, explode=explode, colors=colors,
                                        autopct=custom_pct,
@@ -54,14 +59,15 @@ def get_pie_bar_zoom_in(data: np.array, labels: np.array, figsize=(12, 8), color
     bars = ax2.bar(x, small_data, color=colors[1:])
     ax2.set_ylim(0, max(small_data) * 1.2)
     ax2.set_ylabel(zoomed_in_y_axis_label)
+    ax2.set_xlabel(zoomed_in_x_axis_label)
     ax2.set_xticks(x)
-    ax2.set_xticklabels(labels[1:])
+    ax2.set_xticklabels(labels[1:],fontsize=zoomed_in_fontsize)
 
     # Add value labels on top of bars
     for bar in bars:
         height = bar.get_height()
         ax2.text(bar.get_x() + bar.get_width() / 2., height,
-                 f'{height:.4f}', ha='center', va='bottom')
+                 f'{height:.4f}%' if zoomed_in_pct_to_num == -1 else f'{(height*zoomed_in_pct_to_num)//100}', ha='center', va='bottom')
 
     # Connect pie slices to bars
     for i, (wedge, bar) in enumerate(zip(wedges[1:], bars)):

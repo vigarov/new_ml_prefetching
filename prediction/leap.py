@@ -1,6 +1,5 @@
 import numpy as np
 from typing import Sequence
-from dataclasses import dataclass
 import pandas as pd
 from utils.constants import get_page_num
 from utils.generic import chunk_data
@@ -11,30 +10,8 @@ from metrics import *
 from tqdm import tqdm
 import multiprocessing as mp
 from functools import partial
-
-
-@dataclass
-class LeapConfig:
-    ###
-    # Leap config class used in various leap variants tested (whose code is in this file as well)
-    ###
-    # Type of leap to run ; choose between:
-    #   * "standard" (original leap implementation)
-    #   * "per_path" (a different trend detector for each path)
-    #   * "per_pc" (a different trend detector for each faulty PC) 
-    leap_type: str 
-    # The number of output predicted addresses - K
-    # For each page fault, leap will output `num_predictions` pages following the found trend
-    # e.g.: if trend is +2 (pages), faulted page is 0x11000, num_predictions = 3, 
-    #       the output of leap at that fault is [0x13000,0x15000,0x17000] 
-    num_predictions : int
-    # The access history size used to find a trend - H
-    history_size: int 
-    
-
-    def __post_init__(self):
-        assert self.leap_type in ["standard","per_path","per_pc"]
-        assert self.num_predictions > 0
+from dataclasses import dataclass
+from config import LeapConfig
 
 
 @dataclass
@@ -122,22 +99,25 @@ class Leap:
         return most_frequent,most_frequent_count
     
     @staticmethod
-    def prefetch_outputs(history_window: npt.NDArray,num_to_be_prefetched:int) -> tuple[Sequence[int],float]:
+    def prefetch_outputs(history_window: npt.NDArray,num_to_be_prefetched:int,prediction_type:str) -> tuple[Sequence[int],float]:
         # Returns the prefetched pages and the majority percentage of the trend (Leap usually prefetches if >50%)
-        trend,count = Leap.majority_trend(history_window)
-        majority_trend_pct = 100*count/(len(history_window)-1)
-        faulty_page = history_window[-1]
-        return [faulty_page + i*trend for i in range(1,num_to_be_prefetched+1)],majority_trend_pct
-    
+        assert prediction_type in ["one_trend","all_trends"]
+        if prediction_type == "one_trend":
+            trend,count = Leap.majority_trend(history_window)
+            majority_trend_pct = 100*count/(len(history_window)-1)
+            faulty_page = history_window[-1]
+            return [faulty_page + i*trend for i in range(1,num_to_be_prefetched+1)],majority_trend_pct
+        else:
+            raise NotImplementedError()
     @staticmethod
-    def mp_process_chunk(chunk_data, K):
+    def mp_process_chunk(chunk_data, K, prediction_type):
         chunk_size = len(chunk_data)
         total_certainty = 0
         total_recall = 0
         total_success = 0
         
         for history, comp_output, success_comp in chunk_data:
-            prefetched, pct = Leap.prefetch_outputs(history, K)
+            prefetched, pct = Leap.prefetch_outputs(history, K, prediction_type)
             total_certainty += pct
             total_recall += recall_at_K(prefetched, comp_output)
             total_success += success_at_K(prefetched, success_comp)
@@ -150,7 +130,7 @@ class Leap:
         }
 
     @staticmethod
-    def get_stats(addresses: Sequence|npt.NDArray,H:int,K:int,gid:int|None=None,parallel:int|None=None,info:bool=True) -> tuple[float, float, float, int]:
+    def get_stats(addresses: Sequence|npt.NDArray,H:int,K:int,prediction_type:str,gid:int|None=None,parallel:int|None=None,info:bool=True) -> tuple[float, float, float, int]:
         # Gets success avnd recall, at K
         # Returns (average recall, average success, average certainty, num_predictions)
         # Note that num_predictions is simply N-H-K, where we have N addresses
@@ -177,7 +157,7 @@ class Leap:
             total_success = 0
             total_recall = 0
             for i,history in tqdm(enumerate(histories),total=num_predictions,desc=f"[{gid}] Running leap"):
-                prefetched,pct = Leap.prefetch_outputs(history,K)
+                prefetched,pct = Leap.prefetch_outputs(history,K,prediction_type)
                 total_certainty+=pct
                 total_recall += recall_at_K(prefetched,recall_comp[i])
                 total_success += success_at_K(prefetched,success_comp[i])
@@ -197,7 +177,7 @@ class Leap:
             ]
             chunks = list(chunk_data(history_output_pairs, chunk_size=60_000))
 
-            process_func = partial(Leap.mp_process_chunk, K=K)
+            process_func = partial(Leap.mp_process_chunk, K=K,prediction_type=prediction_type)
             with mp.Pool(processes=n_proc) as pool:
                 chunk_results = list(tqdm(
                     pool.imap(process_func, chunks),
@@ -218,11 +198,11 @@ class Leap:
         return average_certainty,average_success,average_recall, num_predictions
 
 def get_leap(config: LeapConfig,df:pd.DataFrame,enable_parallel:bool=False,info:bool=True):
-    # if config.leap_type != standard, assumes existence of "ip" and/or "stacktrace" column
-    match config.leap_type:
+    # if config.grouping_type != standard, assumes existence of "ip" and/or "stacktrace" column
+    match config.grouping_type:
         case "standard":
             addresses = df["addr"]
-            return Leap.get_stats(addresses.values,config.history_size,config.num_predictions,parallel=-1 if enable_parallel else None,info=info)
+            return Leap.get_stats(addresses.values,config.history_size,config.num_predictions,prediction_type=config.prediction_type,parallel=-1 if enable_parallel else None,info=info)
         case "per_path" | "per_pc":
             if config.leap_type == "per_path":
                 col = "stacktrace"
@@ -237,7 +217,7 @@ def get_leap(config: LeapConfig,df:pd.DataFrame,enable_parallel:bool=False,info:
                 addresses = split.get_group(gname)["addr"].values
                 group_size = len(addresses)
                 all_stats.append((group_size,
-                                  *Leap.get_stats(addresses,config.history_size,config.num_predictions,
-                                                  gid,-1 if enable_parallel and group_size > 200_000 else None,info=info)))
+                                  *Leap.get_stats(addresses,config.history_size,config.num_predictions,prediction_type=config.prediction_type,
+                                                  gid=gid,parallel=-1 if enable_parallel and group_size > 200_000 else None,info=info)))
             return all_stats
     

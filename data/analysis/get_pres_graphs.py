@@ -63,7 +63,7 @@ def process_grandchild(bn,from_mp,grandchild):
             pids_to_procmaps_path[pid] = trace_output
         elif filetype == "faults":
             assert pid in pids_to_procmaps_path.keys(), f"Received faults before procmaps here {trace_output.as_posix()}: are procmaps missing?"
-            if from_mp and grandchild.stat().st_size >= 1 * 1024 * 1024 * 1024:
+            if from_mp and grandchild.stat().st_size >= 10 * 1024 * 1024 * 1024:
                 # If more than 1 gb, don't process in parallel
                 return "do_seq",grandchild
             procmap_path = pids_to_procmaps_path[pid]
@@ -73,20 +73,15 @@ def process_grandchild(bn,from_mp,grandchild):
             if True:
                 df = pd.read_csv(trace_output.as_posix())
                 print(f"Loaded data for {runid}. Starting preprocessing.")
-                df,fltrace_stats_df,epci = preprocess_df(runid,df, procmap_path)
+                df,epci = single_preprocess(runid,df, procmap_path,use_ints=False)
                 print(f"Finished preprocessing data for {runid}.")
-                ret_a = fltrace_stats_df.groupby(by="number_impacted_ips").count()['initial_trace_length'].rename('perc_in_stacktrace').to_frame()
-            
-                number_ips_not_in_st, df = get_ip_not_in_st_stats(runid,df)
-                ret_b = 100*number_ips_not_in_st/len(df)
-
                 # Graph
                 default_dag = get_connection_graph(df,epci,str(runid))
                 get_sink_source_stats(default_dag,df.stacktrace.unique())
                 write_gml(default_dag,graph_out_path.absolute().as_posix()+'/'+str(runid))
                 # TL
                 grouped_addresses_default = get_tl_well_formatted(df)
-                default_tl_fig,_ = plotter.get_time_graph(grouped_addresses_default)
+                default_tl_fig,_,cd = plotter.get_time_graph(grouped_addresses_default)
                 default_tl_fig.savefig(tl_out_path.absolute().as_posix()+'/'+str(runid)+FILE_SAVETYPE_EXTENSION)
                 #-------------------------------
                 #Repeat for no mandatory
@@ -98,14 +93,14 @@ def process_grandchild(bn,from_mp,grandchild):
             write_gml(nm_dag,nm_graph_out_path.absolute().as_posix()+'/'+str(runid))
             # TL
             grouped_no_mandatory = get_tl_well_formatted(analysis_without_mandatory)
-            nm_tl_fig,_ = plotter.get_time_graph(grouped_no_mandatory)
+            nm_tl_fig,_,_ = plotter.get_time_graph(grouped_no_mandatory,color_dict=cd)
             nm_tl_fig.savefig(nm_tl_out_path.absolute().as_posix()+'/'+str(runid)+FILE_SAVETYPE_EXTENSION)
-            return "ok",(ret_a,ret_b,ret_c)
+            return "ok",(ret_c)
         else:
             raise LookupError(f"While looking at {bn}, found the following file in one of the grandchildren which doesn't seem to be the output of fltrace: {trace_output.absolute().as_posix()}")
 
 def process_child(child,from_mp = True):
-    ra,rb,rc = [],[],[]
+    rc = []
     check_correct_dir_str(child)
     benchmark_name = child.name
     to_do_seq = []
@@ -115,13 +110,11 @@ def process_child(child,from_mp = True):
             if o == "do_seq":
                 to_do_seq.append((benchmark_name,ot))
             else:
-                ret_a,ret_b,ret_c = ot
-                ra.append(ret_a)
-                rb.append(ret_b)
+                ret_c = ot
                 rc.append(ret_c)
     print(f"Finished work for for {benchmark_name}.")
     print(TEXT_SEPARATOR)
-    return to_do_seq,ra,rb,rc
+    return to_do_seq,rc
 
 def main():
     parent = Path(PARENT_FOLDER_PATH)
@@ -135,31 +128,19 @@ def main():
     nm_tl_out_path = Path(TIMELINE_NM)
     nm_tl_out_path.mkdir(exist_ok=True,parents=False)
 
-    aggregated_fltrace_stats = []
-    aggregated_ips_not_in_pct = [] 
     cold_miss_pct = []
 
     do_sequentially = []
 
     with Pool(max_workers=3) as pool1:
-        for seq,ra,rb,rc in pool1.map(process_child,Path(PARENT_FOLDER_PATH).iterdir()):
+        for seq,rc in pool1.map(process_child,Path(PARENT_FOLDER_PATH).iterdir()):
             do_sequentially.extend(seq)
-            aggregated_fltrace_stats.extend(ra)
-            aggregated_ips_not_in_pct.extend(rb)
             cold_miss_pct.extend(rc)
 
     for bn,seq_gc in do_sequentially:
-        _,(ra,rb,rc) = process_grandchild(bn,False,seq_gc)
+        _,(rc) = process_grandchild(bn,False,seq_gc)
 
-    agg_stats = pd.concat(aggregated_fltrace_stats,axis=1,join="outer").fillna(0).sum(axis=1)
-    agg_stats= 100*agg_stats/agg_stats.sum()
-    agg_fig = plotter.get_pie_bar_zoom_in(agg_stats.values,agg_stats.index.to_numpy(dtype=str),
-                                             fig_title=("Percentage of page faults in which $N$ fltrace IPs appear in the stacktrace"+f"\nAggregated"))
-    
-    agg_fig.savefig(parent.absolute().as_posix()+'/'+"agg_fltrace_stats"+FILE_SAVETYPE_EXTENSION)    
 
-    print(aggregated_ips_not_in_pct)
-    print(TEXT_SEPARATOR+'\n')
     print(cold_miss_pct)
 
 if __name__=='__main__':
