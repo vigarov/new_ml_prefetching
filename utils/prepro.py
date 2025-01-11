@@ -35,7 +35,7 @@ class ExtraProcessCodeInfo:
 
 
 
-def remove_weird_ips(runid, df,use_ints = False):
+def remove_weird_ips(runid:RunIdentifier, df,use_ints = False):
     # There are several ips which aren't mapped to any library/executable according to the `procmaps`
     # WEIRD_IPS contains a manually populated list of them, found accross executions
     # We can see that it seems to correspond to mainly two IPs, with different offsets (ASLR) 
@@ -45,13 +45,14 @@ def remove_weird_ips(runid, df,use_ints = False):
     #           (more realistic? these ips often occur at the start of the traces --> could also be some weird `exec` behavior)
     # Since they are usually only a handful (though raises up to ~300 for canneal) of rows containing such a weird `ip` we can just ignore them by removing the whole row
     # as we would be left with enough data either way to perform significant work 
-    WEIRD_IPS = ["ffffffffb2987dba","ffffffffb2987d81","ffffffffa9f87dba","ffffffffa9f87d81","ffffffffb2105a48","FFFFFFFFA92FF9E4"]
+    WEIRD_IPS = ["ffffffffb2987dba","ffffffffb2987d81","ffffffffa9f87dba","ffffffffa9f87d81","ffffffffb2105a48","FFFFFFFFA92FF9E4","ffffffffb1cff9e4","ffffffffa92ff9e4"]
     if use_ints:
         WEIRD_IPS = [int(wip,16) for wip in WEIRD_IPS]
     the_row = df[df["ip"].isin(WEIRD_IPS)]
     #assert len(the_row) <= 2, f"# of weird ips is {len(the_row)}"
-    if len(the_row) > 1:
-        print(f"Inspect! {runid}: # of weird ips is {len(the_row)}")
+    print(f"Inspect! {runid.program_name} {runid.l}/{runid.m}: # of weird ips is {len(the_row)}/{len(df)}")
+    # if len(the_row) > 1:
+    #     print(f"Inspect! {runid}: # of weird ips is {len(the_row)}")
     df = df.drop(the_row.index)
     return df
 
@@ -195,12 +196,12 @@ def get_epci_and_all_ips(df, procmap_file,use_ints=False):
         all_encountered_ips.discard("")
     for ip in tqdm(all_encountered_ips,total=len(all_encountered_ips),desc="Finding all ip librairies.."):
         lib = Record.find_record(epci.records, int(ip, 16) if not use_ints else ip)
-        # if not lib or not lib.path:
-        #     #TODO remove temporary
-        #     print(f"WARNINGGGGGG : no lib for ip {ip}")
-        #     continue
-        assert lib, f"can't find lib for ip: {ip}"
-        assert lib.path, f"no lib file path for ip: {ip}"
+        if not lib or not lib.path:
+            #TODO remove temporary
+            print(f"WARNINGGGGGG : no lib for ip {ip}")
+            continue
+        # assert lib, f"can't find lib for ip: {ip}"
+        # assert lib.path, f"no lib file path for ip: {ip}"
         # Ignore fltrace.so, see comment after the for-loop for reasoning
         if "fltrace.so" in lib.path:
             continue
@@ -252,9 +253,9 @@ def get_ip_not_in_st_stats(runid,df):
     return num_not_in_st,n_df
     
 
-def get_tl_well_formatted(df:pd.DataFrame):
-    st_grouped_df = df.groupby("stacktrace")
-    return pd.concat([st_grouped_df["addr"].apply(list).rename("pages").swifter.progress_bar(desc="Translating to pages").apply(lambda addr_list: [get_page_address(addr)  for addr in addr_list]),st_grouped_df.size().rename("num_occurrences"),df.reset_index().groupby("stacktrace")["index"].apply(list).rename("index_occurrences")],axis=1).reset_index()
+def get_tl_well_formatted(df:pd.DataFrame,by="stacktrace"):
+    st_grouped_df = df.groupby(by=by)
+    return pd.concat([st_grouped_df["addr"].apply(list).rename("pages").swifter.progress_bar(desc="Translating to pages").apply(lambda addr_list: [get_page_address(addr)  for addr in addr_list]),st_grouped_df.size().rename("num_occurrences"),df.reset_index().groupby(by)["index"].apply(list).rename("index_occurrences")],axis=1).reset_index()
 
 def get_df_no_cold_miss(df: pd.DataFrame):
     """
@@ -277,7 +278,7 @@ def single_preprocess(runid:RunIdentifier,df:pd.DataFrame, procmap_file: Path | 
         assert procmap_file.exists() and procmap_file.is_file()
 
     # Do some basic pre-processing
-    df["flags"] = df.flags.astype(int)
+    df["flags"] = df["flags"].astype(int)
     if use_ints:
         hex_to_int = partial(int,base=16)
         df["ip"] = df.ip.swifter.progress_bar(desc="Translating iphex to int").apply(hex_to_int)
@@ -311,5 +312,5 @@ def single_preprocess(runid:RunIdentifier,df:pd.DataFrame, procmap_file: Path | 
             df["page_offsets"] = df.page_offsets.swifter.progress_bar(desc="Translating pohex to int").apply(hex_to_int)
         df["addr"] = df.addr.swifter.progress_bar(desc="Translating addrhex to int").apply(get_page_address)
     else:
-        df["addr"] = df.addr.str.slice(end=-3) + '000'
+        df["addr"] = df.addr.str.slice(stop=-3) + '000'
     return df,epci

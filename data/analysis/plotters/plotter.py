@@ -90,26 +90,27 @@ def get_pie_bar_zoom_in(data: np.array, labels: np.array, figsize=(12, 8), color
     return fig
 
 
-def get_time_graph(grouped_addresses_df,color_dict = None):
+def get_time_graph(grouped_addresses_df,color_dict = None,by="stacktrace",rasterized=False,title=""):
     fig,ax = plt.subplots(figsize=(15,10))
-    assert len(grouped_addresses_df) == len(grouped_addresses_df["stacktrace"].unique())
+    assert len(grouped_addresses_df) == len(grouped_addresses_df[by].unique())
     num_groups = len(grouped_addresses_df)
     ret_color_dict = {}
     if color_dict is None:
         cmap = plt.cm.jet(np.linspace(0,1,num_groups))
     for i,row in grouped_addresses_df.iterrows():
         if color_dict is None:
-            ret_color_dict[row["stacktrace"]] = cmap[i]
+            ret_color_dict[row[by]] = cmap[i]
         else: 
-            assert row["stacktrace"] in color_dict, f"{row['stacktrace']} not in {color_dict.keys()}"
+            assert row[by] in color_dict, f"{row[by]} not in {color_dict.keys()}"
         
-        ax.scatter(row["index_occurrences"],row["pages"],color=[(ret_color_dict if color_dict is None else color_dict)[row["stacktrace"]]]*len(row["pages"]),alpha=0.6, label=row["stacktrace"],marker='.')
+        ax.scatter(row["index_occurrences"],row["pages"],color=[(ret_color_dict if color_dict is None else color_dict)[row[by]]]*len(row["pages"]),alpha=0.6, label=row[by],marker='.',rasterized=rasterized)
     #fig.legend(title="Groups")
     ax.set_xlabel('Time')
     current_xlims = ax.get_xlim()
     ax.set_xlim([-10,current_xlims[-1]])
     ax.set_ylabel('Page faulted (hex)')
     ax.get_yaxis().set_major_formatter(ticker.FuncFormatter(lambda x,pos: hex(int(x))))
+    fig.suptitle(title)
     return fig,ax,ret_color_dict
 
 def get_regs_graph():

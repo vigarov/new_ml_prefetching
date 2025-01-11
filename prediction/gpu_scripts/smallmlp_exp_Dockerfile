@@ -1,0 +1,67 @@
+#####################################
+# RCP CaaS requirement (Image)
+#####################################
+# The best practice is to use an image
+# with GPU support pre-built by Nvidia.
+# https://catalog.ngc.nvidia.com/orgs/nvidia/containers/
+
+# For example, if you want to use an image with pytorch already installed
+# FROM --platform=linux/amd64 nvcr.io/nvidia/pytorch:23.11-py3
+
+# IMPORTANT
+# The --platform parameter is mandatory on ARM MacOS
+# to force the build of the container using amd64 (x64).
+# Without this parameter, the container will not work on the CaaS cluster.
+
+# TUTORIAL ONLY
+# In this example we'll use a smaller image to speed up the build process.
+# Basic image based on ubuntu 22.04
+FROM --platform=linux/amd64 nvcr.io/nvidia/pytorch:23.11-py3
+
+#####################################
+# RCP CaaS requirement (Storage)
+#####################################
+# Create your user inside the container.
+# This block is needed to correctly map
+# your EPFL user id inside the container.
+# Without this mapping, you are not able
+# to access files from the external storage.
+ARG LDAP_USERNAME
+ARG LDAP_UID
+ARG LDAP_GROUPNAME
+ARG LDAP_GID
+RUN groupadd ${LDAP_GROUPNAME} --gid ${LDAP_GID}
+RUN useradd -m -s /bin/bash -g ${LDAP_GROUPNAME} -u ${LDAP_UID} ${LDAP_USERNAME}
+#####################################
+
+# Copy your code inside the container
+RUN mkdir -p /home/${LDAP_USERNAME}
+
+COPY requirements.txt /home/${LDAP_USERNAME}/r.txt
+# Set your user as owner of the new copied files
+
+# Install required packages
+RUN apt update
+RUN apt install python3-pip htop tmux openssh-server -y
+# Install additional dependencies
+RUN pip install -r /home/${LDAP_USERNAME}/r.txt
+RUN mkdir -p /var/run/sshd
+RUN sed -i 's/#*PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+RUN sed -i 's/#*PermitTTY yes/PermitTTY yes/g' /etc/ssh/sshd_config
+RUN sed -i 's/#*PermitTunnel no/PermitTunnel no/g' /etc/ssh/sshd_config
+RUN sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
+ENV NOTVISIBLE="in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+EXPOSE 22
+RUN echo 'root:root' | chpasswd
+# Set the working directory in your user's home
+#USER ${LDAP_USERNAME}
+RUN mkdir -p /home/${LDAP_USERNAME}/ip
+RUN mkdir -p /home/${LDAP_USERNAME}/st
+COPY prediction/gpu_scripts/small_mlp.py /home/${LDAP_USERNAME}/ip/exp_ip.py
+COPY prediction/gpu_scripts/small_mlp.py /home/${LDAP_USERNAME}/st/exp_st.py
+COPY data/data/prediction_select_few/processed/facesim/processed_500_125.csv /home/${LDAP_USERNAME}/ip/processed_500_125.csv
+COPY data/data/prediction_select_few/processed/facesim/processed_500_125.csv /home/${LDAP_USERNAME}/st/processed_500_125.csv
+RUN chown -R ${LDAP_USERNAME}:${LDAP_GROUPNAME} /home/${LDAP_USERNAME}
+WORKDIR /home/${LDAP_USERNAME}
+CMD ["/usr/sbin/sshd", "-D"]

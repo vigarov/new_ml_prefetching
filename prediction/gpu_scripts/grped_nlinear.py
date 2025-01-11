@@ -16,7 +16,6 @@ from typing import Sequence
 from pathlib import Path
 from shutil import rmtree
 import pickle as pkl
-import plotly.express as px
 import itertools
 import numpy as np
 from plotly import graph_objects as go
@@ -26,10 +25,8 @@ from collections import defaultdict
 import time
 from datetime import datetime
 from multiprocessing import Pool, cpu_count
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import numpy as np
+from copy import deepcopy
+import matplotlib.pyplot as plt
 
 SEED = 2024
 random.seed(SEED)
@@ -87,7 +84,7 @@ class Config():
         return Config({
             'tt_split': 0.75, # Train-test split
             'bs': 8, # Training batch size
-            'base_lr': 1*(10**-1), # Starting learning rate,
+            'base_lr': 1*(10**-2), # Starting learning rate,
             'end_lr': 1*(10**-4), # Smallest lr you will converge to
             'epochs': 12, # epochs
             'warmup_epochs': 3 # number of warmup epochs
@@ -104,6 +101,10 @@ class Config():
 
 # From https://github.com/cure-lab/LTSF-Linear/blob/main/models/NLinear.py
 
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import numpy as np
 
 class NLinear(nn.Module):
     """
@@ -158,6 +159,7 @@ class Metric():
 
     def worst(self,res_list:list[float]):
         return self.worst_function(res_list) 
+
 
 def rmse(gt,preds):
     return np.sqrt(np.mean((preds-gt)**2))
@@ -269,7 +271,7 @@ class PageFaultDataset(Dataset):
         self.x = self.x.values
         self.y = self.y.values
         assert len(self.x) == len(self.y)
-    
+
     def __len__(self):
         """
         :return: the number of elements in the dataset
@@ -280,11 +282,12 @@ class PageFaultDataset(Dataset):
         return torch.tensor(self.x[index],dtype=torch.double).unsqueeze(-1),torch.tensor(self.y[index],dtype=torch.double)
 
 
-def get_tt_ds(config:Config):
-    df_to_use = pd.read_csv(TEST_DF)
-    if config.new_only:
-        df_to_use = df_to_use[df_to_use["flags"] < 32]
-    df_to_use = df_to_use["addr"]
+def get_tt_ds(config:Config,df_to_use = None):
+    if df_to_use is None:
+        df_to_use = pd.read_csv(TEST_DF)
+        if config.new_only:
+            df_to_use = df_to_use[df_to_use["flags"] < 32]
+        df_to_use = df_to_use["addr"]
     if config.deltas:
         df_to_use = df_to_use.diff().dropna()
     df_to_use = df_to_use.astype(int)
@@ -328,7 +331,7 @@ def maybe_update_result(current_value,new_result,better="lower"):
     return updated,new_value
                 
 
-def generic_train_loop(config:Config,model_fn,override_previous_dir=False,print_validation = True,tqdm_train=True):
+def group_train_loop(config:Config,group_df,model_fn,override_previous_dir=False,print_validation = True,tqdm_train=True,save=True):
     # Trains a model
     # When `override_previous_dir` = True, destroy the directory of the previous saved run with the same config id (if it exists)
     device = "cpu" if not torch.cuda.is_available() else "cuda"
@@ -339,7 +342,7 @@ def generic_train_loop(config:Config,model_fn,override_previous_dir=False,print_
     device = torch.device(device)
     generator = torch.Generator()
     generator.manual_seed(SEED)
-    train_dataloader, test_dataloader = get_tt_ds(config)
+    train_dataloader, test_dataloader = get_tt_ds(config,df_to_use=group_df)
     epochs = config["epochs"]
     warmup_epochs:int = config['warmup_epochs']
     model = model_fn(config).to(device)
@@ -359,20 +362,20 @@ def generic_train_loop(config:Config,model_fn,override_previous_dir=False,print_
         lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,milestones,fct)
     else:
         assert config.lr_scheduler == "exp"
-        lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer,gamma=0.6)
-
+        lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer,gamma=0.8)
 
     metrics_to_use = ALL_METRICS
     best_results = {metric:-np.inf for metric in metrics_to_use}
-    model_bases = Path(MODEL_BASE_DIR)
-    model_bases.mkdir(parents=True,exist_ok=True)
-    save_dir = model_bases / config.ident
-    if override_previous_dir and save_dir.exists():
-        assert save_dir.is_dir(),f"{save_dir.absolute().as_posix()} exists and is not a directory!"
-        rmtree(save_dir.absolute().as_posix())
-    save_dir.mkdir(parents = False,exist_ok=False)
-    for metric in metrics_to_use:
-        (save_dir/metric.name).mkdir(parents = False,exist_ok=False)
+    if save:
+        model_bases = Path(MODEL_BASE_DIR)
+        model_bases.mkdir(parents=True,exist_ok=True)
+        save_dir = model_bases / config.ident
+        if override_previous_dir and save_dir.exists():
+            assert save_dir.is_dir(),f"{save_dir.absolute().as_posix()} exists and is not a directory!"
+            rmtree(save_dir.absolute().as_posix())
+        save_dir.mkdir(parents = False,exist_ok=False)
+        for metric in metrics_to_use:
+            (save_dir/metric.name).mkdir(parents = False,exist_ok=False)
 
     all_losses = []
     all_results = defaultdict(list)
@@ -417,15 +420,16 @@ def generic_train_loop(config:Config,model_fn,override_previous_dir=False,print_
             if updated:
                 if metric.name.lower() == "success": 
                     worse_success_count = 0
-                # Save the model
-                metric_dir:Path = save_dir/metric.name
-                fname:Path = metric_dir/"model.pt"
-                if fname.exists():
-                    assert fname.is_file()
-                    fname.unlink()
-                torch.save(model.state_dict(),fname.absolute().as_posix())
-                with open((metric_dir/"config.pkl").absolute().as_posix(),"wb") as f:
-                    pkl.dump(config,f,pkl.HIGHEST_PROTOCOL)
+                if save:
+                    # Save the model
+                    metric_dir:Path = save_dir/metric.name
+                    fname:Path = metric_dir/"model.pt"
+                    if fname.exists():
+                        assert fname.is_file()
+                        fname.unlink()
+                    torch.save(model.state_dict(),fname.absolute().as_posix())
+                    with open((metric_dir/"config.pkl").absolute().as_posix(),"wb") as f:
+                        pkl.dump(config,f,pkl.HIGHEST_PROTOCOL)
             elif metric.name.lower() == "success": 
                 worse_success_count += 1
         if print_validation:
@@ -439,329 +443,185 @@ def generic_train_loop(config:Config,model_fn,override_previous_dir=False,print_
             print(f"Reached worse success on validation set three epochs in a row, WOULD've early stopped the training to avoid overfitting!")
             lr_scheduler.step()
         
-    return model,save_dir, all_results, all_losses
+    return model,save_dir if save else None, all_results, all_losses
 
-def train_single_configuration(params):
-    """Run a single training configuration in its own process"""
-    deltas, new_only, shuffle, h, lr_scheduler = params
-    
-    # Generate experiment name
-    exp_name = f"d{int(deltas)}n{int(new_only)}s{int(shuffle)}_h{h}_lr{lr_scheduler}"
-    
-    print(f"Starting experiment: {exp_name}")
-    start_time = time.time()
-    
-    # Get configuration and train model
-    config = get_nlinear_config(deltas, new_only, shuffle, h, lr_scheduler=lr_scheduler)
-    last_model, run_save_dir, all_results_base, all_losses_base = generic_train_loop(
+def train_single_group(params):
+    df,config_params = params
+    deltas,shuffle,h = config_params
+    config = get_nlinear_config(deltas=deltas,new_only=True,shuffle=shuffle,h_f = h,lr_scheduler = "custom")
+    _,_, all_results_base, all_losses_base = group_train_loop(
         config,
+        df,
         get_nlinear_model,
-        override_previous_dir=True
+        override_previous_dir=False,
+        save=False
     )
+    return all_results_base,all_losses_base,config.ident
     
-    duration = time.time() - start_time
-    print(f"Finished experiment: {exp_name} in {duration:.2f} seconds")
-    
-    return {
-        'exp_name': exp_name,
-        'results': all_results_base,
-        'losses': all_losses_base,
-        'params': {
-            'deltas': deltas,
-            'new_only': new_only,
-            'shuffle': shuffle,
-            'h': h,
-            'lr_scheduler': lr_scheduler
-        },
-        'duration': duration
-    }
-def cross_validate_hyperparameters(n_workers=None):
-    """Run cross-validation in parallel"""
-    if n_workers is None:
-        n_workers = max(1, cpu_count() - 1)  # Leave one CPU free
-    
-    # Generate all combinations
-    
-    # 1. LR scheduler combinations (with new_only=True, deltas=True)
-    lr_scheduler_combinations = [(False, True, shuffle, h, lr_sched) 
-                               for shuffle in [False, True]
-                               for h in [10, 96, 720]
-                               for lr_sched in ["exp", "custom"]]
-    
-    # 2. h-value combinations (with new_only=True, no lr_scheduler)
-    h_combinations = [(deltas, True, shuffle, h, "custom") 
-                     for deltas, shuffle in itertools.product([False, True], repeat=2)
-                     for h in [10, 96, 720]]
-    
-    # 3. Base combinations (with new_only=False, h=96, no lr_scheduler)
-    base_combinations = [(deltas, False, shuffle, 10, "custom") 
-                        for deltas, shuffle in itertools.product([False, True], repeat=2)]
-    
-    all_combinations = list(set(lr_scheduler_combinations + h_combinations + base_combinations))
-    
-    print(f"Starting parallel cross-validation with {n_workers} workers")
-    print(f"Total configurations to test: {len(all_combinations)}")
-    print(f"- LR scheduler combinations: {len(lr_scheduler_combinations)}")
-    print(f"- h-value combinations: {len(h_combinations)}")
-    print(f"- Base combinations: {len(base_combinations)}")
-    
-    start_time = time.time()
-    
-    Path(OUT_PATH).mkdir(parents=True,exist_ok=True)
-    # Run parallel training
-    with Pool(n_workers) as pool:
-        results = pool.map(train_single_configuration, all_combinations)
-    
-    # Convert results to dictionary
-    all_experiments = {result['exp_name']: result for result in results}
-    
-    total_duration = time.time() - start_time
-    print(f"\nCross-validation completed in {total_duration:.2f} seconds")
-    
-    with open(OUT_PATH+"summary.txt", "w") as f:
-        f.write(f"Cross-validation Summary\n")
-        f.write(f"========================\n")
-        f.write(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-        f.write(f"Number of workers: {n_workers}\n")
-        f.write(f"Total configurations: {len(all_combinations)}\n")
-        f.write(f"- LR scheduler combinations: {len(lr_scheduler_combinations)}\n")
-        f.write(f"- h-value combinations: {len(h_combinations)}\n")
-        f.write(f"- Base combinations: {len(base_combinations)}\n")
-        f.write(f"Total duration: {total_duration:.2f} seconds\n")
-        f.write(f"\nIndividual Experiment Durations:\n")
-        for exp_name, exp_data in all_experiments.items():
-            f.write(f"{exp_name}: {exp_data['duration']:.2f} seconds\n")
-    
-    # Plot and save results
-    plot_all_results(all_experiments, OUT_PATH+"graphs/")
-    plot_results_mpl(all_experiments, OUT_PATH+"graphs/")
-    plot_all_losses(all_experiments, OUT_PATH+"graphs/")
-    
-    return all_experiments
 
-def plot_results_mpl(all_experiments, save_dir="./results/"):
-    """Plot best metric results for each experiment using matplotlib bar plots"""
-    from pathlib import Path
-    import matplotlib.pyplot as plt
-    import numpy as np
+
+def run_one_experiment(config_params:tuple,parent_path:Path):
+    all_dfs,indq_count,indq_len,tot_len = get_all_groupdfs(config_params[-1])
+    print(len(all_dfs),indq_count,indq_len,tot_len)
+
+    n_workers = max(1, cpu_count() - 1)  # Leave one CPU free
+    with Pool(n_workers) as pool:
+        # Train once for every group
+        results = pool.map(train_single_group, zip(all_dfs, [config_params]*len(all_dfs)))
     
-    Path(save_dir).mkdir(parents=True, exist_ok=True)
+    # Unpack results
+    group_results = []
+    group_losses = []
+    group_lengths = []
+    config_id = None
+
+    for (results_base, losses_base,cid), df in zip(results, all_dfs):
+        group_results.append(results_base)
+        group_losses.append(losses_base)
+        config_id = cid
+        group_lengths.append(len(df))
+    print(len(group_results))
+    parent_path = parent_path / config_id
+    parent_path.mkdir(parents=True,exist_ok=False)
+
+    # Calculate weights for each group based on their lengths
+    total_length = sum(group_lengths)
+    weights = [length/total_length for length in group_lengths]
     
-    # Sort experiments by h value for consistent ordering
-    sorted_experiments = dict(sorted(all_experiments.items(), 
-                                   key=lambda x: (x[1]['params']['h'], 
-                                                x[1]['params']['deltas'],
-                                                x[1]['params']['shuffle'],
-                                                x[1]['params']['lr_scheduler'])))
+    # Find best epoch for each group based on Success metric
+    best_epoch_metrics = []
+    for group_metrics in group_results:
+        # Find the Success metric object among the keys
+        success_metric:Metric = next(metric for metric in group_metrics.keys() if metric.name == "Success")
+        success_values = group_metrics[success_metric]
+        best_epoch = success_metric.best_function(range(len(success_values)), key=lambda i: success_values[i])
+        
+        # Get all metrics for the best epoch
+        best_metrics = {
+            metric.name: values[best_epoch] 
+            for metric, values in group_metrics.items()
+        }
+        best_epoch_metrics.append(best_metrics)
     
-    # Get unique metrics
-    metrics = list(next(iter(sorted_experiments.values()))['results'].keys())
+    # Calculate weighted average for each metric
+    final_metrics = {}
+    all_metrics = set().union(*(metrics.keys() for metrics in best_epoch_metrics))
+    
+    for metric in all_metrics:
+        weighted_sum = sum(
+            metrics[metric] * weight 
+            for metrics, weight in zip(best_epoch_metrics, weights)
+        )
+        final_metrics[metric] = weighted_sum
+    
+    # Find best and worst performing groups
+    success_metric = "Success"
+    success_by_group = [metrics[success_metric] for metrics in best_epoch_metrics]
+    best_group_idx = max(range(len(success_by_group)), 
+                        key=lambda i: success_by_group[i])
+    worst_group_idx = min(range(len(success_by_group)), 
+                         key=lambda i: success_by_group[i])
+    
+    # Write summary
+    with open((parent_path / "summary.txt").absolute().as_posix(), 'w') as f:
+        f.write("Experiment Summary\n")
+        f.write("=================\n\n")
+        
+        f.write(f"There are {indq_count} inadequate dfs (of group length < {2*config_params[-1]+1}).\n")
+        f.write(f"This amounts for a total of {indq_len} data points dropped, or {100*indq_len/tot_len:.3f}% of the initial trace \n\n")
+
+        f.write("Overall Results:\n")
+        for metric, value in final_metrics.items():
+            f.write(f"{metric}: {value:.4f}\n")
+        
+        f.write("\nBest Performing Group:\n")
+        f.write(f"Group Index: {best_group_idx}\n")
+        f.write(f"Group Size: {group_lengths[best_group_idx]}\n")
+        for metric, value in best_epoch_metrics[best_group_idx].items():
+            f.write(f"{metric}: {value:.4f}\n")
+        
+        f.write("\nWorst Performing Group:\n")
+        f.write(f"Group Index: {worst_group_idx}\n")
+        f.write(f"Group Size: {group_lengths[worst_group_idx]}\n")
+        for metric, value in best_epoch_metrics[worst_group_idx].items():
+            f.write(f"{metric}: {value:.4f}\n")
+    with open((parent_path /"agg_results.pkl").absolute().as_posix(), 'wb') as f:
+        pkl.dump(final_metrics,f)
+
+    return final_metrics
+
+def run_all_group_experiments():
+    exp_combs = [(deltas,shuffle,h) 
+                    for deltas, shuffle in itertools.product([False, True], repeat=2)
+                    for h in [10, 64, 96]
+                ]
+    print(f"Total configurations to test: {len(exp_combs)}")
+    parent = Path(OUT_PATH)
+    parent.mkdir(parents=True,exist_ok=True)
+    config_results = []
+    all_configs = []
+    for conf_params in tqdm(exp_combs,desc="Running experiment",total=len(exp_combs)):
+        deltas,shuffle,h = conf_params
+        config = get_nlinear_config(deltas=deltas,new_only=True,shuffle=shuffle,h_f = h,lr_scheduler = "custom")
+        all_metrics = run_one_experiment(conf_params,parent)
+        all_configs.append(config)
+        config_results.append(all_metrics)
+    print(all_metrics)
+    plot_config_results(all_configs, config_results, parent)
+
+def plot_config_results(all_configs: list[Config], 
+                       config_results: list[dict[Metric, float]], 
+                       save_dir: Path):
+    """
+    Plot results for each metric across different configurations.
+    
+    Args:
+        all_configs: List of configuration objects
+        config_results: List of dictionaries mapping metrics to their values
+        save_dir: Directory to save the plots
+    """
+    # Get all unique metrics
+    all_metrics = set()
+    for result in config_results:
+        all_metrics.update(result.keys())
     
     # Create a figure for each metric
-    for metric in metrics:
-        # Collect best values for current metric
-        exp_names = []
-        best_values = []
-        
-        for exp_name, exp_data in sorted_experiments.items():
-            results = [resultss for comp_metric,resultss in exp_data['results'] if comp_metric.name == metric.name] # quick fix for non-fixed hashes of metrics
-            best_value = metric.best_function(results)  # Assuming lower is better
-            exp_names.append(exp_name)
-            best_values.append(best_value)
-        
-        # Create the bar plot
+    for metric in all_metrics:
         plt.figure(figsize=(12, 6))
-        bars = plt.bar(exp_names, best_values)
-        plt.title(f'Best {metric.name} Values Across Experiments')
-        plt.xlabel('Experiment')
-        plt.ylabel(f'{metric.name} Value')
         
-        # Rotate x-axis labels for better readability
-        plt.xticks(rotation=45, ha='right')
+        # Extract values for this metric across all configs
+        values = [results.get(metric, np.nan) for results in config_results]
         
-        # Add value labels on top of each bar
-        for bar, value in zip(bars, best_values):
+        # Create bar plot
+        x = np.arange(len(all_configs))
+        bars = plt.bar(x, values)
+        
+        # Customize plot
+        plt.title(f'{metric} Across Configurations', pad=20)
+        plt.xlabel('Configuration')
+        plt.ylabel(metric)
+        
+        # Add value labels on top of bars
+        for bar in bars:
             height = bar.get_height()
             plt.text(bar.get_x() + bar.get_width()/2., height,
-                    f'{value:.4f}',
+                    f'{height:.3f}',
                     ha='center', va='bottom')
-
-        # Adjust layout to make room for the legend
+        
+        # Add config detads as x-tick labels
+        config_labels = [f'{config.ident}' for config in all_configs]
+        plt.xticks(x, config_labels, rotation=45, ha='right')
+        
+        # Adjust layout and add grid
+        plt.grid(True, axis='y', linestyle='--', alpha=0.7)
         plt.tight_layout()
         
-        # Save the plot
-        plt.savefig(save_dir + f"{metric.name}_best_results.png", 
-                    bbox_inches='tight', 
-                    dpi=300)
+        # Save plot
+        plt.savefig((save_dir / f'{metric.lower()}_comparison.png').absolute().as_posix(), 
+                   bbox_inches='tight', 
+                   dpi=300)
         plt.close()
 
-    print(f"Plots saved to {save_dir}")
-
-
-def plot_all_results(all_experiments, save_dir="./results/"):
-    """Plot metric results and save to file"""
-    Path(save_dir).mkdir(parents=True,exist_ok=True)
-    
-    # Create figure
-    fig = go.Figure()
-    
-    # Color scale for different experiments
-    colors = px.colors.qualitative.Set3
-    
-    # Sort experiments by h value for better visualization
-    sorted_experiments = dict(sorted(all_experiments.items(), 
-                                   key=lambda x: (x[1]['params']['h'], 
-                                                x[1]['params']['deltas'],
-                                                x[1]['params']['shuffle'],
-                                                x[1]['params']['lr_scheduler'])))
-    
-    for i, (exp_name, exp_data) in enumerate(sorted_experiments.items()):
-        color = colors[i % len(colors)]
-        
-        for metric, results in exp_data['results'].items():
-            y = np.array(results)
-            x = np.arange(len(results))
-            
-            # Create hover text with parameter values and duration
-            hover_text = (f"h={exp_data['params']['h']}<br>"
-                         f"deltas={exp_data['params']['deltas']}<br>"
-                         f"new_only={exp_data['params']['new_only']}<br>"
-                         f"shuffle={exp_data['params']['shuffle']}<br>"
-                         f"LR Scheduler: {exp_data['params']['lr_scheduler']}<br>"
-                         f"Duration: {exp_data['duration']:.2f}s")
-            
-            # Add line trace
-            fig.add_trace(go.Scatter(
-                x=x,
-                y=y,
-                name=f"{exp_name} - {metric.name}",
-                line=dict(color=color),
-                mode='lines',
-                hovertemplate="%{text}<br>Value: %{y:.4f}<br>Epoch: %{x}<extra></extra>",
-                text=[hover_text]*len(x)
-            ))
-            
-            # Add minimum point marker
-            min_idx = np.argmin(y)
-            fig.add_trace(go.Scatter(
-                x=[x[min_idx]],
-                y=[y[min_idx]],
-                name=f"{exp_name} - {metric.name} min",
-                mode='markers',
-                marker=dict(
-                    symbol='x',
-                    size=10,
-                    color='red'
-                ),
-                hovertemplate="%{text}<br>Min Value: %{y:.4f}<br>Epoch: %{x}<extra></extra>",
-                text=[hover_text],
-                showlegend=False
-            ))
-    
-    # Update layout
-    fig.update_layout(
-        title="Metric Results Across Experiments",
-        xaxis_title="Epoch",
-        yaxis_title="Metric Value",
-        hovermode='x unified',
-        legend=dict(
-            yanchor="top",
-            y=0.99,
-            xanchor="left",
-            x=0.01
-        )
-    )
-    
-    # Save as HTML for interactivity and PNG for static version
-    fig.write_html(save_dir+"metric_results.html")
-    #fig.write_image(save_dir+"metric_results.png")
-
-def plot_all_losses(all_experiments, save_dir="./results/"):
-    """Plot loss curves and save to file"""
-    Path(save_dir).mkdir(parents=True,exist_ok=True)
-    
-    # Create figure
-    fig = go.Figure()
-    
-    # Color scale for different experiments
-    colors = px.colors.qualitative.Set3
-    
-    # Sort experiments by h value for better visualization
-    sorted_experiments = dict(sorted(all_experiments.items(), 
-                                   key=lambda x: (x[1]['params']['h'], 
-                                                x[1]['params']['deltas'],
-                                                x[1]['params']['shuffle'])))
-    
-    for i, (exp_name, exp_data) in enumerate(sorted_experiments.items()):
-        color = colors[i % len(colors)]
-        y = np.array(exp_data['losses'])
-        x = np.arange(len(y))
-        
-        # Calculate number of epochs based on data length
-        num_epochs = len(exp_data['results'][list(exp_data['results'].keys())[0]])
-        iterations_per_epoch = len(y) // num_epochs
-        
-        # Create hover text with parameter values and duration
-        hover_text = (f"h={exp_data['params']['h']}<br>"
-                        f"deltas={exp_data['params']['deltas']}<br>"
-                        f"new_only={exp_data['params']['new_only']}<br>"
-                        f"shuffle={exp_data['params']['shuffle']}<br>"
-                        f"LR Scheduler: {exp_data['params']['lr_scheduler']}<br>"
-                        f"Duration: {exp_data['duration']:.2f}s")
-            
-        # Add raw loss trace with high transparency
-        fig.add_trace(go.Scatter(
-            x=x,
-            y=y,
-            name=f"{exp_name} - Raw",
-            line=dict(color=color, width=1),
-            opacity=0.3,
-            showlegend=False,
-            hovertemplate="%{text}<br>Value: %{y:.4f}<br>Iteration: %{x}<extra></extra>",
-            text=[hover_text]*len(x)
-        ))
-        
-        # Add smoothed loss trace
-        y_smoothed = gaussian_filter1d(y, sigma=max(len(y)//200, 15))
-        fig.add_trace(go.Scatter(
-            x=x,
-            y=y_smoothed,
-            name=f"{exp_name}",
-            line=dict(color=color, width=2),
-            hovertemplate="%{text}<br>Value: %{y:.4f}<br>Iteration: %{x}<extra></extra>",
-            text=[hover_text]*len(x)
-        ))
-        
-        # Create custom tick labels for epochs
-        if num_epochs <= 10:
-            tick_vals = [i * iterations_per_epoch for i in range(num_epochs)]
-            tick_text = list(range(num_epochs))
-        else:
-            tick_indices = np.linspace(0, num_epochs - 1, 10, dtype=int)
-            tick_vals = [int(i * iterations_per_epoch) for i in tick_indices]
-            tick_text = tick_indices
-    
-    # Update layout
-    fig.update_layout(
-        title="Training Loss Across Experiments",
-        xaxis=dict(
-            title="Epoch",
-            ticktext=tick_text,
-            tickvals=tick_vals
-        ),
-        yaxis_title="Loss",
-        hovermode='x unified',
-        legend=dict(
-            yanchor="top",
-            y=0.99,
-            xanchor="left",
-            x=0.01
-        )
-    )
-    
-    # Save as HTML for interactivity and PNG for static version
-    fig.write_html(save_dir+"loss_curves.html")
-    #fig.write_image(save_dir+"loss_curves.png")
 
 def get_nlinear_config(deltas=False,new_only=True,shuffle=False,h_f:int = 10,lr_scheduler:str = "custom" ):
     return Config(None,update_dict={
@@ -772,13 +632,29 @@ def get_nlinear_config(deltas=False,new_only=True,shuffle=False,h_f:int = 10,lr_
         "new_only": new_only,
         "shuffle":shuffle,
         "lr_scheduler": lr_scheduler
-    },name="nlinear",name_features=["seq_len","pred_len","deltas","new_only","shuffle","lr_scheduler"])
+    },name="nlinear",name_features=["seq_len","pred_len","deltas","shuffle"])
 
 def get_nlinear_model(config):
     return NLinear(config)
 
+def get_all_groupdfs(H_F:int,tt_split=0.75,groupby="stacktrace") :
+    df_to_use = pd.read_csv(TEST_DF)
+    NEW_ONLY = True
+    if NEW_ONLY:
+        df_to_use = df_to_use[df_to_use["flags"] < 32]
+    grouped = df_to_use.groupby(by=groupby)
+    all_dfs = []
+    inadequate_dfs_count = 0
+    inadequate_dfs_total_len = 0
+    for groupname,df_group in grouped:
+        if int(len(df_group)*abs(0.5-tt_split)) < (2*H_F)+1:
+            inadequate_dfs_count += 1
+            inadequate_dfs_total_len += len(df_group)
+        else :
+            df_group = deepcopy(df_group)["addr"]
+            all_dfs.append(df_group)
+    return sorted(all_dfs,key=lambda df:len(df),reverse=True),inadequate_dfs_count,inadequate_dfs_total_len,len(df_to_use)
+    
 
 if __name__ == "__main__":
-    experiments = cross_validate_hyperparameters()
-    with open(OUT_PATH+"exp_end.pkl","wb") as f:
-        pkl.dump(experiments,f)
+    run_all_group_experiments()

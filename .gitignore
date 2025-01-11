@@ -10,3 +10,8 @@ __pycache__
 outs/
 prediction_select_few/
 prediction/*res*.pkl
+out_figs
+train_outputs
+*.pdf
+data/analysis/temp_*
+data/analysis/granulari*

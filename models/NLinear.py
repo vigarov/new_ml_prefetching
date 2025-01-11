@@ -37,5 +37,4 @@ class NLinear(nn.Module):
         else:
             x = self.Linear(x.permute(0,2,1)).permute(0,2,1)
         x = x + seq_last
-        return x # [Batch, Output length, Channel]
-    
+        return torch.round(x) # [Batch, Output length, Channel]
